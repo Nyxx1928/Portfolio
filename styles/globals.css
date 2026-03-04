@@ -1,0 +1,446 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Manga Color Palette */
+  --color-manga-black: #000000;
+  --color-manga-white: #FFFFFF;
+  --color-manga-gray-900: #1A1A1A;
+  --color-manga-gray-800: #333333;
+  --color-manga-gray-600: #666666;
+  --color-manga-gray-400: #999999;
+  --color-manga-gray-200: #E5E5E5;
+  --color-manga-gray-50: #F5F5F5;
+
+  /* Font Families */
+  --font-family-heading: 'Bebas Neue', Impact, sans-serif;
+  --font-family-body: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'Courier New', monospace;
+
+  /* Spacing */
+  --spacing-panel-gap: 1.5rem;
+  --spacing-section: 4rem;
+
+  /* Border Widths */
+  --border-width-manga: 3px;
+  --border-width-manga-thick: 5px;
+
+  /* Box Shadows */
+  --shadow-manga: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-manga-hover: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+
+  /* Animations */
+  --animate-panel-reveal: panelReveal 0.6s ease-out;
+  --animate-ink-splash: inkSplash 0.4s ease-out;
+  --animate-speed-line: speedLine 0.3s ease-out;
+
+  @keyframes panelReveal {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes inkSplash {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes speedLine {
+    0% { transform: scaleX(0); opacity: 0; }
+    100% { transform: scaleX(1); opacity: 1; }
+  }
+
+  /* shadcn/ui theme variables */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  :root {
+    --font-heading: 'Bebas Neue', Impact, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-mono: 'Courier New', monospace;
+    --radius: 0.625rem;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.13 0.028 261.692);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.13 0.028 261.692);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.13 0.028 261.692);
+    --primary: oklch(0.21 0.034 264.665);
+    --primary-foreground: oklch(0.985 0.002 247.839);
+    --secondary: oklch(0.967 0.003 264.542);
+    --secondary-foreground: oklch(0.21 0.034 264.665);
+    --muted: oklch(0.967 0.003 264.542);
+    --muted-foreground: oklch(0.551 0.027 264.364);
+    --accent: oklch(0.967 0.003 264.542);
+    --accent-foreground: oklch(0.21 0.034 264.665);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.928 0.006 264.531);
+    --input: oklch(0.928 0.006 264.531);
+    --ring: oklch(0.707 0.022 261.325);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --sidebar: oklch(0.985 0.002 247.839);
+    --sidebar-foreground: oklch(0.13 0.028 261.692);
+    --sidebar-primary: oklch(0.21 0.034 264.665);
+    --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
+    --sidebar-accent: oklch(0.967 0.003 264.542);
+    --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
+    --sidebar-border: oklch(0.928 0.006 264.531);
+    --sidebar-ring: oklch(0.707 0.022 261.325);
+  }
+
+  .dark {
+    --background: oklch(0.13 0.028 261.692);
+    --foreground: oklch(0.985 0.002 247.839);
+    --card: oklch(0.21 0.034 264.665);
+    --card-foreground: oklch(0.985 0.002 247.839);
+    --popover: oklch(0.21 0.034 264.665);
+    --popover-foreground: oklch(0.985 0.002 247.839);
+    --primary: oklch(0.928 0.006 264.531);
+    --primary-foreground: oklch(0.21 0.034 264.665);
+    --secondary: oklch(0.278 0.033 256.848);
+    --secondary-foreground: oklch(0.985 0.002 247.839);
+    --muted: oklch(0.278 0.033 256.848);
+    --muted-foreground: oklch(0.707 0.022 261.325);
+    --accent: oklch(0.278 0.033 256.848);
+    --accent-foreground: oklch(0.985 0.002 247.839);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.551 0.027 264.364);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.21 0.034 264.665);
+    --sidebar-foreground: oklch(0.985 0.002 247.839);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
+    --sidebar-accent: oklch(0.278 0.033 256.848);
+    --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.551 0.027 264.364);
+  }
+
+  * {
+    border-color: var(--color-manga-black);
+  }
+
+  body {
+    background-color: var(--color-manga-white);
+    color: var(--color-manga-black);
+    font-family: var(--font-family-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+@layer components {
+  /* Manga Panel Base */
+  .manga-panel {
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-white);
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .manga-panel-bordered {
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-white);
+    padding: 1.5rem;
+    position: relative;
+    box-shadow: var(--shadow-manga);
+  }
+
+  /* Speech Bubble */
+  .speech-bubble {
+    position: relative;
+    background-color: var(--color-manga-white);
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 15px 0 0;
+    border-color: #000 transparent transparent transparent;
+  }
+
+  /* Halftone Pattern */
+  .halftone-overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #000 1px, transparent 1px);
+    background-size: 4px 4px;
+  }
+
+  /* Manga Button */
+  .manga-button {
+    padding: 0.75rem 1.5rem;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-black);
+    color: var(--color-manga-white);
+    font-family: var(--font-family-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: var(--shadow-manga);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .manga-button:hover {
+    box-shadow: var(--shadow-manga-hover);
+    transform: translate(-2px, -2px);
+  }
+
+  .manga-button-outline {
+    padding: 0.75rem 1.5rem;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-white);
+    color: var(--color-manga-black);
+    font-family: var(--font-family-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: var(--shadow-manga);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .manga-button-outline:hover {
+    box-shadow: var(--shadow-manga-hover);
+    transform: translate(-2px, -2px);
+  }
+
+  /* Form Fields */
+  .manga-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-gray-50);
+    font-family: var(--font-family-body);
+    color: var(--color-manga-black);
+  }
+
+  .manga-input:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: var(--color-manga-black);
+    border-color: var(--color-manga-black);
+  }
+
+  .manga-input::placeholder {
+    color: var(--color-manga-gray-400);
+  }
+
+  .manga-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-gray-50);
+    font-family: var(--font-family-body);
+    color: var(--color-manga-black);
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .manga-textarea:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: var(--color-manga-black);
+    border-color: var(--color-manga-black);
+  }
+
+  .manga-textarea::placeholder {
+    color: var(--color-manga-gray-400);
+  }
+
+  /* Chapter Header */
+  .chapter-header {
+    position: relative;
+    font-size: 2.25rem;
+    font-family: var(--font-family-heading);
+    text-transform: uppercase;
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  @media (min-width: 768px) {
+    .chapter-header {
+      font-size: 3rem;
+    }
+  }
+
+  .chapter-header::before,
+  .chapter-header::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 25%;
+    height: 4px;
+    background-color: var(--color-manga-black);
+  }
+
+  .chapter-header::before {
+    left: 0;
+  }
+
+  .chapter-header::after {
+    right: 0;
+  }
+
+  /* Stat Bar (Skills) */
+  .stat-bar {
+    position: relative;
+    width: 100%;
+    height: 2rem;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-gray-50);
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    background-color: var(--color-manga-black);
+    transition: all 1s ease-out;
+  }
+
+  /* Trading Card */
+  .trading-card {
+    position: relative;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-white);
+    padding: 1rem;
+    box-shadow: var(--shadow-manga);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .trading-card:hover {
+    box-shadow: var(--shadow-manga-hover);
+    transform: translate(-2px, -2px);
+  }
+
+  /* Speed Lines */
+  .speed-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .speed-lines::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent, var(--color-manga-black), transparent);
+    opacity: 0.2;
+    transform: skewX(-20deg);
+  }
+}
+
+@layer utilities {
+  .text-outline {
+    text-shadow: 
+      -2px -2px 0 #000,
+      2px -2px 0 #000,
+      -2px 2px 0 #000,
+      2px 2px 0 #000;
+  }
+
+  .ink-brush-stroke {
+    background-image: url('/images/ink-brush.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 3D Transform Utilities for Trading Card Flip */
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
