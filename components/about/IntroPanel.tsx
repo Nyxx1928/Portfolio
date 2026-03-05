@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { MangaPanel } from '@/components/manga/MangaPanel';
+import { MangaImage } from '@/components/ui/MangaImage';
 import { cn } from '@/lib/utils';
 
 interface IntroPanelProps {
@@ -43,11 +43,12 @@ export function IntroPanel({
             {/* Manga-style frame */}
             <div className="relative border-manga border-manga-black bg-manga-white p-2 shadow-manga">
               <div className="relative w-64 h-64 md:w-full md:h-auto md:aspect-square overflow-hidden border-2 border-manga-black">
-                <Image
+                <MangaImage
                   src={avatarSrc}
                   alt={`${name} - Portfolio Avatar`}
                   fill
                   className="object-cover grayscale"
+                  wrapperClassName="absolute inset-0"
                   priority
                 />
                 {/* Halftone overlay effect */}

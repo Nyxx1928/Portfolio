@@ -29,6 +29,11 @@ jest.mock('next/image', () => ({
   default: ({ src, alt, ...props }: any) => <img src={src} alt={alt} {...props} />,
 }));
 
+// Mock MangaImage to render a plain img
+jest.mock('@/components/ui/MangaImage', () => ({
+  MangaImage: ({ src, alt, ...props }: any) => <img src={src} alt={alt} />,
+}));
+
 describe('InterestsPanel', () => {
   const mockMangaInterests: Interest[] = [
     {

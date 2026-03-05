@@ -107,6 +107,6 @@ describe('ProjectsPage', () => {
     
     render(<ProjectsPage />);
     
-    expect(screen.getByText(/Project grid with 1 projects will be displayed here/i)).toBeInTheDocument();
+    expect(screen.getByText('Test Project')).toBeInTheDocument();
   });
 });

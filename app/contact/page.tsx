@@ -1,8 +1,21 @@
+import dynamic from 'next/dynamic';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { ChapterHeader } from '@/components/manga/ChapterHeader';
 import { ContactIntro } from '@/components/contact/ContactIntro';
 import { ContactForm } from '@/components/contact/ContactForm';
-// import { SocialLinks } from '@/components/contact/SocialLinks';
+
+// Dynamic import for below-the-fold social links section
+const SocialLinks = dynamic(
+  () => import('@/components/contact/SocialLinks').then((m) => m.SocialLinks),
+  {
+    loading: () => (
+      <div className="border-manga border-manga-black bg-manga-white p-8 animate-pulse min-h-[150px]">
+        <div className="h-6 w-40 bg-manga-gray-200 mb-4" />
+        <div className="h-4 w-full bg-manga-gray-200" />
+      </div>
+    ),
+  }
+);
 
 /**
  * Contact Page (/contact)
@@ -36,7 +49,15 @@ export default function ContactPage() {
             <ContactForm />
             
             {/* Social Links - Requirements 15.1, 15.2, 15.3, 15.4, 22.2 */}
-            {/* <SocialLinks /> */}
+            <SocialLinks
+              links={[
+                { platform: 'github', url: 'https://github.com', username: 'mangadev' },
+                { platform: 'linkedin', url: 'https://linkedin.com/in/mangadev', username: 'mangadev' },
+                { platform: 'twitter', url: 'https://twitter.com/mangadev', username: 'mangadev' },
+              ]}
+              email="hello@mangaportfolio.dev"
+              location="Tokyo, Japan"
+            />
           </div>
         </div>
       </main>

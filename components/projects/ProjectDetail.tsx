@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Project } from '@/types';
+import { MangaImage } from '@/components/ui/MangaImage';
 import { MangaPanel } from '@/components/manga/MangaPanel';
 import { ChapterHeader } from '@/components/manga/ChapterHeader';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
@@ -147,12 +147,13 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               >
                 {/* Screenshot Image */}
                 <div className="relative w-full h-full">
-                  <Image
+                  <MangaImage
                     src={screenshot}
                     alt={`${project.title} screenshot ${index + 1}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
+                    wrapperClassName="absolute inset-0"
                   />
                   {/* Halftone overlay on hover */}
                   <div
