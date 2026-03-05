@@ -25,10 +25,15 @@ export function MangaImage({
   showSkeleton = true,
   alt,
   className,
+  sizes,
+  fill,
   ...rest
 }: MangaImageProps) {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Default sizes for fill images if not provided
+  const defaultSizes = fill && !sizes ? '100vw' : sizes;
 
   if (hasError) {
     return (
@@ -80,6 +85,8 @@ export function MangaImage({
           setIsLoading(false);
           setHasError(true);
         }}
+        fill={fill}
+        sizes={defaultSizes}
         {...rest}
       />
     </div>

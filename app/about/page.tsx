@@ -1,35 +1,13 @@
-import dynamic from 'next/dynamic';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { IntroPanel } from '@/components/about/IntroPanel';
+import { SkillsPanel } from '@/components/about/SkillsPanel';
+import { Timeline } from '@/components/about/Timeline';
+import { InterestsPanel } from '@/components/about/InterestsPanel';
 import { getAboutData } from '@/lib/data/about';
 import { getSkills, getTools } from '@/lib/data/skills';
 import { getTimelineEvents } from '@/lib/data/timeline';
 import { getInterests } from '@/lib/data/interests';
 
-// Dynamic imports for heavier below-the-fold components (code-splitting)
-const SkillsPanel = dynamic(
-  () => import('@/components/about/SkillsPanel').then((m) => m.SkillsPanel),
-  { loading: () => <SectionSkeleton /> }
-);
-const Timeline = dynamic(
-  () => import('@/components/about/Timeline').then((m) => m.Timeline),
-  { loading: () => <SectionSkeleton /> }
-);
-const InterestsPanel = dynamic(
-  () => import('@/components/about/InterestsPanel').then((m) => m.InterestsPanel),
-  { loading: () => <SectionSkeleton /> }
-);
-
-/** Lightweight skeleton shown while lazy components load */
-function SectionSkeleton() {
-  return (
-    <div className="border-manga border-manga-black bg-manga-white p-8 animate-pulse min-h-[200px]">
-      <div className="h-6 w-48 bg-manga-gray-200 mb-4" />
-      <div className="h-4 w-full bg-manga-gray-200 mb-2" />
-      <div className="h-4 w-3/4 bg-manga-gray-200" />
-    </div>
-  );
-}
 
 /**
  * About Page (/about)

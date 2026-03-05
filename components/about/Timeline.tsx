@@ -1,8 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { MangaPanel } from '@/components/manga/MangaPanel';
-import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
+// Removed useScrollAnimation for debugging
 import { TimelineEvent } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +30,7 @@ export function Timeline({ events }: TimelineProps) {
   );
 
   return (
-    <MangaPanel variant="bordered" animation="reveal" className="overflow-hidden">
+    <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
       <div className="space-y-8">
         {/* Header */}
         <div>
@@ -59,7 +58,7 @@ export function Timeline({ events }: TimelineProps) {
           </div>
         </div>
       </div>
-    </MangaPanel>
+    </div>
   );
 }
 
@@ -75,7 +74,7 @@ function TimelineEventItem({
   index: number;
   isLast: boolean;
 }) {
-  const { ref, isInView } = useScrollAnimation({ threshold: 0.5 });
+  // Removed scroll animation for debugging
 
   // Format date for display
   const formattedDate = new Date(event.date).toLocaleDateString('en-US', {
@@ -100,20 +99,7 @@ function TimelineEventItem({
   };
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: -20 }}
-      animate={{
-        opacity: isInView ? 1 : 0,
-        x: isInView ? 0 : -20,
-      }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      }}
-      className="relative"
-    >
+    <div className="relative">
       {/* Mobile: Simple stacked layout */}
       <div className="md:hidden">
         <div
@@ -269,6 +255,6 @@ function TimelineEventItem({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
