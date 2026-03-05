@@ -111,7 +111,7 @@ describe('ProjectGrid', () => {
       // Project 3 has 5 tech items, should show first 3 + "+2"
       expect(screen.getByText('Angular')).toBeInTheDocument();
       expect(screen.getByText('RxJS')).toBeInTheDocument();
-      expect(screen.getByText('+2')).toBeInTheDocument();
+      expect(screen.getByText('+2 more')).toBeInTheDocument();
     });
   });
 

@@ -444,3 +444,29 @@
     backface-visibility: hidden;
   }
 }
+
+/* ── Accessibility: Visible Focus Indicators ─────────────────────────────── */
+@layer base {
+  /* Keyboard-only focus ring for all interactive elements */
+  :focus-visible {
+    outline: 3px solid var(--color-manga-black);
+    outline-offset: 2px;
+  }
+
+  /* Remove the default outline for mouse-focused elements */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/* ── Accessibility: Reduced Motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

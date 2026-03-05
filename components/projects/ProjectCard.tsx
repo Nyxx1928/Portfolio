@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { Project } from '@/types';
+import { MangaImage } from '@/components/ui/MangaImage';
 import { HalftonePattern } from '@/components/manga/HalftonePattern';
 import { cardHoverVariants } from '@/lib/animations/variants';
 
@@ -69,12 +69,13 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       <div className="space-y-4">
         {/* Thumbnail with halftone overlay */}
         <div className="relative w-full h-48 overflow-hidden border-manga border-manga-black bg-manga-gray-200">
-          <Image
+          <MangaImage
             src={project.thumbnail}
             alt={project.title}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            wrapperClassName="absolute inset-0"
           />
           <HalftonePattern intensity="light" className="z-10" />
           

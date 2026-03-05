@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { MangaImage } from '@/components/ui/MangaImage';
 import { MangaPanel } from '@/components/manga/MangaPanel';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
 import { Interest } from '@/types';
@@ -145,11 +145,12 @@ function TradingCard({ interest }: { interest: Interest }) {
           {/* Image */}
           <div className="relative h-3/4 bg-manga-gray-200 overflow-hidden">
             {interest.image && (
-              <Image
+              <MangaImage
                 src={interest.image}
                 alt={interest.title}
                 fill
                 className="object-cover grayscale"
+                wrapperClassName="absolute inset-0"
               />
             )}
             {/* Halftone overlay */}
@@ -242,11 +243,12 @@ function HobbyCard({ interest }: { interest: Interest }) {
       {/* Image/Icon */}
       {interest.image && (
         <div className="relative h-32 mb-4 bg-manga-gray-200 border-2 border-manga-black overflow-hidden">
-          <Image
+          <MangaImage
             src={interest.image}
             alt={interest.title}
             fill
             className="object-cover grayscale"
+            wrapperClassName="absolute inset-0"
           />
           {/* Halftone overlay */}
           <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply">

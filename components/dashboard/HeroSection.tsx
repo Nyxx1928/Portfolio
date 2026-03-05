@@ -221,8 +221,19 @@ export function HeroSection({
 
             {/* Halftone overlay effect */}
             <div className="halftone-overlay" aria-hidden="true" />
+
+            {/* Speed lines decoration */}
+            <div className="speed-lines" aria-hidden="true" />
           </div>
         </motion.div>
+      </div>
+
+      {/* Decorative onomatopoeia – visual manga flair */}
+      <div
+        className="absolute top-4 right-4 font-heading text-6xl sm:text-7xl text-manga-gray-200 select-none pointer-events-none rotate-[-12deg] hidden lg:block"
+        aria-hidden="true"
+      >
+        POW!
       </div>
     </motion.section>
   );
