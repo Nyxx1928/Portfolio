@@ -1,8 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { MangaPanel } from '@/components/manga/MangaPanel';
-import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
+// Removed useScrollAnimation for debugging
 import { Skill, Tool } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -48,7 +47,7 @@ export function SkillsPanel({ skills, tools }: SkillsPanelProps) {
   const categoryOrder = ['frontend', 'backend', 'design', 'tools', 'other'];
 
   return (
-    <MangaPanel variant="bordered" animation="reveal" className="overflow-hidden">
+    <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
       <div className="space-y-8">
         {/* Header */}
         <div>
@@ -85,7 +84,7 @@ export function SkillsPanel({ skills, tools }: SkillsPanelProps) {
           </div>
         )}
       </div>
-    </MangaPanel>
+    </div>
   );
 }
 
@@ -112,21 +111,17 @@ function SkillCategory({ title, skills }: { title: string; skills: Skill[] }) {
  * SkillStatBar - RPG-style stat bar with animated fill
  */
 function SkillStatBar({ skill }: { skill: Skill }) {
-  const { ref, isInView } = useScrollAnimation({ threshold: 0.5 });
-
+  // Removed scroll animation for debugging
   return (
-    <div ref={ref} className="space-y-1">
+    <div className="space-y-1">
       {/* Skill name and level */}
       <div className="flex items-center justify-between text-sm md:text-base">
-        <div className="flex items-center gap-2">
-          {skill.icon && <span className="text-lg">{skill.icon}</span>}
-          <span className="font-medium text-manga-black">{skill.name}</span>
-        </div>
+        {skill.icon && <span className="text-lg">{skill.icon}</span>}
+        <span className="font-medium text-manga-black">{skill.name}</span>
         <span className="font-mono text-manga-gray-600 tabular-nums">
           {skill.level}/100
         </span>
       </div>
-
       {/* Stat bar container */}
       <div className="relative h-6 border-2 border-manga-black bg-manga-white overflow-hidden">
         {/* Background pattern (manga halftone effect) */}
@@ -137,57 +132,20 @@ function SkillStatBar({ skill }: { skill: Skill }) {
             backgroundSize: '4px 4px',
           }}
         />
-
-        {/* Animated fill bar */}
-        <motion.div
+        {/* Static fill bar for debug */}
+        <div
           className="absolute inset-y-0 left-0 bg-manga-black"
-          initial={{ width: 0 }}
-          animate={{ width: isInView ? `${skill.level}%` : 0 }}
-          transition={{
-            duration: 1,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            delay: 0.1,
-          }}
+          style={{ width: `${skill.level}%` }}
         >
-          {/* Inner highlight effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        </motion.div>
-
-        {/* Speed lines effect (manga style) */}
-        <motion.div
-          className="absolute inset-y-0 left-0 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isInView ? [0, 1, 0] : 0 }}
-          transition={{
-            duration: 0.6,
-            ease: 'easeOut',
-            delay: 0.1,
-          }}
-        >
-          <div className="h-full flex items-center gap-1 px-2">
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="h-0.5 bg-white"
-                style={{
-                  width: `${20 - i * 5}px`,
-                  opacity: 0.8 - i * 0.2,
-                }}
-              />
-            ))}
-          </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
 }
 
-/**
- * ToolBadges - Display tools as manga-style badges
- */
 function ToolBadges({ tools }: { tools: Tool[] }) {
-  const { ref, isInView } = useScrollAnimation({ threshold: 0.3 });
-
+  // All animation and scroll logic removed for debug
   // Group tools by category
   const groupedTools = tools.reduce((acc, tool) => {
     if (!acc[tool.category]) {
@@ -198,26 +156,16 @@ function ToolBadges({ tools }: { tools: Tool[] }) {
   }, {} as Record<string, Tool[]>);
 
   return (
-    <div ref={ref} className="space-y-4">
+    <div className="space-y-4">
       {Object.entries(groupedTools).map(([category, categoryTools]) => (
         <div key={category}>
           <h4 className="text-sm font-medium text-manga-gray-600 uppercase tracking-wide mb-2">
             {category}
           </h4>
           <div className="flex flex-wrap gap-2">
-            {categoryTools.map((tool, index) => (
-              <motion.div
+            {categoryTools.map((tool) => (
+              <div
                 key={tool.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{
-                  opacity: isInView ? 1 : 0,
-                  scale: isInView ? 1 : 0.8,
-                }}
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.05,
-                  ease: 'easeOut',
-                }}
                 className={cn(
                   'relative border-2 border-manga-black bg-manga-gray-50 px-3 py-1.5',
                   'hover:bg-manga-white hover:shadow-manga transition-all duration-200',
@@ -227,7 +175,7 @@ function ToolBadges({ tools }: { tools: Tool[] }) {
                 <span className="text-sm font-medium text-manga-black">
                   {tool.name}
                 </span>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -235,3 +183,8 @@ function ToolBadges({ tools }: { tools: Tool[] }) {
     </div>
   );
 }
+
+/**
+ * ToolBadges - Display tools as manga-style badges
+ */
+

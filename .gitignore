@@ -45,3 +45,5 @@ next-env.d.ts
 __tests__
 .vscode
 .swc
+.vercel
+.env*.local

@@ -35,18 +35,20 @@ export function IntroPanel({
   inspirations,
 }: IntroPanelProps) {
   return (
-    <MangaPanel variant="bordered" animation="reveal" className="overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 md:gap-8 lg:gap-12">
+    <MangaPanel>
+      <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 md:gap-8 lg:gap-12">
         {/* Avatar/Photo Section */}
         <div className="flex justify-center md:justify-start">
           <div className="relative">
             {/* Manga-style frame */}
             <div className="relative border-manga border-manga-black bg-manga-white p-2 shadow-manga">
-              <div className="relative w-64 h-64 md:w-full md:h-auto md:aspect-square overflow-hidden border-2 border-manga-black">
+              <div className="relative w-64 h-64 overflow-hidden border-2 border-manga-black">
                 <MangaImage
                   src={avatarSrc}
                   alt={`${name} - Portfolio Avatar`}
                   fill
+                  sizes="(max-width: 768px) 256px, 300px"
                   className="object-cover grayscale"
                   wrapperClassName="absolute inset-0"
                   priority
@@ -119,6 +121,7 @@ export function IntroPanel({
           </div>
         </div>
       </div>
+    </div>
     </MangaPanel>
   );
 }

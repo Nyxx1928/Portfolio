@@ -33,7 +33,7 @@ export function InterestsPanel({ interests }: InterestsPanelProps) {
   const hobbyInterests = interests.filter((i) => i.type === 'hobby');
 
   return (
-    <MangaPanel variant="bordered" animation="reveal" className="overflow-hidden">
+    <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
       <div className="space-y-12">
         {/* Header */}
         <div>
@@ -70,7 +70,7 @@ export function InterestsPanel({ interests }: InterestsPanelProps) {
           />
         )}
       </div>
-    </MangaPanel>
+    </div>
   );
 }
 
