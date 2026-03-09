@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import React, { useState } from 'react';
 
 interface HeroSectionProps {
   headline?: string;
@@ -32,7 +34,7 @@ interface HeroSectionProps {
 export function HeroSection({
   headline = "Welcome to My Portfolio",
   subheadline = "Crafting Digital Experiences with Code & Creativity",
-  avatarSrc = "/images/avatar-placeholder.svg",
+  avatarSrc = "/images/profile3.jpg",
   className,
 }: HeroSectionProps) {
   const router = useRouter();
@@ -202,22 +204,15 @@ export function HeroSection({
               'transform rotate-2'
             )}
           >
-            {/* Placeholder for avatar image */}
-            <div
-              className={cn(
-                'absolute inset-0',
-                'flex items-center justify-center',
-                'bg-manga-gray-200'
-              )}
-            >
-              {/* Temporary placeholder - will be replaced with actual image */}
-              <div className="text-center">
-                <div className="text-6xl mb-4">🎨</div>
-                <p className="font-heading text-2xl text-manga-gray-600">
-                  AVATAR
-                </p>
-              </div>
-            </div>
+            {/* Profile Image */}
+            <Image 
+              src={avatarSrc}
+              alt="Me, Myself, and I"
+              fill
+              className="object-cover"
+                style={{ objectPosition: "center top" }}
+              priority
+              />
 
             {/* Halftone overlay effect */}
             <div className="halftone-overlay" aria-hidden="true" />
@@ -229,12 +224,12 @@ export function HeroSection({
       </div>
 
       {/* Decorative onomatopoeia – visual manga flair */}
-      <div
+      {/* <div
         className="absolute top-4 right-4 font-heading text-6xl sm:text-7xl text-manga-gray-200 select-none pointer-events-none rotate-[-12deg] hidden lg:block"
         aria-hidden="true"
       >
         POW!
-      </div>
+      </div> */}
     </motion.section>
   );
 }
