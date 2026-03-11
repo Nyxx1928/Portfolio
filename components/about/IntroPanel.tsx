@@ -65,12 +65,6 @@ export function IntroPanel({
                 </div>
               </div>
             </div>
-            
-            {/* Corner accent marks (manga panel style) */}
-            <div className="absolute -top-1 -left-1 w-4 h-4 border-t-4 border-l-4 border-manga-black" />
-            <div className="absolute -top-1 -right-1 w-4 h-4 border-t-4 border-r-4 border-manga-black" />
-            <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-4 border-l-4 border-manga-black" />
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-4 border-r-4 border-manga-black" />
           </div>
         </div>
 
