@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getProjects, getProjectBySlug } from '@/lib/data/projects';
-import { PageTransition } from '@/components/layout/PageTransition';
 import { ProjectDetail } from '@/components/projects/ProjectDetail';
 
 /**
@@ -60,12 +59,10 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
   }
   
   return (
-    <PageTransition>
-      <main className="min-h-screen py-16">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <ProjectDetail project={project} />
-        </div>
-      </main>
-    </PageTransition>
+    <main className="min-h-screen py-16">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <ProjectDetail project={project} />
+      </div>
+    </main>
   );
 }

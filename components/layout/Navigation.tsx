@@ -1,8 +1,9 @@
 'use client';
 
+import { useHorizontalScroll } from '@/components/horizontal-scroll/HorizontalScrollContext';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { type MouseEvent, useState } from 'react';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -14,6 +15,33 @@ const navLinks = [
 export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { currentIndex, isHorizontalActive, isScrollHandlerReady, scrollToPanel } = useHorizontalScroll();
+
+  const getIsActive = (href: string, index: number) => {
+    if (isHorizontalActive) {
+      return currentIndex === index;
+    }
+
+    return pathname === href;
+  };
+
+  const onNavClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    href: string,
+    index: number
+  ) => {
+    if (!isHorizontalActive || !isScrollHandlerReady) {
+      if (href === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      setMobileMenuOpen(false);
+      return;
+    }
+
+    event.preventDefault();
+    scrollToPanel(index);
+    setMobileMenuOpen(false);
+  };
 
   return (
     <nav 
@@ -26,19 +54,20 @@ export function Navigation() {
           <Link 
             href="/" 
             className="font-heading text-2xl uppercase tracking-wider hover:opacity-70 transition-opacity"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={(event) => onNavClick(event, '/', 0)}
           >
             Portfolio
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+            {navLinks.map((link, index) => {
+              const isActive = getIsActive(link.href, index);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  onClick={(event) => onNavClick(event, link.href, index)}
                   className={`
                     px-4 py-2 font-heading uppercase text-sm tracking-wider
                     border-manga border-manga-black transition-all
@@ -73,12 +102,13 @@ export function Navigation() {
         {mobileMenuOpen && (
           <div className="md:hidden pb-4 border-t-manga border-manga-black mt-2">
             <div className="flex flex-col space-y-2 pt-4">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
+              {navLinks.map((link, index) => {
+                const isActive = getIsActive(link.href, index);
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
+                    onClick={(event) => onNavClick(event, link.href, index)}
                     className={`
                       px-4 py-3 font-heading uppercase text-sm tracking-wider
                       border-manga border-manga-black transition-all
@@ -87,7 +117,6 @@ export function Navigation() {
                         : 'bg-manga-white text-manga-black hover:bg-manga-gray-50'
                       }
                     `}
-                    onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.label}
                   </Link>
@@ -95,6 +124,12 @@ export function Navigation() {
               })}
             </div>
           </div>
+        )}
+
+        {isHorizontalActive && (
+          <p className="sr-only" aria-live="polite">
+            Panel {currentIndex + 1} selected
+          </p>
         )}
       </div>
     </nav>

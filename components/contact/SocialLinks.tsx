@@ -190,26 +190,6 @@ export function SocialLinks({
           </div>
         )}
       </div>
-
-      {/* Typewriter animation CSS */}
-      <style jsx>{`
-        .typewriter-text {
-          display: inline-block;
-          position: relative;
-        }
-        
-        .typewriter-text::after {
-          content: '|';
-          position: absolute;
-          right: -8px;
-          animation: blink 1s step-end infinite;
-        }
-        
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-      `}</style>
     </MangaPanel>
   );
 }

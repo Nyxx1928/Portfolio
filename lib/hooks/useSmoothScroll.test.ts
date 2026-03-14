@@ -11,6 +11,7 @@ describe('useSmoothScroll', () => {
     destroy: jest.Mock;
   };
   let rafSpy: jest.SpyInstance;
+  let cancelRafSpy: jest.SpyInstance;
 
   beforeEach(() => {
     // Create mock Lenis instance
@@ -24,11 +25,13 @@ describe('useSmoothScroll', () => {
 
     // Mock requestAnimationFrame - don't execute callback to prevent infinite loop
     rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 0);
+    cancelRafSpy = jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     rafSpy.mockRestore();
+    cancelRafSpy.mockRestore();
   });
 
   it('initializes Lenis with correct configuration', () => {
@@ -79,6 +82,14 @@ describe('useSmoothScroll', () => {
     unmount();
 
     expect(mockLenis.destroy).toHaveBeenCalledTimes(1);
+    expect(cancelRafSpy).toHaveBeenCalled();
+  });
+
+  it('does not instantiate Lenis when disabled is true', () => {
+    renderHook(() => useSmoothScroll(true));
+
+    expect(Lenis).not.toHaveBeenCalled();
+    expect(rafSpy).not.toHaveBeenCalled();
   });
 
   it('creates only one Lenis instance', () => {
