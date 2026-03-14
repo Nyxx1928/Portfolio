@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
 import "@/styles/globals.css";
+import { HorizontalAppShell } from "@/components/horizontal-scroll/HorizontalAppShell";
+import { HorizontalScrollProvider } from "@/components/horizontal-scroll/HorizontalScrollContext";
 import { Navigation } from "@/components/layout/Navigation";
-import { Footer } from "@/components/layout/Footer";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
-import { PageTransition } from "@/components/layout/PageTransition";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -44,21 +44,18 @@ export default function RootLayout({
       <body className="antialiased font-body bg-manga-white text-manga-black">
         {/* Skip-to-content link for keyboard / screen-reader users */}
         <a
-          href="#main-content"
+          href="#active-panel-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-manga-black focus:text-manga-white focus:font-heading focus:uppercase focus:tracking-wider focus:border-manga focus:border-manga-white focus:shadow-manga"
         >
           Skip to content
         </a>
 
-        <SmoothScrollProvider>
-          <Navigation />
-          <main id="main-content" className="pt-16 min-h-screen" role="main">
-            <PageTransition>
-              {children}
-            </PageTransition>
-          </main>
-          <Footer />
-        </SmoothScrollProvider>
+        <HorizontalScrollProvider>
+          <SmoothScrollProvider>
+            <Navigation />
+            <HorizontalAppShell>{children}</HorizontalAppShell>
+          </SmoothScrollProvider>
+        </HorizontalScrollProvider>
       </body>
     </html>
   );

@@ -1,11 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ProjectCard } from './ProjectCard';
 import { Project } from '@/types';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
 }));
 
 // Mock next/image
@@ -57,6 +58,7 @@ describe('ProjectCard', () => {
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
     });
+    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
   });
 
   it('renders project card with all required fields', () => {
@@ -101,6 +103,16 @@ describe('ProjectCard', () => {
     fireEvent.click(card);
 
     expect(mockPush).toHaveBeenCalledWith('/projects/test-project');
+  });
+
+  it('preserves category query when navigating to project detail', () => {
+    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams('category=web'));
+    render(<ProjectCard project={mockProject} index={0} />);
+
+    const card = screen.getByRole('button', { name: /view test project project details/i });
+    fireEvent.click(card);
+
+    expect(mockPush).toHaveBeenCalledWith('/projects/test-project?category=web');
   });
 
   it('navigates to project detail page on Enter key press', () => {

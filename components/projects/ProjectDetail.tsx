@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Project } from '@/types';
 import { MangaImage } from '@/components/ui/MangaImage';
 import { MangaPanel } from '@/components/manga/MangaPanel';
@@ -32,13 +33,19 @@ interface ProjectDetailProps {
 export function ProjectDetail({ project }: ProjectDetailProps) {
   const { ref: statsRef, isInView: statsInView } = useScrollAnimation();
   const { ref: screenshotsRef, isInView: screenshotsInView } = useScrollAnimation();
+  const searchParams = useSearchParams();
+
+  const category = searchParams?.get('category');
+  const projectsHref = category && category !== 'all'
+    ? `/projects?${new URLSearchParams({ category }).toString()}`
+    : '/projects';
 
   return (
     <div className="w-full">
       {/* Back Navigation */}
       <div className="mb-8">
         <Link
-          href="/projects"
+          href={projectsHref}
           className={cn(
             'inline-flex items-center gap-2',
             'text-manga-black hover:text-manga-gray-800',
@@ -313,7 +320,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
 
       {/* Bottom Navigation */}
       <div className="mt-12 text-center">
-        <Link href="/projects" className="manga-button">
+        <Link href={projectsHref} className="manga-button">
           View All Projects
         </Link>
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Project } from '@/types';
 import { MangaImage } from '@/components/ui/MangaImage';
 import { HalftonePattern } from '@/components/manga/HalftonePattern';
@@ -31,8 +31,17 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleClick = () => {
+    const category = searchParams?.get('category');
+
+    if (category && category !== 'all') {
+      const detailParams = new URLSearchParams({ category });
+      router.push(`/projects/${project.slug}?${detailParams.toString()}`);
+      return;
+    }
+
     router.push(`/projects/${project.slug}`);
   };
 
@@ -53,17 +62,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       role="button"
       tabIndex={0}
       aria-label={`View ${project.title} project details`}
-      className="
-        manga-panel-bordered
-        h-full
-        cursor-pointer
-        transition-shadow
-        duration-200
-        focus:outline-none
-        focus:ring-2
-        focus:ring-manga-black
-        focus:ring-offset-2
-      "
+      className="manga-panel-bordered h-full cursor-pointer transition-shadow duration-200 focus:outline-none focus:ring-2 focus:ring-manga-black focus:ring-offset-2"
       data-testid={`project-card-${project.id}`}
     >
       <div className="space-y-4">
@@ -81,15 +80,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           
           {/* Category badge overlay */}
           <div className="absolute top-2 right-2 z-20">
-            <span className="
-              px-2 py-1 
-              text-xs 
-              font-heading 
-              uppercase 
-              bg-manga-black 
-              text-manga-white
-              border border-manga-black
-            ">
+            <span className="border border-manga-black bg-manga-black px-2 py-1 text-xs font-heading uppercase text-manga-white">
               {project.category}
             </span>
           </div>
@@ -112,16 +103,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             {project.techStack.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="
-                  px-2 py-1 
-                  text-xs 
-                  border border-manga-black 
-                  bg-manga-gray-50 
-                  font-mono
-                  transition-colors
-                  hover:bg-manga-black
-                  hover:text-manga-white
-                "
+                className="border border-manga-black bg-manga-gray-50 px-2 py-1 text-xs font-mono transition-colors hover:bg-manga-black hover:text-manga-white"
               >
                 {tech}
               </span>

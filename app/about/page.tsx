@@ -1,4 +1,3 @@
-import { PageTransition } from '@/components/layout/PageTransition';
 import { IntroPanel } from '@/components/about/IntroPanel';
 import { SkillsPanel } from '@/components/about/SkillsPanel';
 import { Timeline } from '@/components/about/Timeline';
@@ -30,27 +29,25 @@ export default function AboutPage() {
   const interests = getInterests();
 
   return (
-    <PageTransition>
-      <main className="min-h-screen py-section">
-        <div className="container mx-auto px-4 space-y-section">
-          {/* Introduction Panel - Requirements 5.1, 5.2, 5.3 */}
-          <IntroPanel
-            name={aboutData.name}
-            bio={aboutData.bio}
-            avatarSrc={aboutData.avatarSrc}
-            inspirations={aboutData.inspirations}
-          />
-          
-          {/* Skills Panel - Requirements 6.1, 6.2, 6.3 */}
-          <SkillsPanel skills={skills} tools={tools} />
-          
-          {/* Timeline - Requirements 7.1, 7.2, 7.3 */}
-          <Timeline events={timelineEvents} />
-          
-          {/* Interests Panel - Requirements 8.1, 8.2, 8.3 */}
-          <InterestsPanel interests={interests} />
-        </div>
-      </main>
-    </PageTransition>
+    <main className="min-h-screen py-section">
+      <div className="container mx-auto px-4 space-y-section">
+        {/* Introduction Panel - Requirements 5.1, 5.2, 5.3 */}
+        <IntroPanel
+          name={aboutData.name}
+          bio={aboutData.bio}
+          avatarSrc={aboutData.avatarSrc}
+          inspirations={aboutData.inspirations}
+        />
+
+        {/* Skills Panel - Requirements 6.1, 6.2, 6.3 */}
+        <SkillsPanel skills={skills} tools={tools} />
+
+        {/* Timeline - Requirements 7.1, 7.2, 7.3 */}
+        <Timeline events={timelineEvents} />
+
+        {/* Interests Panel - Requirements 8.1, 8.2, 8.3 */}
+        <InterestsPanel interests={interests} />
+      </div>
+    </main>
   );
 }
