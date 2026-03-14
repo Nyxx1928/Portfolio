@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "@/styles/globals.css";
 import { HorizontalAppShell } from "@/components/horizontal-scroll/HorizontalAppShell";
 import { HorizontalScrollProvider } from "@/components/horizontal-scroll/HorizontalScrollContext";
 import { Navigation } from "@/components/layout/Navigation";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
+const bebasNeue = localFont({
+  src: [{ path: "../public/fonts/BebasNeue-Regular.ttf", weight: "400", style: "normal" }],
   variable: "--font-heading",
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: [{ path: "../public/fonts/Inter-Variable.woff2", weight: "100 900", style: "normal" }],
   variable: "--font-body",
   display: "swap",
 });

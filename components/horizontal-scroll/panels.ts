@@ -20,13 +20,13 @@ const ProjectsPanel = dynamic(
 ) as unknown as ComponentType;
 
 export const PANELS: PanelConfig[] = [
-  { id: "home", label: "Home panel", component: HomePanel },
-  { id: "about", label: "About panel", component: AboutPanel },
+  { id: "home", label: "Home panel", component: HomePanel, allowInternalScroll: true },
+  { id: "about", label: "About panel", component: AboutPanel, allowInternalScroll: true },
   {
     id: "projects",
     label: "Projects panel",
     component: ProjectsPanel,
     allowInternalScroll: true,
   },
-  { id: "contact", label: "Contact panel", component: ContactPanel },
+  { id: "contact", label: "Contact panel", component: ContactPanel, allowInternalScroll: true },
 ];

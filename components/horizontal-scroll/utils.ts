@@ -1,6 +1,6 @@
-export type ReadingDirection = "ltr" | "rtl";
+export type ReadingDirection = 'ltr' | 'rtl';
 
-export const READING_DIRECTION_KEY = "manga-reading-direction";
+export const READING_DIRECTION_KEY = 'manga-reading-direction';
 
 export function clampPanelIndex(index: number, totalPanels: number): number {
   if (totalPanels <= 0) {
@@ -10,16 +10,11 @@ export function clampPanelIndex(index: number, totalPanels: number): number {
   return Math.min(Math.max(index, 0), totalPanels - 1);
 }
 
-export function toggleReadingDirection(
-  direction: ReadingDirection,
-): ReadingDirection {
-  return direction === "ltr" ? "rtl" : "ltr";
+export function toggleReadingDirection(direction: ReadingDirection): ReadingDirection {
+  return direction === 'ltr' ? 'rtl' : 'ltr';
 }
 
-export function computeContainerWidth(
-  viewportWidth: number,
-  panelCount: number,
-): number {
+export function computeContainerWidth(viewportWidth: number, panelCount: number): number {
   return viewportWidth * panelCount;
 }
 
@@ -32,17 +27,12 @@ export function getNavigatorState(currentIndex: number, totalPanels: number) {
   };
 }
 
-export function readReadingDirection(
-  storage: Pick<Storage, "getItem">,
-): ReadingDirection {
+export function readReadingDirection(storage: Pick<Storage, 'getItem'>): ReadingDirection {
   const value = storage.getItem(READING_DIRECTION_KEY);
-  return value === "rtl" ? "rtl" : "ltr";
+  return value === 'rtl' ? 'rtl' : 'ltr';
 }
 
-export function writeReadingDirection(
-  storage: Pick<Storage, "setItem">,
-  direction: ReadingDirection,
-): void {
+export function writeReadingDirection(storage: Pick<Storage, 'setItem'>, direction: ReadingDirection): void {
   storage.setItem(READING_DIRECTION_KEY, direction);
 }
 
@@ -50,11 +40,7 @@ export function getOverlayDuration(prefersReducedMotion: boolean): number {
   return prefersReducedMotion ? 0 : 350;
 }
 
-export function shouldAdvanceInternalPanel(
-  deltaY: number,
-  atTop: boolean,
-  atBottom: boolean,
-): boolean {
+export function shouldAdvanceInternalPanel(deltaY: number, atTop: boolean, atBottom: boolean): boolean {
   if (deltaY > 0) {
     return atBottom;
   }
@@ -66,32 +52,27 @@ export function shouldAdvanceInternalPanel(
   return false;
 }
 
-export function getDirectionalDelta(
-  delta: number,
-  direction: ReadingDirection,
-): number {
-  return direction === "ltr" ? delta : -delta;
+export function getDirectionalDelta(delta: number, direction: ReadingDirection): number {
+  return direction === 'ltr' ? delta : -delta;
 }
 
 export function getLogicalScrollLeft(
   rawScrollLeft: number,
   maxScrollLeft: number,
-  direction: ReadingDirection,
+  direction: ReadingDirection
 ): number {
-  return direction === "ltr" ? rawScrollLeft : maxScrollLeft - rawScrollLeft;
+  return direction === 'ltr' ? rawScrollLeft : maxScrollLeft - rawScrollLeft;
 }
 
 export function getRawScrollLeftForIndex(
   index: number,
   panelWidth: number,
   maxScrollLeft: number,
-  direction: ReadingDirection,
+  direction: ReadingDirection
 ): number {
   const logicalLeft = Math.max(0, index) * Math.max(0, panelWidth);
   const clampedLogicalLeft = Math.min(logicalLeft, Math.max(0, maxScrollLeft));
-  return direction === "ltr"
-    ? clampedLogicalLeft
-    : maxScrollLeft - clampedLogicalLeft;
+  return direction === 'ltr' ? clampedLogicalLeft : maxScrollLeft - clampedLogicalLeft;
 }
 
 export function getClosestPanelIndexFromScroll(
@@ -99,23 +80,17 @@ export function getClosestPanelIndexFromScroll(
   panelWidth: number,
   totalPanels: number,
   maxScrollLeft: number,
-  direction: ReadingDirection,
+  direction: ReadingDirection
 ): number {
   if (panelWidth <= 0 || totalPanels <= 0) {
     return 0;
   }
 
-  const logicalLeft = getLogicalScrollLeft(
-    rawScrollLeft,
-    maxScrollLeft,
-    direction,
-  );
+  const logicalLeft = getLogicalScrollLeft(rawScrollLeft, maxScrollLeft, direction);
   return clampPanelIndex(Math.round(logicalLeft / panelWidth), totalPanels);
 }
 
-export function shouldIgnoreArrowNavigation(
-  target: EventTarget | null,
-): boolean {
+export function shouldIgnoreArrowNavigation(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) {
     return false;
   }
@@ -124,27 +99,13 @@ export function shouldIgnoreArrowNavigation(
     return true;
   }
 
-  const interactiveTags = new Set([
-    "INPUT",
-    "TEXTAREA",
-    "SELECT",
-    "BUTTON",
-    "A",
-  ]);
+  const interactiveTags = new Set(['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'A']);
   if (interactiveTags.has(target.tagName)) {
     return true;
   }
 
-  const role = target.getAttribute("role");
-  const interactiveRoles = new Set([
-    "button",
-    "textbox",
-    "listbox",
-    "combobox",
-    "menuitem",
-    "slider",
-    "spinbutton",
-  ]);
+  const role = target.getAttribute('role');
+  const interactiveRoles = new Set(['button', 'textbox', 'listbox', 'combobox', 'menuitem', 'slider', 'spinbutton']);
   return Boolean(role && interactiveRoles.has(role));
 }
 

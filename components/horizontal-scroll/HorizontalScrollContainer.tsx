@@ -35,6 +35,9 @@ export function HorizontalScrollContainer({
   const resizeTimerRef = useRef<number | null>(null);
   const panelBottomStateRef = useRef<Record<number, boolean>>({});
   const touchStartXRef = useRef(0);
+  const accumulatedDeltaRef = useRef(0);
+  const gestureTimeoutRef = useRef<number | null>(null);
+  const lastWheelTimeRef = useRef(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const {
@@ -46,6 +49,13 @@ export function HorizontalScrollContainer({
     registerScrollHandler,
     scrollToPanel,
   } = useHorizontalScrollController();
+
+  const currentIndexRef = useRef(currentIndex);
+
+  // Keep currentIndexRef in sync with currentIndex
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
   const setContainerRef = useCallback((node: HTMLDivElement | null) => {
     containerRef.current = node;
@@ -231,23 +241,68 @@ export function HorizontalScrollContainer({
         const atTop = activePanel.scrollTop <= 0;
         const atBottom = panelBottomStateRef.current[currentIndex] ?? false;
 
+        // Scrolling down: allow internal scroll if not at bottom
         if (event.deltaY > 0 && !atBottom) {
-          return;
+          return; // Allow browser to scroll the panel
         }
 
+        // Scrolling up: allow internal scroll if not at top
         if (event.deltaY < 0 && !atTop) {
-          return;
+          return; // Allow browser to scroll the panel
         }
       }
 
       event.preventDefault();
-      const directionalDelta = getDirectionalDelta(event.deltaY, "ltr");
-      container.scrollBy({ left: directionalDelta, behavior: "smooth" });
+
+      // Trackpad detection
+      const isTrackpad = event.deltaMode === 0 && Math.abs(event.deltaY) < 100;
+      
+      // Timing tracking
+      const now = Date.now();
+      const timeSinceLastWheel = now - lastWheelTimeRef.current;
+      lastWheelTimeRef.current = now;
+
+      if (isTrackpad) {
+        // Trackpad gesture handling with delta accumulation
+        accumulatedDeltaRef.current += event.deltaY;
+
+        // Clear existing gesture timeout
+        if (gestureTimeoutRef.current !== null) {
+          window.clearTimeout(gestureTimeoutRef.current);
+        }
+
+        // Set timeout to detect gesture end (150ms)
+        gestureTimeoutRef.current = window.setTimeout(() => {
+          const accumulated = accumulatedDeltaRef.current;
+          const threshold = 50;
+
+          if (Math.abs(accumulated) >= threshold) {
+            // Determine direction
+            const direction = accumulated > 0 ? 1 : -1;
+            scrollToPanel(currentIndexRef.current + direction);
+          }
+
+          // Reset accumulation after gesture completes
+          accumulatedDeltaRef.current = 0;
+          gestureTimeoutRef.current = null;
+        }, 150);
+      } else {
+        // Mouse wheel events bypass accumulation logic
+        const directionalDelta = getDirectionalDelta(event.deltaY, "ltr");
+        container.scrollBy({ left: directionalDelta, behavior: "smooth" });
+      }
     };
 
     container.addEventListener("wheel", onWheel, { passive: false });
-    return () => container.removeEventListener("wheel", onWheel);
-  }, [currentIndex]);
+    return () => {
+      container.removeEventListener("wheel", onWheel);
+      // Clean up any pending gesture timeout when effect unmounts
+      if (gestureTimeoutRef.current !== null) {
+        window.clearTimeout(gestureTimeoutRef.current);
+        gestureTimeoutRef.current = null;
+      }
+    };
+  }, [scrollToPanel]);
 
   useEffect(() => {
     const container = containerRef.current;

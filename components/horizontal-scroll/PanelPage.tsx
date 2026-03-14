@@ -63,6 +63,10 @@ export function PanelPage({
     );
 
     observer.observe(sentinelRef.current);
+    
+    // Initialize bottom state immediately
+    const initialAtBottom = root.scrollTop + root.clientHeight >= root.scrollHeight - 1;
+    onBottomInViewChange(index, initialAtBottom);
 
     return () => observer.disconnect();
   }, [allowInternalScroll, index, onBottomInViewChange]);
