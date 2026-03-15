@@ -37,7 +37,6 @@ export function HorizontalScrollContainer({
   const touchStartXRef = useRef(0);
   const accumulatedDeltaRef = useRef(0);
   const gestureTimeoutRef = useRef<number | null>(null);
-  const lastWheelTimeRef = useRef(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const {
@@ -231,15 +230,18 @@ export function HorizontalScrollContainer({
         return;
       }
 
-      const activePanel = container.children.item(
-        currentIndex,
-      ) as HTMLElement | null;
+      // Use ref to get current index — avoids stale closure bug
+      const idx = currentIndexRef.current;
+      const activePanel = container.children.item(idx) as HTMLElement | null;
       const allowsInternalScroll =
         activePanel?.dataset.allowInternalScroll === "true";
 
       if (allowsInternalScroll && activePanel) {
         const atTop = activePanel.scrollTop <= 0;
-        const atBottom = panelBottomStateRef.current[currentIndex] ?? false;
+        // A panel with no overflow (scrollHeight === clientHeight) is always at
+        // bottom — treat it as such so horizontal navigation still fires.
+        const hasOverflow = activePanel.scrollHeight > activePanel.clientHeight + 1;
+        const atBottom = !hasOverflow || (panelBottomStateRef.current[idx] ?? false);
 
         // Scrolling down: allow internal scroll if not at bottom
         if (event.deltaY > 0 && !atBottom) {
@@ -256,11 +258,6 @@ export function HorizontalScrollContainer({
 
       // Trackpad detection
       const isTrackpad = event.deltaMode === 0 && Math.abs(event.deltaY) < 100;
-      
-      // Timing tracking
-      const now = Date.now();
-      const timeSinceLastWheel = now - lastWheelTimeRef.current;
-      lastWheelTimeRef.current = now;
 
       if (isTrackpad) {
         // Trackpad gesture handling with delta accumulation
@@ -296,12 +293,13 @@ export function HorizontalScrollContainer({
     container.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       container.removeEventListener("wheel", onWheel);
-      // Clean up any pending gesture timeout when effect unmounts
       if (gestureTimeoutRef.current !== null) {
         window.clearTimeout(gestureTimeoutRef.current);
         gestureTimeoutRef.current = null;
       }
     };
+  // scrollToPanel is stable; currentIndex is read via ref to avoid re-registering
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollToPanel]);
 
   useEffect(() => {
