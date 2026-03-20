@@ -1,18 +1,18 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { InterestsPanel } from './InterestsPanel';
 import { Interest } from '@/types';
 
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>,
   },
   useInView: jest.fn(() => false),
 }));
 
 // Mock MangaPanel
 jest.mock('@/components/manga/MangaPanel', () => ({
-  MangaPanel: ({ children }: any) => <div data-testid="manga-panel">{children}</div>,
+  MangaPanel: ({ children }: { children: React.ReactNode }) => <div data-testid="manga-panel">{children}</div>,
 }));
 
 // Mock useScrollAnimation hook
@@ -26,12 +26,14 @@ jest.mock('@/lib/hooks/useScrollAnimation', () => ({
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, ...props }: any) => <img src={src} alt={alt} {...props} />,
+  // eslint-disable-next-line @next/next/no-img-element
+  default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => <img src={src} alt={alt} {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />,
 }));
 
 // Mock MangaImage to render a plain img
 jest.mock('@/components/ui/MangaImage', () => ({
-  MangaImage: ({ src, alt, ...props }: any) => <img src={src} alt={alt} />,
+  // eslint-disable-next-line @next/next/no-img-element
+  MangaImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />,
 }));
 
 describe('InterestsPanel', () => {
