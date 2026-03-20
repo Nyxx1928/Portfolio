@@ -37,7 +37,6 @@ export function HorizontalScrollContainer({
   const touchStartXRef = useRef(0);
   const accumulatedDeltaRef = useRef(0);
   const gestureTimeoutRef = useRef<number | null>(null);
-  const lastWheelTimeRef = useRef(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const {
@@ -256,11 +255,6 @@ export function HorizontalScrollContainer({
 
       // Trackpad detection
       const isTrackpad = event.deltaMode === 0 && Math.abs(event.deltaY) < 100;
-      
-      // Timing tracking
-      const now = Date.now();
-      const timeSinceLastWheel = now - lastWheelTimeRef.current;
-      lastWheelTimeRef.current = now;
 
       if (isTrackpad) {
         // Trackpad gesture handling with delta accumulation
@@ -296,12 +290,13 @@ export function HorizontalScrollContainer({
     container.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       container.removeEventListener("wheel", onWheel);
-      // Clean up any pending gesture timeout when effect unmounts
       if (gestureTimeoutRef.current !== null) {
         window.clearTimeout(gestureTimeoutRef.current);
         gestureTimeoutRef.current = null;
       }
     };
+  // scrollToPanel is stable; currentIndex is read via ref to avoid re-registering
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollToPanel]);
 
   useEffect(() => {
