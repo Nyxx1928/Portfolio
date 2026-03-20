@@ -111,14 +111,14 @@ export function ChapterHeaderExamples() {
           <div>
             <ChapterHeader title="Latest Work" />
             <p className="mt-6 text-manga-gray-800">
-              Here are some of my recent projects that I'm proud of.
+              Here are some of my recent projects that I&apos;m proud of.
             </p>
           </div>
 
           <div>
             <ChapterHeader title="Get In Touch" />
             <p className="mt-6 text-manga-gray-800">
-              Feel free to reach out if you'd like to collaborate or just chat.
+              Feel free to reach out if you&apos;d like to collaborate or just chat.
             </p>
           </div>
         </div>

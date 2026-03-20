@@ -4,8 +4,8 @@ import { MangaPanel } from './MangaPanel';
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, className, ...props }: any) => (
-      <div className={className} {...props}>
+    div: ({ children, className, ...props }: { children?: React.ReactNode; className?: string; [key: string]: unknown }) => (
+      <div className={className} {...(props as React.HTMLAttributes<HTMLDivElement>)}>
         {children}
       </div>
     ),
