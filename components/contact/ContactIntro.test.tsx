@@ -3,7 +3,7 @@ import { ContactIntro } from './ContactIntro';
 
 // Mock the child components
 jest.mock('@/components/manga/SpeechBubble', () => ({
-  SpeechBubble: ({ children, variant, tailDirection }: any) => (
+  SpeechBubble: ({ children, variant, tailDirection }: { children: React.ReactNode; variant?: string; tailDirection?: string }) => (
     <div data-testid="speech-bubble" data-variant={variant} data-tail={tailDirection}>
       {children}
     </div>
@@ -11,7 +11,7 @@ jest.mock('@/components/manga/SpeechBubble', () => ({
 }));
 
 jest.mock('@/components/manga/MangaPanel', () => ({
-  MangaPanel: ({ children, variant, animation, className }: any) => (
+  MangaPanel: ({ children, variant, animation, className }: { children: React.ReactNode; variant?: string; animation?: string; className?: string }) => (
     <div data-testid="manga-panel" data-variant={variant} data-animation={animation} className={className}>
       {children}
     </div>
@@ -99,6 +99,7 @@ describe('ContactIntro', () => {
     });
 
     it('handles invalid method names gracefully', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render(<ContactIntro preferredMethods={['email', 'invalid-method' as any]} />);
       
       expect(screen.getByText('Email')).toBeInTheDocument();
