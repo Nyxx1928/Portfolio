@@ -29,7 +29,7 @@ interface ProjectCardProps {
   index: number;
 }
 
-export function ProjectCard({ project, index }: ProjectCardProps) {
+export function ProjectCard({ project }: ProjectCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 

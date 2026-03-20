@@ -47,7 +47,7 @@ export function SpeechBubbleExamples() {
         <div className="space-y-4">
           <div className="flex justify-start">
             <SpeechBubble variant="thought" tailDirection="bottom-left">
-              Hmm... I wonder what's for lunch today?
+              Hmm... I wonder what&apos;s for lunch today?
             </SpeechBubble>
           </div>
           
@@ -145,7 +145,7 @@ export function SpeechBubbleExamples() {
         
         <div className="flex justify-start max-w-lg">
           <SpeechBubble variant="speech" tailDirection="bottom-left">
-            I'm currently available for freelance work and new opportunities!
+            I&apos;m currently available for freelance work and new opportunities!
             Feel free to reach out via email or connect with me on social media.
             I typically respond within 24 hours.
           </SpeechBubble>

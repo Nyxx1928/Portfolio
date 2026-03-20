@@ -1,7 +1,5 @@
 'use client';
 
-import { MangaPanel } from '@/components/manga/MangaPanel';
-// Removed useScrollAnimation for debugging
 import { TimelineEvent } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -67,7 +65,6 @@ export function Timeline({ events }: TimelineProps) {
  */
 function TimelineEventItem({
   event,
-  index,
   isLast,
 }: {
   event: TimelineEvent;

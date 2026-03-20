@@ -1,7 +1,5 @@
 'use client';
 
-import { MangaPanel } from '@/components/manga/MangaPanel';
-// Removed useScrollAnimation for debugging
 import { Skill, Tool } from '@/types';
 import { cn } from '@/lib/utils';
 

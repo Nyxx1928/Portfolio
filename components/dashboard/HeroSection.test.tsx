@@ -9,20 +9,23 @@ jest.mock('next/navigation', () => ({
 
 // Mock framer-motion to avoid animation issues in tests
 jest.mock('framer-motion', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   return {
     motion: {
-      section: React.forwardRef(({ children, variants, initial, animate, ...props }: any, ref: any) => (
-        <section ref={ref} {...props}>{children}</section>
-      )),
-      div: React.forwardRef(({ children, variants, ...props }: any, ref: any) => (
-        <div ref={ref} {...props}>{children}</div>
-      )),
-      button: React.forwardRef(({ children, whileHover, whileTap, ...props }: any, ref: any) => (
-        <button ref={ref} {...props}>{children}</button>
-      )),
+      section: React.forwardRef(function MotionSection({ children, variants, initial, animate, ...props }: { children?: React.ReactNode; variants?: unknown; initial?: unknown; animate?: unknown; [key: string]: unknown }, ref: React.Ref<HTMLElement>) {
+        return <section ref={ref} {...(props as React.HTMLAttributes<HTMLElement>)}>{children}</section>;
+      }),
+      div: React.forwardRef(function MotionDiv({ children, variants, ...props }: { children?: React.ReactNode; variants?: unknown; [key: string]: unknown }, ref: React.Ref<HTMLDivElement>) {
+        return <div ref={ref} {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>;
+      }),
+      button: React.forwardRef(function MotionButton({ children, whileHover, whileTap, ...props }: { children?: React.ReactNode; whileHover?: unknown; whileTap?: unknown; [key: string]: unknown }, ref: React.Ref<HTMLButtonElement>) {
+        return <button ref={ref} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>{children}</button>;
+      }),
     },
   };
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 });
 
 describe('HeroSection', () => {

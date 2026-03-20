@@ -4,37 +4,40 @@ import { getFeaturedProjects } from '@/lib/data/projects';
 
 // Mock next/link
 jest.mock('next/link', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
-  return ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  );
+  function MockLink({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) {
+    return <a href={href} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>{children}</a>;
+  }
+  return MockLink;
 });
 
 // Mock framer-motion to avoid animation issues in tests
 jest.mock('framer-motion', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   return {
     motion: {
-      div: React.forwardRef(({ children, variants, initial, animate, whileInView, viewport, ...props }: any, ref: any) => (
-        <div ref={ref} {...props}>{children}</div>
-      )),
+      div: React.forwardRef(function MotionDiv({ children, variants, initial, animate, whileInView, viewport, ...props }: { children?: React.ReactNode; variants?: unknown; initial?: unknown; animate?: unknown; whileInView?: unknown; viewport?: unknown; [key: string]: unknown }, ref: React.Ref<HTMLDivElement>) {
+        return <div ref={ref} {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>;
+      }),
     },
     useInView: jest.fn(() => true),
   };
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 });
 
 // Mock the MangaPanel component
 jest.mock('@/components/manga/MangaPanel', () => ({
-  MangaPanel: ({ children, className }: any) => (
+  MangaPanel: ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <div className={className}>{children}</div>
   ),
 }));
 
 // Mock the ChapterHeader component
 jest.mock('@/components/manga/ChapterHeader', () => ({
-  ChapterHeader: ({ title, subtitle }: any) => (
+  ChapterHeader: ({ title, subtitle }: { title: string; subtitle?: string }) => (
     <div>
       <h2>{title}</h2>
       {subtitle && <p>{subtitle}</p>}
@@ -212,7 +215,7 @@ describe('FeaturedProjects', () => {
     });
 
     it('applies manga styling classes', () => {
-      const { container } = render(<FeaturedProjects />);
+      render(<FeaturedProjects />);
       
       // Check for manga-button class on "View All Projects" button
       const viewAllButton = screen.getByText('View All Projects');
