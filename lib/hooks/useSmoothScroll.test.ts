@@ -21,7 +21,7 @@ describe('useSmoothScroll', () => {
     };
 
     // Mock Lenis constructor
-    (Lenis as jest.MockedClass<typeof Lenis>).mockImplementation(() => mockLenis as any);
+    (Lenis as jest.MockedClass<typeof Lenis>).mockImplementation(() => mockLenis as unknown as InstanceType<typeof Lenis>);
 
     // Mock requestAnimationFrame - don't execute callback to prevent infinite loop
     rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 0);

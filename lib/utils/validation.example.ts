@@ -69,6 +69,7 @@ function exampleFormValidation() {
 function exampleReactHookFormIntegration() {
   // This is how you would use it with React Hook Form in ContactForm.tsx
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const customValidators = {
     name: (value: string) => {
       const result = validateName(value);
