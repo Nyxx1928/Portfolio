@@ -71,13 +71,13 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     });
 
     // Mock scrollBy and scrollTo methods for JSDOM
-    Element.prototype.scrollBy = function(options: any) {
+    Element.prototype.scrollBy = function(options: ScrollToOptions | number) {
       if (typeof options === 'object' && options.left !== undefined) {
         this.scrollLeft += options.left;
       }
     };
 
-    Element.prototype.scrollTo = function(options: any) {
+    Element.prototype.scrollTo = function(options: ScrollToOptions | number) {
       if (typeof options === 'object' && options.left !== undefined) {
         this.scrollLeft = options.left;
         // Manually trigger scroll event since JSDOM doesn't do it automatically
@@ -368,13 +368,13 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
     });
 
     // Mock scrollBy and scrollTo methods
-    Element.prototype.scrollBy = function(options: any) {
+    Element.prototype.scrollBy = function(options: ScrollToOptions | number) {
       if (typeof options === 'object' && options.left !== undefined) {
         this.scrollLeft += options.left;
       }
     };
 
-    Element.prototype.scrollTo = function(options: any) {
+    Element.prototype.scrollTo = function(options: ScrollToOptions | number) {
       if (typeof options === 'object' && options.left !== undefined) {
         this.scrollLeft = options.left;
         // Manually trigger scroll event since JSDOM doesn't do it automatically

@@ -232,14 +232,14 @@ export function HorizontalScrollContainer({
       }
 
       const activePanel = container.children.item(
-        currentIndex,
+        currentIndexRef.current,
       ) as HTMLElement | null;
       const allowsInternalScroll =
         activePanel?.dataset.allowInternalScroll === "true";
 
       if (allowsInternalScroll && activePanel) {
         const atTop = activePanel.scrollTop <= 0;
-        const atBottom = panelBottomStateRef.current[currentIndex] ?? false;
+        const atBottom = panelBottomStateRef.current[currentIndexRef.current] ?? false;
 
         // Scrolling down: allow internal scroll if not at bottom
         if (event.deltaY > 0 && !atBottom) {

@@ -68,7 +68,7 @@ export function FeaturedProjects() {
             featuredProjects.length === 3 && 'lg:grid-cols-3'
           )}
         >
-          {featuredProjects.map((project, index) => (
+          {featuredProjects.map((project) => (
             <motion.div key={project.id} variants={cardVariants}>
               {/* Project card as Link for navigation - Requirement 4.4 */}
               <Link
