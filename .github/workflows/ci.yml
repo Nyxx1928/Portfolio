@@ -231,7 +231,7 @@ jobs:
           format: sarif
           output: trivy-results.sarif
           severity: HIGH,CRITICAL
-          exit-code: '1'
+          exit-code: "1"
           ignore-unfixed: true
 
       - name: Upload Trivy results to GitHub Security tab
@@ -248,7 +248,7 @@ jobs:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     permissions:
       contents: read
-      id-token: write   # required for keyless signing via OIDC
+      id-token: write # required for keyless signing via OIDC
     steps:
       - uses: actions/checkout@v4
 
@@ -280,7 +280,19 @@ jobs:
     name: "CI Summary"
     runs-on: ubuntu-latest
     if: always()
-    needs: [lint, typecheck, unit_tests, build, integration_tests, e2e, docker, security_sbom, security_trivy, security_cosign]
+    needs:
+      [
+        lint,
+        typecheck,
+        unit_tests,
+        build,
+        integration_tests,
+        e2e,
+        docker,
+        security_sbom,
+        security_trivy,
+        security_cosign,
+      ]
     steps:
       - name: Publish summary
         shell: bash
