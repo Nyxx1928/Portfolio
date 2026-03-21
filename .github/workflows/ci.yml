@@ -166,11 +166,13 @@ jobs:
         if: steps.detect.outputs.found == 'true'
         shell: bash
         run: |
+          # Force pulling the latest base images and avoid cached layers so CI
+          # uses the repository's updated Dockerfile and base image.
           if [ -f Dockerfile ]; then
-            docker build -t app-ci:latest .
+            docker build --pull --no-cache -t app-ci:latest .
           else
             first=$(find . -name Dockerfile | head -n 1)
-            docker build -t app-ci:latest -f "$first" "$(dirname "$first")"
+            docker build --pull --no-cache -t app-ci:latest -f "$first" "$(dirname "$first")"
           fi
       - name: Validate Docker Compose
         if: steps.detect.outputs.found == 'true'
@@ -214,11 +216,12 @@ jobs:
       - name: Build Docker image for scanning
         shell: bash
         run: |
+          # Force fresh build for security scanning to avoid scanning stale images
           if [ -f Dockerfile ]; then
-            docker build -t app-scan:latest .
+            docker build --pull --no-cache -t app-scan:latest .
           else
             first=$(find . -name Dockerfile | head -n 1)
-            docker build -t app-scan:latest -f "$first" "$(dirname "$first")"
+            docker build --pull --no-cache -t app-scan:latest -f "$first" "$(dirname "$first")"
           fi
 
       - name: Run Trivy vulnerability scan
@@ -255,11 +258,12 @@ jobs:
       - name: Build Docker image
         shell: bash
         run: |
+          # Ensure signed image is built from the freshest base
           if [ -f Dockerfile ]; then
-            docker build -t app-signed:latest .
+            docker build --pull --no-cache -t app-signed:latest .
           else
             first=$(find . -name Dockerfile | head -n 1)
-            docker build -t app-signed:latest -f "$first" "$(dirname "$first")"
+            docker build --pull --no-cache -t app-signed:latest -f "$first" "$(dirname "$first")"
           fi
 
       - name: Sign image with Cosign (keyless via OIDC)
