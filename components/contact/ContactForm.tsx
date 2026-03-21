@@ -87,7 +87,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
             Send a Message
           </h2>
           <p className="text-sm text-manga-gray-600 mt-2">
-            Fill out the form below and I'll get back to you as soon as possible!
+            Fill out the form below and I&apos;ll get back to you as soon as possible!
           </p>
         </div>
 
@@ -294,7 +294,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
                   </h3>
                 </div>
                 <p className="text-sm text-manga-gray-800">
-                  Thanks for reaching out! I'll get back to you as soon as possible.
+                  Thanks for reaching out! I&apos;ll get back to you as soon as possible.
                 </p>
               </div>
             </div>

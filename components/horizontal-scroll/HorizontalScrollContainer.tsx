@@ -299,7 +299,7 @@ export function HorizontalScrollContainer({
       }
     };
   // scrollToPanel is stable; currentIndex is read via ref to avoid re-registering
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [scrollToPanel]);
 
   useEffect(() => {

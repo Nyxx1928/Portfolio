@@ -72,6 +72,8 @@ export function PanelPage({
   }, [allowInternalScroll, index, onBottomInViewChange]);
 
   const childArray = useMemo(() => Children.toArray(children), [children]);
+  // Accessing ref.current here is intentional to preserve the "played" flag
+  // eslint-disable-next-line react-hooks/refs
   const shouldShowAnimatedState = hasPlayedEntryRef.current || isInView;
 
   return (
