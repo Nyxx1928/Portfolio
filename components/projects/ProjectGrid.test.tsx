@@ -5,7 +5,7 @@ import { Project } from '@/types';
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>,
   },
   useInView: () => true,
 }));

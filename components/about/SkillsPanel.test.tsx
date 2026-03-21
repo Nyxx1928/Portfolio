@@ -5,14 +5,14 @@ import { Skill, Tool } from '@/types';
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>,
   },
   useInView: jest.fn(() => false),
 }));
 
 // Mock MangaPanel
 jest.mock('@/components/manga/MangaPanel', () => ({
-  MangaPanel: ({ children }: any) => <div data-testid="manga-panel">{children}</div>,
+  MangaPanel: ({ children }: { children: React.ReactNode }) => <div data-testid="manga-panel">{children}</div>,
 }));
 
 // Mock useScrollAnimation
@@ -381,7 +381,7 @@ describe('SkillsPanel', () => {
 
   describe('Responsive Design', () => {
     it('applies responsive text sizing classes', () => {
-      const { container } = render(<SkillsPanel skills={mockSkills} tools={mockTools} />);
+      render(<SkillsPanel skills={mockSkills} tools={mockTools} />);
       
       const mainHeader = screen.getByText('Skills & Abilities');
       expect(mainHeader).toHaveClass('text-3xl', 'md:text-4xl');

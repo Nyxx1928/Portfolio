@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { SocialLinks } from './SocialLinks';
 
 describe('SocialLinks', () => {
@@ -109,7 +108,6 @@ describe('SocialLinks', () => {
 
   describe('Hover Effects', () => {
     it('applies hover styles to social link badges', async () => {
-      const user = userEvent.setup();
       render(<SocialLinks links={[mockLinks[0]]} />);
       
       const githubLink = screen.getByRole('link', { name: /visit github profile/i });

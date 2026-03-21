@@ -12,15 +12,15 @@ jest.mock('next/navigation', () => ({
 // Mock next/image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
+  default: (props: { src: string; alt: string; [key: string]: unknown }) => {
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-    return <img {...props} />;
+    return <img {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />;
   },
 }));
 
 // Mock HalftonePattern component
 jest.mock('@/components/manga/HalftonePattern', () => ({
-  HalftonePattern: ({ intensity, className }: any) => (
+  HalftonePattern: ({ intensity, className }: { intensity?: string; className?: string }) => (
     <div data-testid="halftone-pattern" data-intensity={intensity} className={className} />
   ),
 }));
@@ -28,7 +28,7 @@ jest.mock('@/components/manga/HalftonePattern', () => ({
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>,
   },
 }));
 
