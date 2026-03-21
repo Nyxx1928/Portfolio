@@ -158,7 +158,7 @@ describe('ProjectDetailPage', () => {
     
     it('should call notFound for invalid slug', () => {
       // Mock notFound to throw an error like it does in production
-      mockedNotFound.mockImplementation(() => {
+      (mockedNotFound as unknown as jest.Mock).mockImplementation(() => {
         throw new Error('NEXT_NOT_FOUND');
       });
 
@@ -166,14 +166,14 @@ describe('ProjectDetailPage', () => {
         render(<ProjectDetailPage params={{ slug: 'invalid-slug-that-does-not-exist' }} />);
       }).toThrow('NEXT_NOT_FOUND');
 
-      expect(mockedNotFound).toHaveBeenCalled();
+      expect((mockedNotFound as unknown as jest.Mock)).toHaveBeenCalled();
 
       // Reset the mock
-      mockedNotFound.mockReset();
+      (mockedNotFound as unknown as jest.Mock).mockReset();
     });
     
     it('should not call notFound for valid slug', () => {
-      mockedNotFound.mockClear();
+      (mockedNotFound as unknown as jest.Mock).mockClear();
 
       const project = getProjects()[0];
       render(<ProjectDetailPage params={{ slug: project.slug }} />);
