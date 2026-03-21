@@ -150,8 +150,9 @@ describe('ContactForm', () => {
 
     it('displays loading state during submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockImplementation(async (data: any) => new Promise((resolve) => setTimeout(resolve, 100))) as unknown as (data: any) => Promise<void>;
-      render(<ContactForm onSubmit={mockOnSubmit} />);
+      const mockOnSubmit = jest.fn((data: any) => new Promise((resolve) => setTimeout(resolve, 100)));
+      const handleSubmit = async (data: any): Promise<void> => { await mockOnSubmit(data); };
+      render(<ContactForm onSubmit={handleSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
       await user.type(screen.getByLabelText(/email/i), 'john@example.com');
@@ -231,8 +232,9 @@ describe('ContactForm', () => {
 
     it('disables form fields during submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockImplementation(async (data: any) => new Promise((resolve) => setTimeout(resolve, 100))) as unknown as (data: any) => Promise<void>;
-      render(<ContactForm onSubmit={mockOnSubmit} />);
+      const mockOnSubmit = jest.fn((data: any) => new Promise((resolve) => setTimeout(resolve, 100)));
+      const handleSubmit = async (data: any): Promise<void> => { await mockOnSubmit(data); };
+      render(<ContactForm onSubmit={handleSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
       await user.type(screen.getByLabelText(/email/i), 'john@example.com');

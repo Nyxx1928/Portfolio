@@ -71,7 +71,7 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     });
 
     // Mock scrollBy and scrollTo methods for JSDOM (accept any arg forms)
-    Element.prototype.scrollBy = function(...args: any[]) {
+    (Element.prototype as any).scrollBy = function(...args: any[]) {
       const options = args[0];
       if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft += options.left;
@@ -81,7 +81,7 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
       }
     };
 
-    Element.prototype.scrollTo = function(...args: any[]) {
+    (Element.prototype as any).scrollTo = function(...args: any[]) {
       const options = args[0];
       if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft = options.left;
@@ -377,7 +377,7 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
     });
 
     // Mock scrollBy and scrollTo methods (accept any arg forms)
-    Element.prototype.scrollBy = function(...args: any[]) {
+    (Element.prototype as any).scrollBy = function(...args: any[]) {
       const options = args[0];
       if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft += options.left;
@@ -386,7 +386,7 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       }
     };
 
-    Element.prototype.scrollTo = function(...args: any[]) {
+    (Element.prototype as any).scrollTo = function(...args: any[]) {
       const options = args[0];
       if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft = options.left;
