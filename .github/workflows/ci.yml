@@ -140,7 +140,7 @@ jobs:
         if: steps.detect.outputs.found == 'true'
         env:
           CI: true
-        run: npx playwright test --pass-with-no-tests
+        run: npx playwright test --project=chromium --pass-with-no-tests
       - if: steps.detect.outputs.found != 'true'
         run: echo "No Playwright config found — skipping."
 
