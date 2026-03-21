@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { renderHook } from '@testing-library/react';
 import { useSmoothScroll } from './useSmoothScroll';
 import Lenis from 'lenis';

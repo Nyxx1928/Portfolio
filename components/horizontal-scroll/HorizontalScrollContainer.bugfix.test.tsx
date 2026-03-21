@@ -18,6 +18,7 @@
 import { render, waitFor } from '@testing-library/react';
 import { HorizontalScrollContainer, PanelConfig } from './HorizontalScrollContainer';
 import { HorizontalScrollProvider } from './HorizontalScrollContext';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as fc from 'fast-check';
 
 // Mock panels for testing
