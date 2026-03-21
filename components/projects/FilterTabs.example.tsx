@@ -12,7 +12,7 @@ export default function FilterTabsExamples() {
       <section>
         <h2 className="text-2xl font-heading mb-4">Default State (All Projects)</h2>
         <p className="text-manga-gray-600 mb-4">
-          FilterTabs with "All Projects" active (default when no category parameter is present)
+          FilterTabs with &quot;All Projects&quot; active (default when no category parameter is present)
         </p>
         <div className="bg-manga-white p-6 border-manga border-manga-black">
           <FilterTabs />
@@ -57,11 +57,11 @@ export default function FilterTabsExamples() {
           When a tab is clicked:
         </p>
         <ul className="list-disc list-inside text-manga-gray-600 mb-4 space-y-1">
-          <li>"All Projects" → navigates to /projects</li>
-          <li>"Web Apps" → navigates to /projects?category=web</li>
-          <li>"Mobile Apps" → navigates to /projects?category=mobile</li>
-          <li>"UI/UX" → navigates to /projects?category=uiux</li>
-          <li>"Other" → navigates to /projects?category=other</li>
+          <li>&quot;All Projects&quot; → navigates to /projects</li>
+          <li>&quot;Web Apps&quot; → navigates to /projects?category=web</li>
+          <li>&quot;Mobile Apps&quot; → navigates to /projects?category=mobile</li>
+          <li>&quot;UI/UX&quot; → navigates to /projects?category=uiux</li>
+          <li>&quot;Other&quot; → navigates to /projects?category=other</li>
         </ul>
         <div className="bg-manga-white p-6 border-manga border-manga-black">
           <FilterTabs />
@@ -74,9 +74,9 @@ export default function FilterTabsExamples() {
           The component includes proper ARIA attributes:
         </p>
         <ul className="list-disc list-inside text-manga-gray-600 mb-4 space-y-1">
-          <li>role="tablist" on the container</li>
-          <li>aria-label="Project category filters" for screen readers</li>
-          <li>role="tab" on each button</li>
+          <li>role=&quot;tablist&quot; on the container</li>
+          <li>aria-label=&quot;Project category filters&quot; for screen readers</li>
+          <li>role=&quot;tab&quot; on each button</li>
           <li>aria-selected indicates active tab</li>
           <li>aria-controls links to the projects grid</li>
         </ul>

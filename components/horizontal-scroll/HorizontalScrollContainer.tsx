@@ -230,18 +230,15 @@ export function HorizontalScrollContainer({
         return;
       }
 
-      // Use ref to get current index — avoids stale closure bug
-      const idx = currentIndexRef.current;
-      const activePanel = container.children.item(idx) as HTMLElement | null;
+      const activePanel = container.children.item(
+        currentIndexRef.current,
+      ) as HTMLElement | null;
       const allowsInternalScroll =
         activePanel?.dataset.allowInternalScroll === "true";
 
       if (allowsInternalScroll && activePanel) {
         const atTop = activePanel.scrollTop <= 0;
-        // A panel with no overflow (scrollHeight === clientHeight) is always at
-        // bottom — treat it as such so horizontal navigation still fires.
-        const hasOverflow = activePanel.scrollHeight > activePanel.clientHeight + 1;
-        const atBottom = !hasOverflow || (panelBottomStateRef.current[idx] ?? false);
+        const atBottom = panelBottomStateRef.current[currentIndexRef.current] ?? false;
 
         // Scrolling down: allow internal scroll if not at bottom
         if (event.deltaY > 0 && !atBottom) {

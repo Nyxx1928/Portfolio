@@ -50,13 +50,13 @@ describe('ChapterHeader', () => {
   });
 
   it('uses bold typography for title', () => {
-    const { container } = render(<ChapterHeader title="Test Chapter" />);
+    render(<ChapterHeader title="Test Chapter" />);
     const title = screen.getByText('Test Chapter');
     expect(title).toHaveClass('font-heading');
   });
 
   it('uses uppercase styling for title', () => {
-    const { container } = render(<ChapterHeader title="Test Chapter" />);
+    render(<ChapterHeader title="Test Chapter" />);
     const title = screen.getByText('Test Chapter');
     expect(title).toHaveClass('uppercase');
   });

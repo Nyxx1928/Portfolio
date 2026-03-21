@@ -24,14 +24,8 @@ export function PanelPage({
 }: PanelPageProps) {
   const panelRef = useRef<HTMLElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const hasPlayedEntryRef = useRef(false);
-  const isInView = useInView(panelRef, { amount: 0.65 });
-
-  useEffect(() => {
-    if (isInView) {
-      hasPlayedEntryRef.current = true;
-    }
-  }, [isInView]);
+  // once: true means isInView stays true after first intersection — no need for extra state/ref
+  const isInView = useInView(panelRef, { amount: 0.65, once: true });
 
   useEffect(() => {
     if (!allowInternalScroll || !sentinelRef.current || !onBottomInViewChange) {
@@ -72,9 +66,7 @@ export function PanelPage({
   }, [allowInternalScroll, index, onBottomInViewChange]);
 
   const childArray = useMemo(() => Children.toArray(children), [children]);
-  // Accessing ref.current here is intentional to preserve the "played" flag
-  // eslint-disable-next-line react-hooks/refs
-  const shouldShowAnimatedState = hasPlayedEntryRef.current || isInView;
+  const shouldShowAnimatedState = isInView;
 
   return (
     <section

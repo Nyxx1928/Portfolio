@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface HeroSectionProps {
   headline?: string;
