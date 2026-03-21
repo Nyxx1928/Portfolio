@@ -37,6 +37,7 @@ export function HorizontalScrollContainer({
   const touchStartXRef = useRef(0);
   const accumulatedDeltaRef = useRef(0);
   const gestureTimeoutRef = useRef<number | null>(null);
+  const navigatedRef = useRef(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const {
@@ -258,6 +259,11 @@ export function HorizontalScrollContainer({
 
       if (isTrackpad) {
         // Trackpad gesture handling with delta accumulation
+        // If this is the first event of a new gesture, reset the navigated flag
+        if (gestureTimeoutRef.current === null) {
+          navigatedRef.current = false;
+        }
+
         accumulatedDeltaRef.current += event.deltaY;
 
         // Clear existing gesture timeout
@@ -270,14 +276,18 @@ export function HorizontalScrollContainer({
           const accumulated = accumulatedDeltaRef.current;
           const threshold = 50;
 
-          if (Math.abs(accumulated) >= threshold) {
+          if (Math.abs(accumulated) >= threshold && !navigatedRef.current) {
             // Determine direction
             const direction = accumulated > 0 ? 1 : -1;
             scrollToPanel(currentIndexRef.current + direction);
+            // Mark that we've navigated during this gesture so further
+            // accumulated values in the same gesture don't trigger another move
+            navigatedRef.current = true;
+            // Reset accumulation after navigation
+            accumulatedDeltaRef.current = 0;
           }
 
-          // Reset accumulation after gesture completes
-          accumulatedDeltaRef.current = 0;
+          // Gesture sequence completed
           gestureTimeoutRef.current = null;
         }, 150);
       } else {
