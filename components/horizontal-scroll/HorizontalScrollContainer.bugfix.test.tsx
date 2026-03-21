@@ -18,6 +18,7 @@
 import { render, waitFor } from '@testing-library/react';
 import { HorizontalScrollContainer, PanelConfig } from './HorizontalScrollContainer';
 import { HorizontalScrollProvider } from './HorizontalScrollContext';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as fc from 'fast-check';
 
 // Mock panels for testing
@@ -70,17 +71,26 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
       value: 1920,
     });
 
-    // Mock scrollBy and scrollTo methods for JSDOM
-    Element.prototype.scrollBy = function(options: ScrollToOptions | number) {
-      if (typeof options === 'object' && options.left !== undefined) {
+    // Mock scrollBy and scrollTo methods for JSDOM (accept any arg forms)
+    (Element.prototype as any).scrollBy = function(...args: any[]) {
+      const options = args[0];
+      if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft += options.left;
+      } else if (typeof options === 'number') {
+        // scrollBy(x, y) — treat x as left delta
+        this.scrollLeft += options;
       }
     };
 
-    Element.prototype.scrollTo = function(options: ScrollToOptions | number) {
-      if (typeof options === 'object' && options.left !== undefined) {
+    (Element.prototype as any).scrollTo = function(...args: any[]) {
+      const options = args[0];
+      if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft = options.left;
         // Manually trigger scroll event since JSDOM doesn't do it automatically
+        this.dispatchEvent(new Event('scroll', { bubbles: true }));
+      } else if (typeof options === 'number') {
+        // scrollTo(x, y) — set scrollLeft to x
+        this.scrollLeft = options;
         this.dispatchEvent(new Event('scroll', { bubbles: true }));
       }
     };
@@ -367,17 +377,23 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       value: 1920,
     });
 
-    // Mock scrollBy and scrollTo methods
-    Element.prototype.scrollBy = function(options: ScrollToOptions | number) {
-      if (typeof options === 'object' && options.left !== undefined) {
+    // Mock scrollBy and scrollTo methods (accept any arg forms)
+    (Element.prototype as any).scrollBy = function(...args: any[]) {
+      const options = args[0];
+      if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft += options.left;
+      } else if (typeof options === 'number') {
+        this.scrollLeft += options;
       }
     };
 
-    Element.prototype.scrollTo = function(options: ScrollToOptions | number) {
-      if (typeof options === 'object' && options.left !== undefined) {
+    (Element.prototype as any).scrollTo = function(...args: any[]) {
+      const options = args[0];
+      if (typeof options === 'object' && options?.left !== undefined) {
         this.scrollLeft = options.left;
-        // Manually trigger scroll event since JSDOM doesn't do it automatically
+        this.dispatchEvent(new Event('scroll', { bubbles: true }));
+      } else if (typeof options === 'number') {
+        this.scrollLeft = options;
         this.dispatchEvent(new Event('scroll', { bubbles: true }));
       }
     };

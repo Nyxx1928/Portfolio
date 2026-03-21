@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import ProjectDetailPage, { generateStaticParams, generateMetadata } from './page';
 import { getProjects, getProjectBySlug } from '@/lib/data/projects';
-import { notFound } from 'next/navigation';
+import { notFound as mockedNotFound } from 'next/navigation';
 
 // Mock Next.js navigation
 jest.mock('next/navigation', () => ({
@@ -157,29 +157,27 @@ describe('ProjectDetailPage', () => {
     });
     
     it('should call notFound for invalid slug', () => {
-      const mockedNotFound = notFound as jest.Mock;
       // Mock notFound to throw an error like it does in production
-      mockedNotFound.mockImplementation(() => {
+      (mockedNotFound as unknown as jest.Mock).mockImplementation(() => {
         throw new Error('NEXT_NOT_FOUND');
       });
-      
+
       expect(() => {
         render(<ProjectDetailPage params={{ slug: 'invalid-slug-that-does-not-exist' }} />);
       }).toThrow('NEXT_NOT_FOUND');
-      
-      expect(mockedNotFound).toHaveBeenCalled();
-      
+
+      expect((mockedNotFound as unknown as jest.Mock)).toHaveBeenCalled();
+
       // Reset the mock
-      mockedNotFound.mockReset();
+      (mockedNotFound as unknown as jest.Mock).mockReset();
     });
     
     it('should not call notFound for valid slug', () => {
-      const mockedNotFound = notFound as jest.Mock;
-      mockedNotFound.mockClear();
-      
+      (mockedNotFound as unknown as jest.Mock).mockClear();
+
       const project = getProjects()[0];
       render(<ProjectDetailPage params={{ slug: project.slug }} />);
-      
+
       expect(mockedNotFound).not.toHaveBeenCalled();
     });
   });

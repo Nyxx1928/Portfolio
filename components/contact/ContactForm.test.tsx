@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -126,7 +127,7 @@ describe('ContactForm', () => {
   describe('Form Submission', () => {
     it('calls onSubmit with form data when submitted with valid data', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockResolvedValue(undefined);
+      const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       const formData = {
@@ -150,8 +151,9 @@ describe('ContactForm', () => {
 
     it('displays loading state during submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn(() => new Promise((resolve) => setTimeout(resolve, 100)));
-      render(<ContactForm onSubmit={mockOnSubmit} />);
+      const mockOnSubmit = jest.fn((data: any) => new Promise((resolve) => setTimeout(resolve, 100)));
+      const handleSubmit = async (data: any): Promise<void> => { await mockOnSubmit(data); };
+      render(<ContactForm onSubmit={handleSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
       await user.type(screen.getByLabelText(/email/i), 'john@example.com');
@@ -170,7 +172,7 @@ describe('ContactForm', () => {
 
     it('displays success message after successful submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockResolvedValue(undefined);
+      const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
@@ -188,7 +190,7 @@ describe('ContactForm', () => {
 
     it('displays error message when submission fails', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error'));
+      const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error')) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
@@ -206,7 +208,7 @@ describe('ContactForm', () => {
 
     it('resets form after successful submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockResolvedValue(undefined);
+      const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       const nameInput = screen.getByLabelText(/name/i) as HTMLInputElement;
@@ -231,8 +233,9 @@ describe('ContactForm', () => {
 
     it('disables form fields during submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn(() => new Promise((resolve) => setTimeout(resolve, 100)));
-      render(<ContactForm onSubmit={mockOnSubmit} />);
+      const mockOnSubmit = jest.fn((data: any) => new Promise((resolve) => setTimeout(resolve, 100)));
+      const handleSubmit = async (data: any): Promise<void> => { await mockOnSubmit(data); };
+      render(<ContactForm onSubmit={handleSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
       await user.type(screen.getByLabelText(/email/i), 'john@example.com');
@@ -269,7 +272,7 @@ describe('ContactForm', () => {
 
     it('displays manga character reaction on success', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockResolvedValue(undefined);
+      const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
@@ -288,7 +291,7 @@ describe('ContactForm', () => {
 
     it('displays manga character reaction on error', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error'));
+      const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error')) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
