@@ -156,7 +156,7 @@ describe('ProjectDetailPage', () => {
     });
     
     it('should call notFound for invalid slug', () => {
-      const { notFound } = require('next/navigation');
+      const { notFound } = require('next/navigation') as { notFound: jest.Mock };
       // Mock notFound to throw an error like it does in production
       notFound.mockImplementation(() => {
         throw new Error('NEXT_NOT_FOUND');
@@ -173,7 +173,7 @@ describe('ProjectDetailPage', () => {
     });
     
     it('should not call notFound for valid slug', () => {
-      const { notFound } = require('next/navigation');
+      const { notFound } = require('next/navigation') as { notFound: jest.Mock };
       notFound.mockClear();
       
       const project = getProjects()[0];

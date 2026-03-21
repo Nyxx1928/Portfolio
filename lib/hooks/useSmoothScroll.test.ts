@@ -51,7 +51,9 @@ describe('useSmoothScroll', () => {
   it('uses correct easing function', () => {
     renderHook(() => useSmoothScroll());
 
-    const config = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0][0];
+    const call = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0];
+    expect(call).toBeDefined();
+    const config = call![0] as any;
     const easingFn = config.easing as (t: number) => number;
 
     // Test easing function behavior
@@ -101,7 +103,9 @@ describe('useSmoothScroll', () => {
   it('configures smooth scrolling for vertical orientation', () => {
     renderHook(() => useSmoothScroll());
 
-    const config = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0][0];
+    const call = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0];
+    expect(call).toBeDefined();
+    const config = call![0] as any;
     expect(config.orientation).toBe('vertical');
     expect(config.smoothWheel).toBe(true);
   });
@@ -109,7 +113,9 @@ describe('useSmoothScroll', () => {
   it('configures appropriate scroll multipliers', () => {
     renderHook(() => useSmoothScroll());
 
-    const config = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0][0];
+    const call = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0];
+    expect(call).toBeDefined();
+    const config = call![0] as any;
     expect(config.wheelMultiplier).toBe(1);
     expect(config.touchMultiplier).toBe(2);
   });
@@ -117,14 +123,18 @@ describe('useSmoothScroll', () => {
   it('disables infinite scrolling', () => {
     renderHook(() => useSmoothScroll());
 
-    const config = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0][0];
+    const call = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0];
+    expect(call).toBeDefined();
+    const config = call![0] as any;
     expect(config.infinite).toBe(false);
   });
 
   it('sets duration to 1.2 seconds', () => {
     renderHook(() => useSmoothScroll());
 
-    const config = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0][0];
+    const call = (Lenis as jest.MockedClass<typeof Lenis>).mock.calls[0];
+    expect(call).toBeDefined();
+    const config = call![0] as any;
     expect(config.duration).toBe(1.2);
   });
 });
