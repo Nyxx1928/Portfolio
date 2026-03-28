@@ -15,6 +15,11 @@
   --color-manga-gray-200: #E5E5E5;
   --color-manga-gray-50: #F5F5F5;
 
+  /* Manga Cyan Accent Colors */
+  --color-manga-cyan-primary: #00BCD4;
+  --color-manga-cyan-light: #4DD0E1;
+  --color-manga-cyan-dark: #0097A7;
+
   /* Font Families */
   --font-family-heading: 'Bebas Neue', Impact, sans-serif;
   --font-family-body: 'Inter', system-ui, sans-serif;
@@ -185,6 +190,13 @@
 }
 
 @layer components {
+  /*
+   * Accent color usage guidelines:
+   * - Keep cyan accents to roughly <= 20% of viewport area.
+   * - Prefer dark cyan for text; primary/light cyan are best for decorative surfaces.
+   * - Maintain WCAG AA contrast for interactive and text elements.
+   */
+
   /* Manga Panel Base */
   .manga-panel {
     border-width: var(--border-width-manga);
@@ -270,6 +282,64 @@
   .manga-button-outline:hover {
     box-shadow: var(--shadow-manga-hover);
     transform: translate(-2px, -2px);
+  }
+
+  /* Manga Button Variants (cyan accent system) */
+  .manga-button-primary,
+  .manga-button-light,
+  .manga-button-dark,
+  .manga-button-outline-cyan {
+    padding: 0.75rem 1.5rem;
+    border-width: var(--border-width-manga);
+    font-family: var(--font-family-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: var(--shadow-manga);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .manga-button-primary {
+    border-color: var(--color-manga-cyan-dark);
+    background-color: var(--color-manga-cyan-primary);
+    color: var(--color-manga-black);
+  }
+
+  .manga-button-light {
+    border-color: var(--color-manga-cyan-dark);
+    background-color: var(--color-manga-cyan-light);
+    color: var(--color-manga-black);
+  }
+
+  .manga-button-dark {
+    border-color: var(--color-manga-cyan-dark);
+    background-color: var(--color-manga-cyan-dark);
+    color: var(--color-manga-white);
+  }
+
+  .manga-button-outline-cyan {
+    border-color: var(--color-manga-cyan-dark);
+    background-color: var(--color-manga-white);
+    color: var(--color-manga-cyan-dark);
+  }
+
+  .manga-button-primary:hover,
+  .manga-button-light:hover,
+  .manga-button-dark:hover,
+  .manga-button-outline-cyan:hover {
+    border-color: var(--color-manga-cyan-dark);
+    background-color: var(--color-manga-cyan-dark);
+    color: var(--color-manga-white);
+    box-shadow: var(--shadow-manga-hover);
+    transform: translate(-2px, -2px);
+  }
+
+  .manga-button-primary:focus-visible,
+  .manga-button-light:focus-visible,
+  .manga-button-dark:focus-visible,
+  .manga-button-outline-cyan:focus-visible {
+    outline: 3px solid var(--color-manga-cyan-dark);
+    outline-offset: 3px;
   }
 
   .typewriter-text {
@@ -429,6 +499,40 @@
 }
 
 @layer utilities {
+  /* Typography utilities for manga emphasis text */
+  .text-emphasis {
+    font-family: var(--font-family-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  .text-rotate-neg-12 { transform: rotate(-12deg); }
+  .text-rotate-neg-6 { transform: rotate(-6deg); }
+  .text-rotate-6 { transform: rotate(6deg); }
+  .text-rotate-12 { transform: rotate(12deg); }
+
+  .text-stroke {
+    -webkit-text-stroke: 2px var(--color-manga-black);
+    paint-order: stroke fill;
+  }
+
+  .text-stroke-accent {
+    -webkit-text-stroke: 2px var(--color-manga-cyan-dark);
+    paint-order: stroke fill;
+  }
+
+  .text-shadow-manga {
+    text-shadow: 2px 2px 0 var(--color-manga-black);
+  }
+
+  .text-shadow-manga-strong {
+    text-shadow:
+      2px 2px 0 var(--color-manga-black),
+      4px 4px 0 rgba(0, 0, 0, 0.35);
+  }
+
   .text-outline {
     text-shadow: 
       -2px -2px 0 #000,
@@ -450,6 +554,29 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Mobile typography safety: keep emphasis text readable under 640px */
+@media (max-width: 639px) {
+  .text-emphasis {
+    letter-spacing: 0.04em;
+    line-height: 1.08;
+  }
+
+  .text-stroke,
+  .text-stroke-accent {
+    -webkit-text-stroke-width: 1.5px;
+  }
+
+  .text-shadow-manga {
+    text-shadow: 1px 1px 0 var(--color-manga-black);
+  }
+
+  .text-shadow-manga-strong {
+    text-shadow:
+      1px 1px 0 var(--color-manga-black),
+      2px 2px 0 rgba(0, 0, 0, 0.3);
   }
 }
 

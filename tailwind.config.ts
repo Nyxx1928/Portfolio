@@ -20,6 +20,11 @@ const config: Config = {
             200: '#E5E5E5',
             50: '#F5F5F5',
           },
+          cyan: {
+            primary: '#00BCD4',
+            light: '#4DD0E1',
+            dark: '#0097A7',
+          },
         },
       },
       fontFamily: {

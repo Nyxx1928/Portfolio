@@ -62,7 +62,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       role="button"
       tabIndex={0}
       aria-label={`View ${project.title} project details`}
-      className="manga-panel-bordered h-full cursor-pointer transition-shadow duration-200 focus:outline-none focus:ring-2 focus:ring-manga-black focus:ring-offset-2"
+      className="manga-panel-bordered h-full cursor-pointer border-manga border-manga-black transition-colors duration-200 hover:border-manga-cyan-primary focus:outline-none focus:ring-2 focus:ring-manga-black focus:ring-offset-2"
       data-testid={`project-card-${project.id}`}
     >
       <div className="space-y-4">
@@ -84,6 +84,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
               {project.category}
             </span>
           </div>
+
+          {project.featured && (
+            <div className="absolute top-2 left-2 z-20">
+              <span className="border border-manga-cyan-dark bg-manga-cyan-light px-2 py-1 text-xs font-heading uppercase text-manga-black">
+                Featured
+              </span>
+            </div>
+          )}
         </div>
         
         {/* Content */}
@@ -103,7 +111,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {project.techStack.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="border border-manga-black bg-manga-gray-50 px-2 py-1 text-xs font-mono transition-colors hover:bg-manga-black hover:text-manga-white"
+                className="border border-manga-black bg-manga-gray-50 px-2 py-1 text-xs font-mono transition-colors hover:bg-manga-cyan-dark hover:text-manga-white"
               >
                 {tech}
               </span>

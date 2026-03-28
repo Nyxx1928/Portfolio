@@ -91,6 +91,15 @@ describe('ChapterHeader', () => {
     expect(title).toHaveClass('text-manga-black');
   });
 
+  it('applies cyan variant to chapter number and decorative lines', () => {
+    const { container } = render(<ChapterHeader title="Test Chapter" chapterNumber={2} cyanVariant="dark" />);
+    const chapterNumber = screen.getByText('Chapter 2');
+    expect(chapterNumber).toHaveClass('text-manga-cyan-dark');
+
+    const cyanLines = container.querySelectorAll('.bg-manga-cyan-dark');
+    expect(cyanLines.length).toBeGreaterThanOrEqual(3);
+  });
+
   it('renders with all props combined', () => {
     render(
       <ChapterHeader

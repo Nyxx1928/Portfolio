@@ -9,6 +9,8 @@ This directory contains reusable manga-themed UI components for the portfolio we
 - [HalftonePattern](#halftonepattern) - Manga-style halftone dot pattern effect
 - [ChapterHeader](#chapterheader) - Manga-style chapter headers for section dividers
 - [InkEffect](#inkeffect) - Ink brush stroke effects for dividers, borders, and splash animations
+- [Onomatopoeia](#onomatopoeia) - Decorative manga sound-effect text with animations
+- [EmphasisText](#emphasistext) - Inline manga emphasis typography utility component
 
 ---
 
@@ -1513,3 +1515,56 @@ See `InkEffect.example.tsx` for comprehensive usage examples including:
 - **Framer Motion**: Requires modern browser with JavaScript enabled
 - **CSS Transforms**: Supported in all modern browsers
 - **Fallback**: Effects gracefully degrade if SVG filters not supported
+
+---
+
+## Onomatopoeia
+
+Decorative manga sound effects with viewport-triggered animation.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `effect` | `'POW' \| 'BOOM' \| 'BAM' \| 'WHOOSH' \| 'ZAP' \| 'CRASH'` | Required | Rendered sound effect text |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Typography size |
+| `color` | `'primary' \| 'light' \| 'dark' \| 'black' \| 'white'` | `'primary'` | Accent color |
+| `rotation` | `number` | `-12` | Rotation in degrees (clamped to `[-45, 45]`) |
+| `animation` | `'pop' \| 'shake' \| 'pulse' \| 'none'` | `'pop'` | Motion variant |
+| `zIndex` | `number` | `20` | Stacking order |
+| `className` | `string` | `undefined` | Additional classes |
+
+### Animation Examples
+
+```tsx
+<Onomatopoeia effect="POW" animation="pop" className="top-6 right-8" />
+<Onomatopoeia effect="BOOM" animation="shake" className="bottom-8 left-4" />
+<Onomatopoeia effect="ZAP" animation="pulse" className="top-1/2 right-0" />
+<Onomatopoeia effect="BAM" animation="none" className="top-10 left-10" />
+```
+
+### Placement Guidelines
+
+- Keep onomatopoeia decorative and out of main reading flow.
+- Prefer corners and panel edges to avoid overlap with critical content.
+- Hide non-essential decorations on small screens when space is tight.
+
+### Accessibility
+
+- Component uses `aria-hidden="true"` so screen readers ignore decorative effects.
+- Respects `prefers-reduced-motion` and disables animations automatically.
+- Animations use transform and opacity only for smoother performance.
+
+---
+
+## EmphasisText
+
+Inline manga typography helper for callouts and stylized words.
+
+### Usage
+
+```tsx
+<EmphasisText size="lg" color="cyan-dark" rotation={6}>
+  Critical Hit
+</EmphasisText>
+```

@@ -96,6 +96,16 @@ describe('ProjectCard', () => {
     expect(screen.getByText('web')).toBeInTheDocument();
   });
 
+  it('displays featured badge for featured projects', () => {
+    render(<ProjectCard project={mockProject} index={0} />);
+    expect(screen.getByText('Featured')).toBeInTheDocument();
+  });
+
+  it('does not display featured badge for non-featured projects', () => {
+    render(<ProjectCard project={{ ...mockProject, featured: false }} index={0} />);
+    expect(screen.queryByText('Featured')).not.toBeInTheDocument();
+  });
+
   it('navigates to project detail page on click', () => {
     render(<ProjectCard project={mockProject} index={0} />);
 
@@ -206,5 +216,14 @@ describe('ProjectCard', () => {
 
     const description = screen.getByText(/This is a very long project description/);
     expect(description).toHaveClass('line-clamp-3');
+  });
+
+  it('uses cyan hover classes for accents', () => {
+    render(<ProjectCard project={mockProject} index={0} />);
+    const card = screen.getByTestId('project-card-1');
+    expect(card.className).toContain('hover:border-manga-cyan-primary');
+
+    const techBadge = screen.getByText('React');
+    expect(techBadge.className).toContain('hover:bg-manga-cyan-dark');
   });
 });

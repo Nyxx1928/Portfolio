@@ -24,6 +24,8 @@ jest.mock('framer-motion', () => {
         return <button ref={ref} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>{children}</button>;
       }),
     },
+    useInView: jest.fn(() => true),
+    useReducedMotion: jest.fn(() => false),
   };
   /* eslint-enable @typescript-eslint/no-unused-vars */
 });
@@ -98,18 +100,18 @@ describe('HeroSection', () => {
   });
 
   describe('Styling and Layout', () => {
-    it('applies manga-button class to View Projects button', () => {
+    it('applies manga-button-primary class to View Projects button', () => {
       render(<HeroSection />);
       
       const viewProjectsButton = screen.getByLabelText('Navigate to projects page');
-      expect(viewProjectsButton).toHaveClass('manga-button');
+      expect(viewProjectsButton).toHaveClass('manga-button-primary');
     });
 
-    it('applies manga-button-outline class to Contact Me button', () => {
+    it('applies manga-button-outline-cyan class to Contact Me button', () => {
       render(<HeroSection />);
       
       const contactButton = screen.getByLabelText('Navigate to contact page');
-      expect(contactButton).toHaveClass('manga-button-outline');
+      expect(contactButton).toHaveClass('manga-button-outline-cyan');
     });
 
     it('applies custom className when provided', () => {
