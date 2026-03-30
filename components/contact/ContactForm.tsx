@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+
 import { MangaPanel } from '@/components/manga/MangaPanel';
 import { cn } from '@/lib/utils';
 import {
@@ -38,15 +39,16 @@ type SubmissionState = 'idle' | 'loading' | 'success' | 'error';
  */
 export function ContactForm({ onSubmit, className }: ContactFormProps) {
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle');
+  const timeoutRef = useRef<number | null>(null);
   
+  const _form = useForm({ mode: 'onBlur' });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<ContactFormData>({
-    mode: 'onBlur',
-  });
+  } = _form;
 
   const handleFormSubmit = async (data: ContactFormData) => {
     setSubmissionState('loading');
@@ -62,32 +64,48 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
       
       setSubmissionState('success');
       reset();
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => {
+      // Reset success message after 5 seconds (clear previous timer first)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      timeoutRef.current = window.setTimeout(() => {
         setSubmissionState('idle');
+        timeoutRef.current = null;
       }, 5000);
     } catch (error) {
       console.error('Form submission error:', error);
       setSubmissionState('error');
-      
-      // Reset error message after 5 seconds
-      setTimeout(() => {
+      // Reset error message after 5 seconds (clear previous timer first)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      timeoutRef.current = window.setTimeout(() => {
         setSubmissionState('idle');
+        timeoutRef.current = null;
       }, 5000);
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <MangaPanel variant="bordered" animation="reveal" className={cn('', className)}>
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+      <form onSubmit={(e) => handleSubmit(handleFormSubmit)(e)} className="space-y-6">
         {/* Form Header */}
         <div className="border-b-2 border-manga-black pb-4">
           <h2 className="text-2xl md:text-3xl font-heading uppercase tracking-wider">
             Send a Message
           </h2>
           <p className="text-sm text-manga-gray-600 mt-2">
-            I&apos;ll get back to you as soon as possible!
+            Fill out the form below and I&apos;ll get back to you as soon as possible!
           </p>
         </div>
 
@@ -103,7 +121,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
             id="name"
             type="text"
             {...register('name', {
-              validate: (value) => {
+              validate: (value: string) => {
                 const result = validateName(value);
                 return result.isValid || result.error || 'Invalid name';
               },
@@ -139,7 +157,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
             id="email"
             type="email"
             {...register('email', {
-              validate: (value) => {
+              validate: (value: string) => {
                 const result = validateEmail(value);
                 return result.isValid || result.error || 'Invalid email';
               },
@@ -175,7 +193,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
             id="subject"
             type="text"
             {...register('subject', {
-              validate: (value) => {
+              validate: (value: string) => {
                 const result = validateSubject(value);
                 return result.isValid || result.error || 'Invalid subject';
               },
@@ -211,7 +229,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
             id="message"
             rows={6}
             {...register('message', {
-              validate: (value) => {
+              validate: (value: string) => {
                 const result = validateMessage(value);
                 return result.isValid || result.error || 'Invalid message';
               },
@@ -269,7 +287,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
 
         {/* Success/Error Feedback with Manga Reactions */}
         {submissionState === 'success' && (
-          <div className="mt-6 border-2 border-manga-black bg-manga-white p-6">
+          <div role="status" aria-live="polite" aria-atomic="true" className="mt-6 border-2 border-manga-black bg-manga-white p-6">
             <div className="flex items-start gap-4">
               {/* Happy manga character reaction */}
               <div className="flex-shrink-0">
@@ -302,7 +320,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
         )}
 
         {submissionState === 'error' && (
-          <div className="mt-6 border-2 border-manga-black bg-manga-gray-50 p-6">
+          <div role="alert" aria-live="assertive" aria-atomic="true" className="mt-6 border-2 border-manga-black bg-manga-gray-50 p-6">
             <div className="flex items-start gap-4">
               {/* Frustrated manga character reaction */}
               <div className="flex-shrink-0">

@@ -1,0 +1,367 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 20
+
+# Shared install + cache step used by all jobs
+# node_modules is cached by setup-node; .next/cache is cached separately
+
+jobs:
+  # ─── Parallel group ────────────────────────────────────────────────────────
+
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint --if-present
+
+  typecheck:
+    name: "Typecheck"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+
+  unit_tests:
+    name: "Unit Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Run unit tests
+        env:
+          CI: true
+        run: npx jest --ci --maxWorkers=50% --passWithNoTests --testPathIgnorePatterns='(/integration/|\.integration\.|/e2e/|\.e2e\.)'
+
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-next-
+      - run: npm ci
+      - run: npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: .next
+          retention-days: 1
+
+  # ─── Gated sequential phases ───────────────────────────────────────────────
+
+  integration_tests:
+    name: "Integration Tests"
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, unit_tests, build]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Detect integration tests
+        id: detect
+        shell: bash
+        run: |
+          shopt -s globstar nullglob
+          files=(
+            **/*.integration.test.ts **/*.integration.test.tsx
+            **/*.int.test.ts **/*.int.test.tsx
+            **/integration/**/*.test.ts **/integration/**/*.test.tsx
+          )
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s\n' "${files[@]}" > integration-tests.txt
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run integration tests
+        if: steps.detect.outputs.found == 'true'
+        env:
+          CI: true
+        run: xargs -a integration-tests.txt npx jest --ci --runInBand
+      - if: steps.detect.outputs.found != 'true'
+        run: echo "No integration tests found — skipping."
+
+  e2e:
+    name: "E2E - Playwright"
+    runs-on: ubuntu-latest
+    needs: integration_tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Cache Playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: playwright-${{ runner.os }}-
+      - run: npm ci
+      - name: Detect Playwright config
+        id: detect
+        shell: bash
+        run: |
+          if [ -f playwright.config.ts ] || [ -f playwright.config.js ] || [ -f playwright.config.mjs ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install Playwright browsers
+        if: steps.detect.outputs.found == 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        if: steps.detect.outputs.found == 'true'
+        env:
+          CI: true
+        run: npx playwright test --project=chromium --pass-with-no-tests
+      - if: steps.detect.outputs.found != 'true'
+        run: echo "No Playwright config found — skipping."
+
+  docker_build:
+    name: "Docker Build"
+    runs-on: ubuntu-latest
+    needs: e2e
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        shell: bash
+        run: |
+          if [ -f Dockerfile ]; then
+            docker build --pull --no-cache -t app-ci:latest .
+          else
+            first=$(find . -name Dockerfile | head -n 1)
+            docker build --pull --no-cache -t app-ci:latest -f "$first" "$(dirname "$first")"
+          fi
+      - name: Save Docker image as artifact
+        run: |
+          docker save -o app-ci.tar app-ci:latest
+      - name: Upload Docker artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: app-ci.tar
+          retention-days: 1
+
+  docker_validate:
+    name: "Docker Validate"
+    runs-on: ubuntu-latest
+    needs: docker_build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Docker artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: .
+      - name: Load Docker image
+        run: docker load -i app-ci.tar
+      - name: Validate Docker Compose
+        shell: bash
+        run: |
+          compose=$(find . \( -name docker-compose.yml -o -name docker-compose.yaml \) | head -n 1)
+          [ -n "$compose" ] && docker compose -f "$compose" config || echo "No compose file found."
+
+  security_sbom:
+    name: "Security – SBOM (Syft)"
+    runs-on: ubuntu-latest
+    needs: docker_build
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Docker artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: .
+      - name: Load Docker image
+        run: docker load -i app-ci.tar
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: app-ci:latest
+          format: spdx-json
+          output-file: sbom.spdx.json
+          artifact-name: sbom.spdx.json
+          upload-artifact: true
+
+  security_trivy:
+    name: "Security – Vulnerability Scan (Trivy)"
+    runs-on: ubuntu-latest
+    needs: docker_build
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Docker artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: .
+      - name: Load Docker image
+        run: docker load -i app-ci.tar
+
+      - name: Run Trivy vulnerability scan (block on main)
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: app-ci:latest
+          format: sarif
+          output: trivy-results.sarif
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
+
+      - name: Run Trivy vulnerability scan (report-only for PRs/others)
+        if: ${{ !(github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')) }}
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: app-ci:latest
+          format: sarif
+          output: trivy-results.sarif
+          severity: HIGH,CRITICAL
+          exit-code: "0"
+          ignore-unfixed: true
+
+      - name: Upload Trivy results to GitHub Security tab
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+
+  security_cosign:
+    name: "Security – Image Signing (Cosign)"
+    runs-on: ubuntu-latest
+    needs: docker_build
+    # Only sign on pushes to main — PRs don't produce a trusted artifact
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    permissions:
+      contents: read
+      id-token: write # required for keyless signing via OIDC
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Docker artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: .
+      - name: Load Docker image
+        run: docker load -i app-ci.tar
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image with Cosign (keyless via OIDC)
+        shell: bash
+        env:
+          COSIGN_EXPERIMENTAL: "1"
+        run: |
+          # Keyless signing — no long-lived key needed, uses GitHub OIDC token
+          cosign sign --yes app-ci:latest
+
+  # ─── Summary ───────────────────────────────────────────────────────────────
+
+  ci_summary:
+    name: "CI Summary"
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      [
+        lint,
+        typecheck,
+        unit_tests,
+        build,
+        integration_tests,
+        e2e,
+        docker_build,
+        docker_validate,
+        security_sbom,
+        security_trivy,
+        security_cosign,
+      ]
+    steps:
+      - name: Publish summary
+        shell: bash
+        run: |
+          {
+            echo "## CI Summary"
+            echo
+            echo "| Job | Result |"
+            echo "|---|---|"
+            echo "| Lint | ${{ needs.lint.result }} |"
+            echo "| Typecheck | ${{ needs.typecheck.result }} |"
+            echo "| Unit Tests | ${{ needs.unit_tests.result }} |"
+            echo "| Build | ${{ needs.build.result }} |"
+            echo "| Integration Tests | ${{ needs.integration_tests.result }} |"
+            echo "| E2E Playwright | ${{ needs.e2e.result }} |"
+            echo "| Docker Build | ${{ needs.docker_build.result }} |"
+            echo "| Docker Validate | ${{ needs.docker_validate.result }} |"
+            echo "| SBOM (Syft) | ${{ needs.security_sbom.result }} |"
+            echo "| Vulnerability Scan (Trivy) | ${{ needs.security_trivy.result }} |"
+            echo "| Image Signing (Cosign) | ${{ needs.security_cosign.result }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if any job failed
+        shell: bash
+        run: |
+          results=(
+            "${{ needs.lint.result }}"
+            "${{ needs.typecheck.result }}"
+            "${{ needs.unit_tests.result }}"
+            "${{ needs.build.result }}"
+            "${{ needs.integration_tests.result }}"
+            "${{ needs.e2e.result }}"
+            "${{ needs.docker_build.result }}"
+            "${{ needs.docker_validate.result }}"
+            "${{ needs.security_sbom.result }}"
+            "${{ needs.security_trivy.result }}"
+          )
+          for r in "${results[@]}"; do
+            if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
+              echo "A job failed or was cancelled."
+              exit 1
+            fi
+          done

@@ -83,7 +83,7 @@ describe('SkillsPanel', () => {
   describe('Component Rendering', () => {
     it('renders without crashing', () => {
       render(<SkillsPanel skills={mockSkills} tools={mockTools} />);
-      expect(screen.getByTestId('manga-panel')).toBeInTheDocument();
+      expect(screen.getByText('Skills & Abilities')).toBeInTheDocument();
     });
 
     it('renders the main header', () => {
@@ -93,17 +93,17 @@ describe('SkillsPanel', () => {
 
     it('renders with empty skills array', () => {
       render(<SkillsPanel skills={[]} tools={mockTools} />);
-      expect(screen.getByTestId('manga-panel')).toBeInTheDocument();
+      expect(screen.getByText('Skills & Abilities')).toBeInTheDocument();
     });
 
     it('renders with empty tools array', () => {
       render(<SkillsPanel skills={mockSkills} tools={[]} />);
-      expect(screen.getByTestId('manga-panel')).toBeInTheDocument();
+      expect(screen.getByText('Skills & Abilities')).toBeInTheDocument();
     });
 
     it('renders with both empty arrays', () => {
       render(<SkillsPanel skills={[]} tools={[]} />);
-      expect(screen.getByTestId('manga-panel')).toBeInTheDocument();
+      expect(screen.getByText('Skills & Abilities')).toBeInTheDocument();
     });
   });
 

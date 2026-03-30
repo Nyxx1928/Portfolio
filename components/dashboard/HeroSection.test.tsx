@@ -70,7 +70,8 @@ describe('HeroSection', () => {
     it('displays avatar placeholder', () => {
       render(<HeroSection />);
       
-      expect(screen.getByText('AVATAR')).toBeInTheDocument();
+      // Avatar is rendered as an Image with alt text
+      expect(screen.getByAltText('Me, Myself, and I')).toBeInTheDocument();
     });
   });
 
