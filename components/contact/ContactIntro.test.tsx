@@ -99,8 +99,7 @@ describe('ContactIntro', () => {
     });
 
     it('handles invalid method names gracefully', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render(<ContactIntro preferredMethods={['email', 'invalid-method' as any]} />);
+      render(<ContactIntro preferredMethods={['email', 'invalid-method' as unknown as string]} />);
       
       expect(screen.getByText('Email')).toBeInTheDocument();
       // Invalid method should not cause crash

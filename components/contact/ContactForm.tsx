@@ -3,12 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-type RHFReturn<T> = {
-  register: any;
-  handleSubmit: (onValid: (data: T) => Promise<void> | void, onInvalid?: any) => (e?: any) => void;
-  formState: { errors: Record<string, any> };
-  reset: () => void;
-};
 import { MangaPanel } from '@/components/manga/MangaPanel';
 import { cn } from '@/lib/utils';
 import {
@@ -47,7 +41,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle');
   const timeoutRef = useRef<number | null>(null);
   
-  const _form = useForm({ mode: 'onBlur' }) as unknown as RHFReturn<ContactFormData>;
+  const _form = useForm({ mode: 'onBlur' });
 
   const {
     register,
