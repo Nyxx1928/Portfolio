@@ -36,8 +36,10 @@ const config: Config = {
         'manga-thick': '5px',
       },
       boxShadow: {
-        'manga': '4px 4px 0px 0px rgba(0, 0, 0, 1)',
-        'manga-hover': '6px 6px 0px 0px rgba(0, 0, 0, 1)',
+        'manga': 'var(--manga-shadow)',
+        'manga-hover': 'var(--manga-shadow-hover)',
+        'manga-sm': 'var(--manga-shadow-sm)',
+        'manga-pressed': 'var(--manga-shadow-pressed)',
       },
       animation: {
         'panel-reveal': 'panelReveal 0.6s ease-out',
