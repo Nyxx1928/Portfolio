@@ -29,7 +29,7 @@ export function PanelNavigator() {
             aria-disabled={state.prevDisabled}
             disabled={state.prevDisabled}
             onClick={() => scrollToPanel(currentIndex - 1)}
-            className="flex h-11 w-11 items-center justify-center border border-manga-black text-sm font-heading uppercase disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center border border-manga-black bg-manga-white text-sm font-heading uppercase shadow-manga transition-all duration-150 ease-out hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:outline-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:cursor-not-allowed disabled:opacity-40 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-none"
           >
             Prev
           </button>
@@ -46,7 +46,7 @@ export function PanelNavigator() {
                   type="button"
                   aria-label={`Go to panel ${index + 1}`}
                   onClick={() => scrollToPanel(index)}
-                  className={`h-3 w-3 rounded-full border border-manga-black ${
+                  className={`h-3 w-3 rounded-full border border-manga-black transition-transform duration-150 ease-out hover:translate-x-[1px] hover:translate-y-[1px] focus-visible:translate-x-[1px] focus-visible:translate-y-[1px] focus-visible:outline-none active:translate-x-[2px] active:translate-y-[2px] ${
                     isActive ? "bg-manga-black" : "bg-manga-white"
                   }`}
                 />
@@ -60,7 +60,7 @@ export function PanelNavigator() {
             aria-disabled={state.nextDisabled}
             disabled={state.nextDisabled}
             onClick={() => scrollToPanel(currentIndex + 1)}
-            className="flex h-11 w-11 items-center justify-center border border-manga-black text-sm font-heading uppercase disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center border border-manga-black bg-manga-white text-sm font-heading uppercase shadow-manga transition-all duration-150 ease-out hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:outline-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:cursor-not-allowed disabled:opacity-40 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-none"
           >
             Next
           </button>
