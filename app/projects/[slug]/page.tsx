@@ -32,8 +32,9 @@ export async function generateStaticParams() {
 /**
  * Generate metadata for the project page
  */
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const project = getProjectBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   
   if (!project) {
     return {
@@ -50,8 +51,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 /**
  * Project Detail Page Component
  */
-export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
-  const project = getProjectBySlug(params.slug);
+export default async function ProjectDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const { slug } = await params;
+  const { category } = await searchParams;
+  const project = getProjectBySlug(slug);
   
   // Handle 404 for invalid project slugs
   if (!project) {
@@ -61,7 +70,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
   return (
     <main className="min-h-screen py-16">
       <div className="container mx-auto px-4 max-w-6xl">
-        <ProjectDetail project={project} />
+        <ProjectDetail project={project} category={category} />
       </div>
     </main>
   );
