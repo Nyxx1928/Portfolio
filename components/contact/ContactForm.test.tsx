@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContactForm } from './ContactForm';
 import type { ContactFormData } from '@/lib/utils/validation';
+import { toast } from 'sonner';
 
 // Mock the MangaPanel component
 jest.mock('@/components/manga/MangaPanel', () => ({
@@ -11,6 +12,13 @@ jest.mock('@/components/manga/MangaPanel', () => ({
       {children}
     </div>
   ),
+}));
+
+jest.mock('sonner', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
 }));
 
 describe('ContactForm', () => {
@@ -188,6 +196,7 @@ describe('ContactForm', () => {
       await waitFor(() => {
         expect(screen.getByText(/message sent!/i)).toBeInTheDocument();
         expect(screen.getByText(/thanks for reaching out/i)).toBeInTheDocument();
+        expect(toast.success).toHaveBeenCalledWith('Message sent!');
       });
     });
 
@@ -206,6 +215,7 @@ describe('ContactForm', () => {
       await waitFor(() => {
         expect(screen.getByText(/oops! something went wrong/i)).toBeInTheDocument();
         expect(screen.getByText(/there was an error sending your message/i)).toBeInTheDocument();
+        expect(toast.error).toHaveBeenCalledWith('Failed to send message');
       });
     });
 
@@ -276,7 +286,7 @@ describe('ContactForm', () => {
       expect(submitButton).toHaveClass('manga-button');
     });
 
-    it('displays manga character reaction on success', async () => {
+    it('displays inline success alert on success', async () => {
       const user = userEvent.setup();
       const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: ContactFormData) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
@@ -289,13 +299,12 @@ describe('ContactForm', () => {
       await user.click(screen.getByRole('button', { name: /send message/i }));
 
       await waitFor(() => {
-        // Check for SVG manga character
-        const svgs = document.querySelectorAll('svg');
-        expect(svgs.length).toBeGreaterThan(0);
+        expect(screen.getByRole('status')).toBeInTheDocument();
+        expect(screen.getByText(/message sent!/i)).toBeInTheDocument();
       });
     });
 
-    it('displays manga character reaction on error', async () => {
+    it('displays inline error alert on error', async () => {
       const user = userEvent.setup();
       const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error')) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
@@ -308,9 +317,8 @@ describe('ContactForm', () => {
       await user.click(screen.getByRole('button', { name: /send message/i }));
 
       await waitFor(() => {
-        // Check for SVG manga character
-        const svgs = document.querySelectorAll('svg');
-        expect(svgs.length).toBeGreaterThan(0);
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+        expect(screen.getByText(/oops! something went wrong/i)).toBeInTheDocument();
       });
     });
   });
