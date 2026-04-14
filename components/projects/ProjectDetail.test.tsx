@@ -1,11 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { useSearchParams } from 'next/navigation';
 import { ProjectDetail } from './ProjectDetail';
 import { Project } from '@/types';
-
-jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn(),
-}));
 
 // Mock Next.js Link component
 jest.mock('next/link', () => {
@@ -99,10 +94,6 @@ describe('ProjectDetail', () => {
     createdAt: '2024-01-01',
   };
 
-  beforeEach(() => {
-    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
-  });
-
   describe('Back Navigation', () => {
     it('should display back to projects link', () => {
       render(<ProjectDetail project={mockProject} />);
@@ -113,8 +104,7 @@ describe('ProjectDetail', () => {
     });
 
     it('should preserve category filter in back link when present', () => {
-      (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams('category=web'));
-      render(<ProjectDetail project={mockProject} />);
+      render(<ProjectDetail project={mockProject} category="web" />);
 
       const backLink = screen.getByText('Back to Projects');
       expect(backLink.closest('a')).toHaveAttribute('href', '/projects?category=web');

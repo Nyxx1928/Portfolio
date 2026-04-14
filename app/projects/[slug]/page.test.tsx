@@ -66,7 +66,7 @@ describe('ProjectDetailPage', () => {
   
   describe('generateMetadata', () => {
     it('should generate metadata for valid project', async () => {
-      const metadata = await generateMetadata({ params: { slug: 'task-master-pro' } });
+      const metadata = await generateMetadata({ params: Promise.resolve({ slug: 'task-master-pro' }) });
       const project = getProjectBySlug('task-master-pro');
       
       expect(metadata.title).toBe(`${project?.title} | Projects`);
@@ -74,38 +74,50 @@ describe('ProjectDetailPage', () => {
     });
     
     it('should return "Project Not Found" for invalid slug', async () => {
-      const metadata = await generateMetadata({ params: { slug: 'invalid-slug' } });
+      const metadata = await generateMetadata({ params: Promise.resolve({ slug: 'invalid-slug' }) });
       
       expect(metadata.title).toBe('Project Not Found');
     });
   });
   
   describe('ProjectDetailPage Component', () => {
-    it('should render project details for valid slug', () => {
+    it('should render project details for valid slug', async () => {
       const project = getProjects()[0];
-      
-      render(<ProjectDetailPage params={{ slug: project.slug }} />);
+
+      const element = await ProjectDetailPage({
+        params: Promise.resolve({ slug: project.slug }),
+        searchParams: Promise.resolve({}),
+      });
+      render(element);
       
       expect(screen.getByText(project.title)).toBeInTheDocument();
       expect(screen.getByText(project.description)).toBeInTheDocument();
       expect(screen.getByText(project.fullDescription)).toBeInTheDocument();
     });
     
-    it('should display tech stack badges', () => {
+    it('should display tech stack badges', async () => {
       const project = getProjects()[0];
-      
-      render(<ProjectDetailPage params={{ slug: project.slug }} />);
+
+      const element = await ProjectDetailPage({
+        params: Promise.resolve({ slug: project.slug }),
+        searchParams: Promise.resolve({}),
+      });
+      render(element);
       
       project.techStack.forEach(tech => {
         expect(screen.getByText(tech)).toBeInTheDocument();
       });
     });
     
-    it('should display demo link when available', () => {
+    it('should display demo link when available', async () => {
       const projectWithDemo = getProjects().find(p => p.demoUrl);
       
       if (projectWithDemo) {
-        render(<ProjectDetailPage params={{ slug: projectWithDemo.slug }} />);
+        const element = await ProjectDetailPage({
+          params: Promise.resolve({ slug: projectWithDemo.slug }),
+          searchParams: Promise.resolve({}),
+        });
+        render(element);
         
         const demoLink = screen.getByText('View Demo');
         expect(demoLink).toBeInTheDocument();
@@ -113,11 +125,15 @@ describe('ProjectDetailPage', () => {
       }
     });
     
-    it('should display repo link when available', () => {
+    it('should display repo link when available', async () => {
       const projectWithRepo = getProjects().find(p => p.repoUrl);
       
       if (projectWithRepo) {
-        render(<ProjectDetailPage params={{ slug: projectWithRepo.slug }} />);
+        const element = await ProjectDetailPage({
+          params: Promise.resolve({ slug: projectWithRepo.slug }),
+          searchParams: Promise.resolve({}),
+        });
+        render(element);
         
         const repoLink = screen.getByText('View Code');
         expect(repoLink).toBeInTheDocument();
@@ -125,30 +141,42 @@ describe('ProjectDetailPage', () => {
       }
     });
     
-    it('should display challenges section', () => {
+    it('should display challenges section', async () => {
       const project = getProjects()[0];
-      
-      render(<ProjectDetailPage params={{ slug: project.slug }} />);
+
+      const element = await ProjectDetailPage({
+        params: Promise.resolve({ slug: project.slug }),
+        searchParams: Promise.resolve({}),
+      });
+      render(element);
       
       project.challenges.forEach(challenge => {
         expect(screen.getByText(challenge)).toBeInTheDocument();
       });
     });
     
-    it('should display learnings section', () => {
+    it('should display learnings section', async () => {
       const project = getProjects()[0];
-      
-      render(<ProjectDetailPage params={{ slug: project.slug }} />);
+
+      const element = await ProjectDetailPage({
+        params: Promise.resolve({ slug: project.slug }),
+        searchParams: Promise.resolve({}),
+      });
+      render(element);
       
       project.learnings.forEach(learning => {
         expect(screen.getByText(learning)).toBeInTheDocument();
       });
     });
     
-    it('should display impact metrics', () => {
+    it('should display impact metrics', async () => {
       const project = getProjects()[0];
-      
-      render(<ProjectDetailPage params={{ slug: project.slug }} />);
+
+      const element = await ProjectDetailPage({
+        params: Promise.resolve({ slug: project.slug }),
+        searchParams: Promise.resolve({}),
+      });
+      render(element);
       
       project.impact.forEach(stat => {
         expect(screen.getByText(stat.metric)).toBeInTheDocument();
@@ -156,15 +184,18 @@ describe('ProjectDetailPage', () => {
       });
     });
     
-    it('should call notFound for invalid slug', () => {
+    it('should call notFound for invalid slug', async () => {
       // Mock notFound to throw an error like it does in production
       (mockedNotFound as unknown as jest.Mock).mockImplementation(() => {
         throw new Error('NEXT_NOT_FOUND');
       });
 
-      expect(() => {
-        render(<ProjectDetailPage params={{ slug: 'invalid-slug-that-does-not-exist' }} />);
-      }).toThrow('NEXT_NOT_FOUND');
+      await expect(
+        ProjectDetailPage({
+          params: Promise.resolve({ slug: 'invalid-slug-that-does-not-exist' }),
+          searchParams: Promise.resolve({}),
+        }),
+      ).rejects.toThrow('NEXT_NOT_FOUND');
 
       expect((mockedNotFound as unknown as jest.Mock)).toHaveBeenCalled();
 
@@ -172,11 +203,15 @@ describe('ProjectDetailPage', () => {
       (mockedNotFound as unknown as jest.Mock).mockReset();
     });
     
-    it('should not call notFound for valid slug', () => {
+    it('should not call notFound for valid slug', async () => {
       (mockedNotFound as unknown as jest.Mock).mockClear();
 
       const project = getProjects()[0];
-      render(<ProjectDetailPage params={{ slug: project.slug }} />);
+      const element = await ProjectDetailPage({
+        params: Promise.resolve({ slug: project.slug }),
+        searchParams: Promise.resolve({}),
+      });
+      render(element);
 
       expect(mockedNotFound).not.toHaveBeenCalled();
     });
