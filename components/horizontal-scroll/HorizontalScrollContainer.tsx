@@ -255,7 +255,7 @@ export function HorizontalScrollContainer({
       event.preventDefault();
 
       // Trackpad detection
-      const isTrackpad = event.deltaMode === 0 && Math.abs(event.deltaY) < 100;
+      const isTrackpad = event.deltaMode === 0 && Math.abs(event.deltaY) <= 100;
 
       if (isTrackpad) {
         // Trackpad gesture handling with delta accumulation

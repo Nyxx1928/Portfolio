@@ -53,7 +53,7 @@ export function ProjectsPanel() {
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setFilter(tab.value)}
-                className={`border-manga border-manga-black px-4 py-2 font-heading text-sm uppercase tracking-wider ${
+                className={`border-manga border-manga-black px-4 py-2 font-heading text-sm uppercase tracking-wider [box-shadow:var(--manga-shadow)] transition-all duration-150 ease-out hover:translate-x-[2px] hover:translate-y-[2px] hover:[box-shadow:var(--manga-shadow-pressed)] focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] focus-visible:[box-shadow:var(--manga-shadow-pressed)] focus-visible:outline-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none ${
                   isActive
                     ? 'bg-manga-black text-manga-white'
                     : 'bg-manga-white text-manga-black hover:bg-manga-gray-50'

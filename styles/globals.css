@@ -31,6 +31,8 @@
   /* Box Shadows */
   --shadow-manga: 4px 4px 0px 0px rgba(0, 0, 0, 1);
   --shadow-manga-hover: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-manga-sm: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-manga-pressed: 2px 2px 0px 0px rgba(0, 0, 0, 1);
 
   /* Animations */
   --animate-panel-reveal: panelReveal 0.6s ease-out;
@@ -131,6 +133,12 @@
     --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
     --sidebar-border: oklch(0.928 0.006 264.531);
     --sidebar-ring: oklch(0.707 0.022 261.325);
+
+    /* Shadow tokens consumed directly in CSS and Tailwind utilities */
+    --manga-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    --manga-shadow-hover: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+    --manga-shadow-sm: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+    --manga-shadow-pressed: 2px 2px 0px 0px rgba(0, 0, 0, 1);
   }
 
   .dark {
@@ -165,6 +173,27 @@
     --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.551 0.027 264.364);
+
+    /* Ensure existing manga utility classes adapt in dark mode */
+    --color-manga-white: #0f0f0f;
+    --color-manga-black: #f5f5f5;
+    --color-manga-gray-50: #1a1a1a;
+    --color-manga-gray-200: #2b2b2b;
+    --color-manga-gray-400: #8f8f8f;
+    --color-manga-gray-600: #b3b3b3;
+    --color-manga-gray-800: #e0e0e0;
+    --color-manga-gray-900: #f5f5f5;
+
+    --manga-shadow: 4px 4px 0px 0px rgba(245, 245, 245, 1);
+    --manga-shadow-hover: 6px 6px 0px 0px rgba(245, 245, 245, 1);
+    --manga-shadow-sm: 3px 3px 0px 0px rgba(245, 245, 245, 1);
+    --manga-shadow-pressed: 2px 2px 0px 0px rgba(245, 245, 245, 1);
+
+    /* In dark mode, invert manga shadow ink to white */
+    --shadow-manga: 4px 4px 0px 0px rgba(245, 245, 245, 1);
+    --shadow-manga-hover: 6px 6px 0px 0px rgba(245, 245, 245, 1);
+    --shadow-manga-sm: 3px 3px 0px 0px rgba(245, 245, 245, 1);
+    --shadow-manga-pressed: 2px 2px 0px 0px rgba(245, 245, 245, 1);
   }
 
   * {
@@ -172,8 +201,8 @@
   }
 
   body {
-    background-color: var(--color-manga-white);
-    color: var(--color-manga-black);
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: var(--font-body, var(--font-family-body));
   }
 
@@ -200,7 +229,7 @@
     background-color: var(--color-manga-white);
     padding: 1.5rem;
     position: relative;
-    box-shadow: var(--shadow-manga);
+    box-shadow: var(--manga-shadow);
   }
 
   /* Speech Bubble */
@@ -243,14 +272,33 @@
     font-family: var(--font-family-heading);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    box-shadow: var(--shadow-manga);
+    box-shadow: var(--manga-shadow);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
   }
 
   .manga-button:hover {
-    box-shadow: var(--shadow-manga-hover);
-    transform: translate(-2px, -2px);
+    box-shadow: var(--manga-shadow-pressed);
+    transform: translate(2px, 2px);
+  }
+
+  .manga-button:focus-visible {
+    box-shadow: var(--manga-shadow-pressed);
+    transform: translate(2px, 2px);
+    outline: none;
+  }
+
+  .manga-button:active {
+    box-shadow: none;
+    transform: translate(4px, 4px);
+  }
+
+  .manga-button:disabled,
+  .manga-button[aria-disabled='true'] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
   }
 
   .manga-button-outline {
@@ -262,14 +310,33 @@
     font-family: var(--font-family-heading);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    box-shadow: var(--shadow-manga);
+    box-shadow: var(--manga-shadow);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
   }
 
   .manga-button-outline:hover {
-    box-shadow: var(--shadow-manga-hover);
-    transform: translate(-2px, -2px);
+    box-shadow: var(--manga-shadow-pressed);
+    transform: translate(2px, 2px);
+  }
+
+  .manga-button-outline:focus-visible {
+    box-shadow: var(--manga-shadow-pressed);
+    transform: translate(2px, 2px);
+    outline: none;
+  }
+
+  .manga-button-outline:active {
+    box-shadow: none;
+    transform: translate(4px, 4px);
+  }
+
+  .manga-button-outline:disabled,
+  .manga-button-outline[aria-disabled='true'] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
   }
 
   .typewriter-text {
@@ -400,13 +467,13 @@
     border-color: var(--color-manga-black);
     background-color: var(--color-manga-white);
     padding: 1rem;
-    box-shadow: var(--shadow-manga);
+    box-shadow: var(--manga-shadow);
     cursor: pointer;
     transition: all 0.2s;
   }
 
   .trading-card:hover {
-    box-shadow: var(--shadow-manga-hover);
+    box-shadow: var(--manga-shadow-hover);
     transform: translate(-2px, -2px);
   }
 

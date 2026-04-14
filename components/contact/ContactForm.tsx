@@ -2,8 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { MangaPanel } from '@/components/manga/MangaPanel';
+import { Alert, AlertDescription, AlertTitle } from '@/components/retroui/Alert';
+import { Button } from '@/components/retroui/Button';
+import { Input } from '@/components/retroui/Input';
+import { Textarea } from '@/components/retroui/Textarea';
 import { cn } from '@/lib/utils';
 import {
   validateName,
@@ -12,7 +17,7 @@ import {
   validateMessage,
   type ContactFormData,
 } from '@/lib/utils/validation';
-import { Send, Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { Send, Loader2 } from 'lucide-react';
 
 interface ContactFormProps {
   onSubmit?: (data: ContactFormData) => Promise<void>;
@@ -63,6 +68,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
       }
       
       setSubmissionState('success');
+      toast.success('Message sent!');
       reset();
       // Reset success message after 5 seconds (clear previous timer first)
       if (timeoutRef.current) {
@@ -76,6 +82,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
     } catch (error) {
       console.error('Form submission error:', error);
       setSubmissionState('error');
+      toast.error('Failed to send message');
       // Reset error message after 5 seconds (clear previous timer first)
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -117,7 +124,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
           >
             Name <span className="text-manga-gray-600">*</span>
           </label>
-          <input
+          <Input
             id="name"
             type="text"
             {...register('name', {
@@ -127,13 +134,10 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
               },
             })}
             className={cn(
-              'manga-input w-full',
-              'border-2 border-manga-black bg-manga-white',
-              'px-4 py-3 font-body',
-              'focus:outline-none focus:ring-2 focus:ring-manga-black',
-              'transition-all duration-200',
+              'manga-input',
               errors.name && 'border-manga-gray-600 bg-manga-gray-50'
             )}
+            aria-invalid={Boolean(errors.name)}
             placeholder="Your name..."
             disabled={submissionState === 'loading'}
           />
@@ -153,7 +157,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
           >
             Email <span className="text-manga-gray-600">*</span>
           </label>
-          <input
+          <Input
             id="email"
             type="email"
             {...register('email', {
@@ -163,13 +167,10 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
               },
             })}
             className={cn(
-              'manga-input w-full',
-              'border-2 border-manga-black bg-manga-white',
-              'px-4 py-3 font-body',
-              'focus:outline-none focus:ring-2 focus:ring-manga-black',
-              'transition-all duration-200',
+              'manga-input',
               errors.email && 'border-manga-gray-600 bg-manga-gray-50'
             )}
+            aria-invalid={Boolean(errors.email)}
             placeholder="your.email@example.com"
             disabled={submissionState === 'loading'}
           />
@@ -189,7 +190,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
           >
             Subject <span className="text-manga-gray-600">*</span>
           </label>
-          <input
+          <Input
             id="subject"
             type="text"
             {...register('subject', {
@@ -199,13 +200,10 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
               },
             })}
             className={cn(
-              'manga-input w-full',
-              'border-2 border-manga-black bg-manga-white',
-              'px-4 py-3 font-body',
-              'focus:outline-none focus:ring-2 focus:ring-manga-black',
-              'transition-all duration-200',
+              'manga-input',
               errors.subject && 'border-manga-gray-600 bg-manga-gray-50'
             )}
+            aria-invalid={Boolean(errors.subject)}
             placeholder="What's this about?"
             disabled={submissionState === 'loading'}
           />
@@ -225,7 +223,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
           >
             Message <span className="text-manga-gray-600">*</span>
           </label>
-          <textarea
+          <Textarea
             id="message"
             rows={6}
             {...register('message', {
@@ -235,13 +233,10 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
               },
             })}
             className={cn(
-              'manga-textarea w-full',
-              'border-2 border-manga-black bg-manga-white',
-              'px-4 py-3 font-body resize-y',
-              'focus:outline-none focus:ring-2 focus:ring-manga-black',
-              'transition-all duration-200',
+              'manga-textarea resize-y',
               errors.message && 'border-manga-gray-600 bg-manga-gray-50'
             )}
+            aria-invalid={Boolean(errors.message)}
             placeholder="Tell me about your project or idea..."
             disabled={submissionState === 'loading'}
           />
@@ -255,7 +250,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
 
         {/* Submit Button - Styled as "Action" manga panel */}
         <div className="pt-4">
-          <button
+          <Button
             type="submit"
             disabled={submissionState === 'loading'}
             className={cn(
@@ -263,11 +258,10 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
               'px-8 py-4 border-manga border-manga-black',
               'bg-manga-black text-manga-white',
               'font-heading text-lg uppercase tracking-wider',
-              'shadow-manga hover:shadow-manga-hover',
-              'hover:translate-x-[-2px] hover:translate-y-[-2px]',
-              'transition-all duration-200',
+              'shadow-manga transition-transform duration-150',
+              'hover:-translate-y-0.5 active:translate-y-0',
               'disabled:opacity-50 disabled:cursor-not-allowed',
-              'disabled:hover:translate-x-0 disabled:hover:translate-y-0',
+              'disabled:hover:translate-y-0',
               'flex items-center justify-center gap-3'
             )}
           >
@@ -282,74 +276,38 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
                 <span>Send Message</span>
               </>
             )}
-          </button>
+          </Button>
         </div>
 
-        {/* Success/Error Feedback with Manga Reactions */}
+        {/* Success/Error Feedback */}
         {submissionState === 'success' && (
-          <div role="status" aria-live="polite" aria-atomic="true" className="mt-6 border-2 border-manga-black bg-manga-white p-6">
-            <div className="flex items-start gap-4">
-              {/* Happy manga character reaction */}
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 border-2 border-manga-black bg-manga-white flex items-center justify-center">
-                  <svg viewBox="0 0 50 50" className="w-full h-full">
-                    {/* Happy face */}
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black" strokeWidth="2" />
-                    <circle cx="18" cy="22" r="2" fill="black" />
-                    <circle cx="32" cy="22" r="2" fill="black" />
-                    <circle cx="19" cy="21" r="0.5" fill="white" />
-                    <circle cx="33" cy="21" r="0.5" fill="white" />
-                    <path d="M 15 28 Q 25 35 35 28" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </div>
-              </div>
-              
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle2 className="w-5 h-5" />
-                  <h3 className="font-heading text-lg uppercase tracking-wider">
-                    Message Sent!
-                  </h3>
-                </div>
-                <p className="text-sm text-manga-gray-800">
-                  Thanks for reaching out! I&apos;ll get back to you as soon as possible.
-                </p>
-              </div>
-            </div>
-          </div>
+          <Alert
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            status="success"
+            className="mt-6 border-2 border-manga-black bg-manga-white text-manga-black"
+          >
+            <AlertTitle className="text-lg">Message Sent!</AlertTitle>
+            <AlertDescription className="text-manga-gray-800">
+              Thanks for reaching out! I&apos;ll get back to you as soon as possible.
+            </AlertDescription>
+          </Alert>
         )}
 
         {submissionState === 'error' && (
-          <div role="alert" aria-live="assertive" aria-atomic="true" className="mt-6 border-2 border-manga-black bg-manga-gray-50 p-6">
-            <div className="flex items-start gap-4">
-              {/* Frustrated manga character reaction */}
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 border-2 border-manga-black bg-manga-white flex items-center justify-center">
-                  <svg viewBox="0 0 50 50" className="w-full h-full">
-                    {/* Frustrated face */}
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black" strokeWidth="2" />
-                    <line x1="15" y1="20" x2="20" y2="23" stroke="black" strokeWidth="2" strokeLinecap="round" />
-                    <line x1="30" y1="23" x2="35" y2="20" stroke="black" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M 18 33 Q 25 28 32 33" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" />
-                    {/* Sweat drop */}
-                    <ellipse cx="38" cy="18" rx="2" ry="3" fill="black" />
-                  </svg>
-                </div>
-              </div>
-              
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <XCircle className="w-5 h-5" />
-                  <h3 className="font-heading text-lg uppercase tracking-wider">
-                    Oops! Something went wrong
-                  </h3>
-                </div>
-                <p className="text-sm text-manga-gray-800">
-                  There was an error sending your message. Please try again or contact me directly via email.
-                </p>
-              </div>
-            </div>
-          </div>
+          <Alert
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+            status="error"
+            className="mt-6 border-2 border-manga-black bg-manga-gray-50 text-manga-black"
+          >
+            <AlertTitle className="text-lg">Oops! Something went wrong</AlertTitle>
+            <AlertDescription className="text-manga-gray-800">
+              There was an error sending your message. Please try again or contact me directly via email.
+            </AlertDescription>
+          </Alert>
         )}
       </form>
     </MangaPanel>

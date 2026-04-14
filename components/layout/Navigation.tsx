@@ -1,6 +1,7 @@
 'use client';
 
 import { useHorizontalScroll } from '@/components/horizontal-scroll/HorizontalScrollContext';
+import { ThemeSwitch } from '@/components/theme/ThemeSwitch';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { type MouseEvent, useState } from 'react';
@@ -56,7 +57,7 @@ export function Navigation() {
             className="font-heading text-2xl uppercase tracking-wider hover:opacity-70 transition-opacity"
             onClick={(event) => onNavClick(event, '/', 0)}
           >
-            Portfolio
+            Nyxx
           </Link>
 
           {/* Desktop Navigation */}
@@ -81,11 +82,14 @@ export function Navigation() {
                 </Link>
               );
             })}
+            <div className="ml-3 pl-2 border-l-manga border-manga-black">
+              <ThemeSwitch />
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 border-manga border-manga-black bg-manga-white hover:bg-manga-gray-50"
+            className="md:hidden p-2 border-manga border-manga-black bg-manga-white shadow-manga transition-all duration-150 ease-out hover:bg-manga-gray-50 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:outline-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
             aria-expanded={mobileMenuOpen}
@@ -122,6 +126,9 @@ export function Navigation() {
                   </Link>
                 );
               })}
+              <div className="pt-2">
+                <ThemeSwitch />
+              </div>
             </div>
           </div>
         )}

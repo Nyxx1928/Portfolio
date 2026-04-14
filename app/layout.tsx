@@ -5,6 +5,8 @@ import { HorizontalAppShell } from "@/components/horizontal-scroll/HorizontalApp
 import { HorizontalScrollProvider } from "@/components/horizontal-scroll/HorizontalScrollContext";
 import { Navigation } from "@/components/layout/Navigation";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
+import { Toaster } from "@/components/retroui/Sonner";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 const bebasNeue = localFont({
   src: [{ path: "../public/fonts/BebasNeue-Regular.ttf", weight: "400", style: "normal" }],
@@ -39,22 +41,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bebasNeue.variable} ${inter.variable}`}>
-      <body className="antialiased font-body bg-manga-white text-manga-black">
-        {/* Skip-to-content link for keyboard / screen-reader users */}
-        <a
-          href="#active-panel-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-manga-black focus:text-manga-white focus:font-heading focus:uppercase focus:tracking-wider focus:border-manga focus:border-manga-white focus:shadow-manga"
-        >
-          Skip to content
-        </a>
+    <html lang="en" suppressHydrationWarning className={`${bebasNeue.variable} ${inter.variable}`}>
+      <body suppressHydrationWarning className="antialiased font-body bg-background text-foreground">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          {/* Skip-to-content link for keyboard / screen-reader users */}
+          <a
+            href="#active-panel-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-manga-black focus:text-manga-white focus:font-heading focus:uppercase focus:tracking-wider focus:border-manga focus:border-manga-white focus:shadow-manga"
+          >
+            Skip to content
+          </a>
 
-        <HorizontalScrollProvider>
-          <SmoothScrollProvider>
-            <Navigation />
-            <HorizontalAppShell>{children}</HorizontalAppShell>
-          </SmoothScrollProvider>
-        </HorizontalScrollProvider>
+          <HorizontalScrollProvider>
+            <SmoothScrollProvider>
+              <Navigation />
+              <HorizontalAppShell>{children}</HorizontalAppShell>
+              <Toaster />
+            </SmoothScrollProvider>
+          </HorizontalScrollProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
