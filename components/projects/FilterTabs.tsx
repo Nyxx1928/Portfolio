@@ -62,14 +62,15 @@ export function FilterTabs() {
               onClick={() => handleFilterChange(tab.value)}
               className={`
                 relative px-6 py-3 font-heading uppercase tracking-wider text-sm md:text-base
-                border-manga border-manga-black transition-all duration-200
+                border-manga border-manga-black [box-shadow:var(--manga-shadow)] transition-all duration-150 ease-out
+                hover:translate-x-[2px] hover:translate-y-[2px] hover:[box-shadow:var(--manga-shadow-pressed)]
+                focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] focus-visible:[box-shadow:var(--manga-shadow-pressed)] focus-visible:outline-none
+                active:translate-x-[4px] active:translate-y-[4px] active:shadow-none
                 ${isActive 
-                  ? 'bg-manga-black text-manga-white shadow-manga' 
+                  ? 'bg-manga-black text-manga-white' 
                   : 'bg-manga-white text-manga-black hover:bg-manga-gray-50'
                 }
               `}
-              whileHover={{ scale: isActive ? 1 : 1.02 }}
-              whileTap={{ scale: 0.98 }}
               role="tab"
               aria-selected={isActive}
               aria-controls="projects-grid"
