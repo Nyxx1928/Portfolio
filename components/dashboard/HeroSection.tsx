@@ -161,8 +161,6 @@ export function HeroSection({
             <motion.button
               onClick={handleViewProjects}
               className="manga-button w-full sm:w-auto"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
               aria-label="Navigate to projects page"
             >
               View Projects
@@ -172,8 +170,6 @@ export function HeroSection({
             <motion.button
               onClick={handleContactMe}
               className="manga-button-outline w-full sm:w-auto"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
               aria-label="Navigate to contact page"
             >
               Contact Me
@@ -209,6 +205,7 @@ export function HeroSection({
               src={avatarSrc}
               alt="Me, Myself, and I"
               fill
+              sizes="(max-width: 640px) 16rem, (max-width: 768px) 20rem, (max-width: 1024px) 24rem, 28rem"
               className="object-cover"
                 style={{ objectPosition: "center top" }}
               priority
