@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { Project } from '@/types';
 import { MangaImage } from '@/components/ui/MangaImage';
 import { MangaPanel } from '@/components/manga/MangaPanel';
@@ -13,6 +12,7 @@ import { cn } from '@/lib/utils';
 
 interface ProjectDetailProps {
   project: Project;
+  category?: string;
 }
 
 /**
@@ -30,12 +30,10 @@ interface ProjectDetailProps {
  * 
  * @param project - The project data to display
  */
-export function ProjectDetail({ project }: ProjectDetailProps) {
+export function ProjectDetail({ project, category }: ProjectDetailProps) {
   const { ref: statsRef, isInView: statsInView } = useScrollAnimation();
   const { ref: screenshotsRef, isInView: screenshotsInView } = useScrollAnimation();
-  const searchParams = useSearchParams();
 
-  const category = searchParams?.get('category');
   const projectsHref = category && category !== 'all'
     ? `/projects?${new URLSearchParams({ category }).toString()}`
     : '/projects';
