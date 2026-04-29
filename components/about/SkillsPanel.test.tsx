@@ -30,42 +30,42 @@ describe('SkillsPanel', () => {
       name: 'React',
       level: 95,
       category: 'frontend',
-      icon: '⚛️',
+      icon: 'Atom',
     },
     {
       id: 'skill-2',
       name: 'TypeScript',
       level: 90,
       category: 'frontend',
-      icon: '📘',
+      icon: 'FileCode2',
     },
     {
       id: 'skill-3',
       name: 'Node.js',
       level: 85,
       category: 'backend',
-      icon: '🟢',
+      icon: 'Circle',
     },
     {
       id: 'skill-4',
       name: 'Figma',
       level: 88,
       category: 'design',
-      icon: '🎨',
+      icon: 'Figma',
     },
     {
       id: 'skill-5',
       name: 'Git',
       level: 92,
       category: 'tools',
-      icon: '🔀',
+      icon: 'GitBranch',
     },
     {
       id: 'skill-6',
       name: 'Agile',
       level: 80,
       category: 'other',
-      icon: '🔄',
+      icon: 'RefreshCw',
     },
   ];
 
@@ -131,14 +131,12 @@ describe('SkillsPanel', () => {
     });
 
     it('renders skill icons when provided', () => {
-      render(<SkillsPanel skills={mockSkills} tools={mockTools} />);
+      const { container } = render(<SkillsPanel skills={mockSkills} tools={mockTools} />);
       
-      expect(screen.getByText('⚛️')).toBeInTheDocument();
-      expect(screen.getByText('📘')).toBeInTheDocument();
-      expect(screen.getByText('🟢')).toBeInTheDocument();
-      expect(screen.getByText('🎨')).toBeInTheDocument();
-      expect(screen.getByText('🔀')).toBeInTheDocument();
-      expect(screen.getByText('🔄')).toBeInTheDocument();
+      // Check that SVG icons are rendered (lucide-react icons are SVG elements)
+      const svgIcons = container.querySelectorAll('svg');
+      // Should have at least one icon per skill with an icon property
+      expect(svgIcons.length).toBeGreaterThanOrEqual(mockSkills.length);
     });
 
     it('renders skills without icons', () => {
@@ -189,7 +187,7 @@ describe('SkillsPanel', () => {
           name: 'React',
           level: 95,
           category: 'frontend',
-          icon: '⚛️',
+          icon: 'Atom',
         },
       ];
 

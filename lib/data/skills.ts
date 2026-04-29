@@ -11,6 +11,7 @@ import { Skill, Tool } from '@/types';
  * - Other: Additional technical skills
  * 
  * Skill levels range from 0-100 for stat bar visualization
+ * Icons use lucide-react icon names (without 'Icon' suffix)
  */
 
 export const skills: Skill[] = [
@@ -18,58 +19,51 @@ export const skills: Skill[] = [
   {
     id: 'skill-1',
     name: 'React',
-    level: 95,
+    level: 90,
     category: 'frontend',
-    icon: '⚛️',
+    icon: 'Atom',
   },
   {
     id: 'skill-2',
     name: 'Next.js',
     level: 90,
     category: 'frontend',
-    icon: '▲',
+    icon: 'Triangle',
   },
   {
     id: 'skill-3',
     name: 'TypeScript',
     level: 92,
     category: 'frontend',
-    icon: '📘',
+    icon: 'FileCode2',
   },
   {
     id: 'skill-4',
     name: 'JavaScript',
     level: 95,
     category: 'frontend',
-    icon: '📜',
+    icon: 'FileJson',
   },
   {
     id: 'skill-5',
     name: 'HTML/CSS',
     level: 98,
     category: 'frontend',
-    icon: '🎨',
+    icon: 'Palette',
   },
   {
     id: 'skill-6',
     name: 'Tailwind CSS',
     level: 90,
     category: 'frontend',
-    icon: '💨',
+    icon: 'Wind',
   },
   {
     id: 'skill-7',
     name: 'Framer Motion',
     level: 85,
     category: 'frontend',
-    icon: '🎬',
-  },
-  {
-    id: 'skill-8',
-    name: 'React Native',
-    level: 80,
-    category: 'frontend',
-    icon: '📱',
+    icon: 'Film',
   },
 
   // Backend Skills
@@ -78,49 +72,43 @@ export const skills: Skill[] = [
     name: 'Node.js',
     level: 88,
     category: 'backend',
-    icon: '🟢',
+    icon: 'Circle',
   },
   {
     id: 'skill-10',
     name: 'Express',
     level: 85,
     category: 'backend',
-    icon: '🚂',
+    icon: 'Zap',
   },
   {
     id: 'skill-11',
     name: 'PostgreSQL',
     level: 82,
     category: 'backend',
-    icon: '🐘',
+    icon: 'Database',
   },
   {
     id: 'skill-12',
     name: 'MongoDB',
     level: 80,
     category: 'backend',
-    icon: '🍃',
+    icon: 'Leaf',
   },
   {
     id: 'skill-13',
     name: 'Prisma',
     level: 85,
     category: 'backend',
-    icon: '🔷',
+    icon: 'Layers',
   },
-  {
-    id: 'skill-14',
-    name: 'GraphQL',
-    level: 78,
-    category: 'backend',
-    icon: '◈',
-  },
+  
   {
     id: 'skill-15',
     name: 'REST APIs',
     level: 90,
     category: 'backend',
-    icon: '🔌',
+    icon: 'Plug',
   },
 
   // Design Skills
@@ -129,35 +117,28 @@ export const skills: Skill[] = [
     name: 'Figma',
     level: 88,
     category: 'design',
-    icon: '🎨',
+    icon: 'Figma',
   },
   {
     id: 'skill-17',
     name: 'UI/UX Design',
     level: 85,
     category: 'design',
-    icon: '✨',
-  },
-  {
-    id: 'skill-18',
-    name: 'Adobe XD',
-    level: 75,
-    category: 'design',
-    icon: '🎭',
+    icon: 'Sparkles',
   },
   {
     id: 'skill-19',
     name: 'Responsive Design',
     level: 95,
     category: 'design',
-    icon: '📐',
+    icon: 'Monitor',
   },
   {
     id: 'skill-20',
     name: 'Accessibility',
     level: 82,
     category: 'design',
-    icon: '♿',
+    icon: 'Accessibility',
   },
 
   // Tools
@@ -166,42 +147,42 @@ export const skills: Skill[] = [
     name: 'Git',
     level: 92,
     category: 'tools',
-    icon: '🔀',
+    icon: 'GitBranch',
   },
   {
     id: 'skill-22',
     name: 'GitHub',
     level: 90,
     category: 'tools',
-    icon: '🐙',
+    icon: 'Github',
   },
   {
     id: 'skill-23',
     name: 'VS Code',
     level: 95,
     category: 'tools',
-    icon: '💻',
+    icon: 'Code',
   },
   {
     id: 'skill-24',
     name: 'Docker',
     level: 75,
     category: 'tools',
-    icon: '🐳',
+    icon: 'Container',
   },
   {
     id: 'skill-25',
     name: 'Jest',
     level: 85,
     category: 'tools',
-    icon: '🃏',
+    icon: 'TestTube',
   },
   {
     id: 'skill-26',
     name: 'Webpack',
     level: 70,
     category: 'tools',
-    icon: '📦',
+    icon: 'Package',
   },
 
   // Other Skills
@@ -210,28 +191,28 @@ export const skills: Skill[] = [
     name: 'Agile/Scrum',
     level: 88,
     category: 'other',
-    icon: '🔄',
+    icon: 'RefreshCw',
   },
   {
     id: 'skill-28',
     name: 'CI/CD',
     level: 80,
     category: 'other',
-    icon: '🚀',
+    icon: 'Rocket',
   },
   {
     id: 'skill-29',
     name: 'Performance Optimization',
     level: 85,
     category: 'other',
-    icon: '⚡',
+    icon: 'Gauge',
   },
   {
     id: 'skill-30',
     name: 'SEO',
     level: 78,
     category: 'other',
-    icon: '🔍',
+    icon: 'Search',
   },
 ];
 
@@ -240,19 +221,12 @@ export const skills: Skill[] = [
  */
 export const tools: Tool[] = [
   { name: 'Vercel', category: 'Deployment' },
-  { name: 'AWS', category: 'Cloud Services' },
   { name: 'Firebase', category: 'Backend Services' },
-  { name: 'Stripe', category: 'Payment Processing' },
   { name: 'Supabase', category: 'Backend Services' },
-  { name: 'Netlify', category: 'Deployment' },
   { name: 'Postman', category: 'API Testing' },
-  { name: 'Storybook', category: 'Component Development' },
   { name: 'Playwright', category: 'Testing' },
   { name: 'ESLint', category: 'Code Quality' },
   { name: 'Prettier', category: 'Code Formatting' },
-  { name: 'Jira', category: 'Project Management' },
-  { name: 'Notion', category: 'Documentation' },
-  { name: 'Slack', category: 'Communication' },
 ];
 
 /**

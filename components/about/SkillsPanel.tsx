@@ -2,6 +2,8 @@
 
 import { Skill, Tool } from '@/types';
 import { cn } from '@/lib/utils';
+import * as LucideIcons from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 interface SkillsPanelProps {
   skills: Skill[];
@@ -109,13 +111,19 @@ function SkillCategory({ title, skills }: { title: string; skills: Skill[] }) {
  * SkillStatBar - RPG-style stat bar with animated fill
  */
 function SkillStatBar({ skill }: { skill: Skill }) {
-  // Removed scroll animation for debugging
+  // Get the icon component from lucide-react
+  const IconComponent = skill.icon 
+    ? (LucideIcons[skill.icon as keyof typeof LucideIcons] as LucideIcon)
+    : null;
+
   return (
     <div className="space-y-1">
       {/* Skill name and level */}
       <div className="flex items-center justify-between text-sm md:text-base">
-        {skill.icon && <span className="text-lg">{skill.icon}</span>}
-        <span className="font-medium text-manga-black">{skill.name}</span>
+        <div className="flex items-center gap-2">
+          {IconComponent && <IconComponent className="w-5 h-5 text-manga-black" />}
+          <span className="font-medium text-manga-black">{skill.name}</span>
+        </div>
         <span className="font-mono text-manga-gray-600 tabular-nums">
           {skill.level}/100
         </span>
