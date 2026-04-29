@@ -22,9 +22,9 @@ interface TimelineProps {
  * @param events - Array of timeline events to display
  */
 export function Timeline({ events }: TimelineProps) {
-  // Sort events chronologically (oldest first)
+  // Sort events reverse chronologically (newest first)
   const sortedEvents = [...events].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
   return (

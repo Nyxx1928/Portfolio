@@ -128,7 +128,7 @@ describe('Timeline', () => {
     expect(flashbackLabels).toHaveLength(0);
   });
 
-  it('sorts events chronologically (oldest first)', () => {
+  it('sorts events chronologically (newest first)', () => {
     const unsortedEvents: TimelineEvent[] = [
       {
         id: 'event-3',
@@ -161,14 +161,14 @@ describe('Timeline', () => {
     // Get all event titles (both mobile and desktop versions)
     const titles = screen.getAllByRole('heading', { level: 3 });
     
-    // Check that events appear in chronological order
+    // Check that events appear in reverse chronological order (newest first)
     // Each event appears twice (mobile + desktop), so we check pairs
-    expect(titles[0]).toHaveTextContent('Oldest Event');
-    expect(titles[1]).toHaveTextContent('Oldest Event');
+    expect(titles[0]).toHaveTextContent('Latest Event');
+    expect(titles[1]).toHaveTextContent('Latest Event');
     expect(titles[2]).toHaveTextContent('Middle Event');
     expect(titles[3]).toHaveTextContent('Middle Event');
-    expect(titles[4]).toHaveTextContent('Latest Event');
-    expect(titles[5]).toHaveTextContent('Latest Event');
+    expect(titles[4]).toHaveTextContent('Oldest Event');
+    expect(titles[5]).toHaveTextContent('Oldest Event');
   });
 
   it('handles events without organization or location', () => {
