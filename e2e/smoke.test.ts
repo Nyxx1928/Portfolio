@@ -43,6 +43,10 @@ test.describe('Projects panel', () => {
 
   test('shows project grid with projects', async ({ page }) => {
     await page.goto('/');
+    // Click the projects button to navigate to the projects panel
+    await page.getByRole('button', { name: /navigate to projects page/i }).click({ force: true });
+    // Wait for the projects panel to be visible
+    await expect(page.getByText(/Projects Archive/i)).toBeVisible({ timeout: 10_000 });
     // ProjectGrid renders with role="region" aria-label="Projects grid"
     await expect(page.getByRole('region', { name: /projects grid/i })).toBeAttached();
   });
