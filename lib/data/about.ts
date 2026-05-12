@@ -18,7 +18,7 @@ export interface AboutData {
 }
 
 export const aboutData: AboutData = {
-  name: 'Nics Pakluma',
+  name: 'Nicolas Lumapak',
   bio: 'A passionate developer and manga enthusiast who combines technical expertise with creative storytelling. Inspired by the visual language of manga, I create immersive web experiences that blend modern technology with classic comic art aesthetics. My work focuses on building engaging, accessible, and visually striking applications that tell a story.',
   avatarSrc: '/images/profile2.jpg',
   inspirations: [

@@ -9,7 +9,7 @@ export interface Project {
   thumbnail: string;
   screenshots: string[];
   techStack: string[];
-  category: 'web' | 'mobile' | 'uiux' | 'other';
+  category: Array<'web' | 'mobile' | 'uiux' | 'other'>;
   featured: boolean;
   demoUrl?: string;
   repoUrl?: string;
