@@ -49,12 +49,12 @@ export default function ContactPage() {
           {/* Social Links - Requirements 15.1, 15.2, 15.3, 15.4, 22.2 */}
           <SocialLinks
             links={[
-              { platform: 'github', url: 'https://github.com', username: 'mangadev' },
+              { platform: 'github', url: 'https://github.com/Nyxx1928', username: 'Nyxx1928' },
               { platform: 'linkedin', url: 'https://linkedin.com/in/mangadev', username: 'mangadev' },
               { platform: 'twitter', url: 'https://twitter.com/mangadev', username: 'mangadev' },
             ]}
-            email="hello@mangaportfolio.dev"
-            location="Tokyo, Japan"
+            email="nyxxlumapak@gmail.com"
+            location="Caloocan, Metro Manila"
           />
         </div>
       </div>

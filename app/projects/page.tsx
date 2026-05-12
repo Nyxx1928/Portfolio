@@ -33,7 +33,7 @@ function ProjectsContent() {
   const filteredProjects =
     filter === "all"
       ? projects
-      : projects.filter((project) => project.category === filter);
+      : projects.filter((project) => project.category.includes(filter as 'web' | 'mobile' | 'uiux' | 'other'));
 
   // Empty state when no projects exist at all
   if (projects.length === 0) {
@@ -93,7 +93,7 @@ function ProjectsContent() {
 
       {/* ProjectGrid component */}
       <div className="mb-8" id="projects-grid">
-        <ProjectGrid projects={filteredProjects} />
+        <ProjectGrid projects={filteredProjects} currentCategory={filter} />
       </div>
     </div>
   );

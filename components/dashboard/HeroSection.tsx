@@ -32,7 +32,7 @@ interface HeroSectionProps {
  * @param className - Additional CSS classes
  */
 export function HeroSection({
-  headline = "Welcome to My Portfolio",
+  headline = "Hi, I'm Nics",
   subheadline = "Crafting Digital Experiences with Code & Creativity",
   avatarSrc = "/images/profile3.jpg",
   className,

@@ -58,16 +58,16 @@ describe('ProjectDetailPage', () => {
       const params = await generateStaticParams();
       const slugs = params.map(p => p.slug);
       
-      expect(slugs).toContain('task-master-pro');
-      expect(slugs).toContain('manga-reader-app');
-      expect(slugs).toContain('design-system-revamp');
+      expect(slugs).toContain('chatter-sys');
+      expect(slugs).toContain('the-periodic-legends');
+      expect(slugs).toContain('accugeo-website');
     });
   });
   
   describe('generateMetadata', () => {
     it('should generate metadata for valid project', async () => {
-      const metadata = await generateMetadata({ params: Promise.resolve({ slug: 'task-master-pro' }) });
-      const project = getProjectBySlug('task-master-pro');
+      const metadata = await generateMetadata({ params: Promise.resolve({ slug: 'chatter-sys' }) });
+      const project = getProjectBySlug('chatter-sys');
       
       expect(metadata.title).toBe(`${project?.title} | Projects`);
       expect(metadata.description).toBe(project?.description);

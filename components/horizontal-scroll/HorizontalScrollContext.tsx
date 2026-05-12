@@ -42,7 +42,7 @@ export function HorizontalScrollProvider({
 }: HorizontalScrollProviderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalPanels, setTotalPanels] = useState(initialTotalPanels);
-  const [isHorizontalActive, setHorizontalActive] = useState(false);
+  const [isHorizontalActive, setHorizontalActiveState] = useState(false);
   const [isScrollHandlerReady, setIsScrollHandlerReady] = useState(false);
   const hydrated = true;
 
@@ -64,6 +64,10 @@ export function HorizontalScrollProvider({
     },
     [totalPanels],
   );
+
+  const setHorizontalActive = useCallback((active: boolean) => {
+    setHorizontalActiveState(active);
+  }, []);
 
   const setCurrentIndexInternal = useCallback(
     (index: number) => {

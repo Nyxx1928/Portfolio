@@ -13,7 +13,7 @@ test.describe('Home page', () => {
     await page.goto('/');
 
     await expect(page).toHaveTitle(/Manga Portfolio/i);
-    await expect(page.getByRole('heading', { name: /welcome to my portfolio/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /hi, i'm nics/i })).toBeVisible();
 
     // Buttons use aria-label, not visible text as the accessible name
     await expect(page.getByRole('button', { name: /navigate to projects page/i })).toBeAttached();
@@ -43,8 +43,13 @@ test.describe('Projects panel', () => {
 
   test('shows project grid with projects', async ({ page }) => {
     await page.goto('/');
-    // ProjectGrid renders with role="region" aria-label="Projects grid"
-    await expect(page.getByRole('region', { name: /projects grid/i })).toBeAttached();
+    await page.getByRole('button', { name: /navigate to projects page/i }).click({ force: true });
+    await expect(page.getByText(/Projects Archive/i)).toBeVisible({ timeout: 10_000 });
+    // Wait for projects to load (wrapped in Suspense) and scroll into view
+    await page.waitForFunction(() => {
+      const grid = document.querySelector('[role="region"][aria-label="Projects grid"]');
+      return grid !== null;
+    }, { timeout: 10_000 });
   });
 });
 

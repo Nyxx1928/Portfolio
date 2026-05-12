@@ -42,7 +42,7 @@ describe('HeroSection', () => {
     it('displays default headline and subheadline', () => {
       render(<HeroSection />);
       
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Welcome to My Portfolio');
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent("Hi, I'm Nics");
       expect(screen.getByText(/Crafting Digital Experiences with Code & Creativity/i)).toBeInTheDocument();
     });
 

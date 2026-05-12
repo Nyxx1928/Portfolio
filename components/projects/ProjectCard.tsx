@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Project } from '@/types';
 import { MangaImage } from '@/components/ui/MangaImage';
 import { HalftonePattern } from '@/components/manga/HalftonePattern';
@@ -27,17 +27,15 @@ import { cardHoverVariants } from '@/lib/animations/variants';
 interface ProjectCardProps {
   project: Project;
   index: number;
+  currentCategory?: string | null;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, currentCategory }: ProjectCardProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleClick = () => {
-    const category = searchParams?.get('category');
-
-    if (category && category !== 'all') {
-      const detailParams = new URLSearchParams({ category });
+    if (currentCategory && currentCategory !== 'all') {
+      const detailParams = new URLSearchParams({ category: currentCategory });
       router.push(`/projects/${project.slug}?${detailParams.toString()}`);
       return;
     }
@@ -79,10 +77,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <HalftonePattern intensity="light" className="z-10" />
           
           {/* Category badge overlay */}
-          <div className="absolute top-2 right-2 z-20">
-            <span className="border border-manga-black bg-manga-black px-2 py-1 text-xs font-heading uppercase text-manga-white">
-              {project.category}
-            </span>
+          <div className="absolute top-2 right-2 z-20 flex gap-1">
+            {project.category.map((cat) => (
+              <span key={cat} className="border border-manga-black bg-manga-black px-2 py-1 text-xs font-heading uppercase text-manga-white">
+                {cat === 'uiux' ? 'UI/UX' : cat}
+              </span>
+            ))}
           </div>
         </div>
         

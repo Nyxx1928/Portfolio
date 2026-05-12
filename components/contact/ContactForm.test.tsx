@@ -118,10 +118,12 @@ describe('ContactForm', () => {
       render(<ContactForm />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
+      await user.tab();
       await user.type(screen.getByLabelText(/email/i), 'john@example.com');
+      await user.tab();
       await user.type(screen.getByLabelText(/subject/i), 'Project Inquiry');
+      await user.tab();
       await user.type(screen.getByLabelText(/message/i), 'I would like to discuss a project with you.');
-
       await user.tab();
 
       await waitFor(() => {
@@ -146,8 +148,11 @@ describe('ContactForm', () => {
       };
 
       await user.type(screen.getByLabelText(/name/i), formData.name);
+      await user.tab();
       await user.type(screen.getByLabelText(/email/i), formData.email);
+      await user.tab();
       await user.type(screen.getByLabelText(/subject/i), formData.subject);
+      await user.tab();
       await user.type(screen.getByLabelText(/message/i), formData.message);
 
       await user.click(screen.getByRole('button', { name: /send message/i }));
@@ -159,16 +164,19 @@ describe('ContactForm', () => {
 
     it('displays loading state during submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit: jest.MockedFunction<(data: ContactFormData) => Promise<void>> = jest.fn(
-        async (_data: ContactFormData) => {
+      const mockOnSubmit = jest.fn(
+        async () => {
           await new Promise<void>((resolve) => setTimeout(resolve, 100));
         }
-      );
+      ) as jest.MockedFunction<() => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
+      await user.tab();
       await user.type(screen.getByLabelText(/email/i), 'john@example.com');
+      await user.tab();
       await user.type(screen.getByLabelText(/subject/i), 'Project Inquiry');
+      await user.tab();
       await user.type(screen.getByLabelText(/message/i), 'I would like to discuss a project.');
 
       await user.click(screen.getByRole('button', { name: /send message/i }));
@@ -246,16 +254,19 @@ describe('ContactForm', () => {
 
     it('disables form fields during submission', async () => {
       const user = userEvent.setup();
-      const mockOnSubmit: jest.MockedFunction<(data: ContactFormData) => Promise<void>> = jest.fn(
-        async (_data: ContactFormData) => {
+      const mockOnSubmit = jest.fn(
+        async () => {
           await new Promise<void>((resolve) => setTimeout(resolve, 100));
         }
-      );
+      ) as jest.MockedFunction<() => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
+      await user.tab();
       await user.type(screen.getByLabelText(/email/i), 'john@example.com');
+      await user.tab();
       await user.type(screen.getByLabelText(/subject/i), 'Project Inquiry');
+      await user.tab();
       await user.type(screen.getByLabelText(/message/i), 'I would like to discuss a project.');
 
       await user.click(screen.getByRole('button', { name: /send message/i }));
