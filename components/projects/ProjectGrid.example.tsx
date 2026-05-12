@@ -105,7 +105,7 @@ export default function ProjectGridExamples() {
         </h2>
         <div className="bg-manga-white p-6">
           <ProjectGrid 
-            projects={sampleProjects.filter(p => p.category === 'web')} 
+            projects={sampleProjects.filter(p => p.category.includes('web'))} 
           />
         </div>
       </section>
