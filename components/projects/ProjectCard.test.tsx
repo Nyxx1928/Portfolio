@@ -43,7 +43,7 @@ describe('ProjectCard', () => {
     thumbnail: '/images/test-thumb.jpg',
     screenshots: [],
     techStack: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS'],
-    category: 'web',
+    category: ['web'],
     featured: true,
     demoUrl: 'https://demo.example.com',
     repoUrl: 'https://github.com/test/repo',

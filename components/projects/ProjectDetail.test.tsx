@@ -72,7 +72,7 @@ describe('ProjectDetail', () => {
       '/images/screenshot-3.jpg',
     ],
     techStack: ['React', 'TypeScript', 'Next.js'],
-    category: 'web',
+    category: ['web'],
     featured: true,
     demoUrl: 'https://demo.example.com',
     repoUrl: 'https://github.com/user/repo',

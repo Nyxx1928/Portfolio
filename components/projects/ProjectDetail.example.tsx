@@ -22,7 +22,7 @@ const fullFeaturedProject: Project = {
     '/images/projects/taskmaster-4.jpg',
   ],
   techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'PostgreSQL', 'WebSocket'],
-  category: 'web',
+  category: ['web'],
   featured: true,
   demoUrl: 'https://taskmaster-demo.example.com',
   repoUrl: 'https://github.com/username/taskmaster-pro',
@@ -57,7 +57,7 @@ const projectWithoutDemo: Project = {
     '/images/projects/analytics-2.jpg',
   ],
   techStack: ['React', 'TypeScript', 'D3.js', 'Node.js'],
-  category: 'web',
+  category: ['web'],
   featured: false,
   repoUrl: 'https://github.com/username/analytics-tool',
   challenges: [
@@ -87,7 +87,7 @@ const projectWithFewScreenshots: Project = {
     '/images/projects/cli-1.jpg',
   ],
   techStack: ['Node.js', 'TypeScript', 'Commander.js'],
-  category: 'other',
+  category: ['other'],
   featured: false,
   repoUrl: 'https://github.com/username/devtools-cli',
   challenges: [
