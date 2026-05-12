@@ -68,7 +68,7 @@ export function ProjectsPanel() {
 
           {filteredProjects.length > 0 ? (
             <div id="projects-grid">
-              <ProjectGrid projects={filteredProjects} />
+              <ProjectGrid projects={filteredProjects} currentCategory={filter} />
             </div>
           ) : (
             <div className="min-h-[40vh] flex items-center justify-center">

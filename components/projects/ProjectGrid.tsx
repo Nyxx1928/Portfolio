@@ -23,9 +23,10 @@ import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
 
 interface ProjectGridProps {
   projects: Project[];
+  currentCategory?: string | null;
 }
 
-export function ProjectGrid({ projects }: ProjectGridProps) {
+export function ProjectGrid({ projects, currentCategory }: ProjectGridProps) {
   const { ref, isInView } = useScrollAnimation({
     threshold: 0.1,
     triggerOnce: true,
@@ -69,7 +70,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
           custom={index}
           className="h-full"
         >
-          <ProjectCard project={project} index={index} />
+          <ProjectCard project={project} index={index} currentCategory={currentCategory} />
         </motion.div>
       ))}
     </motion.div>

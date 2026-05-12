@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Project } from '@/types';
 import { MangaImage } from '@/components/ui/MangaImage';
 import { HalftonePattern } from '@/components/manga/HalftonePattern';
@@ -27,17 +27,15 @@ import { cardHoverVariants } from '@/lib/animations/variants';
 interface ProjectCardProps {
   project: Project;
   index: number;
+  currentCategory?: string | null;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, currentCategory }: ProjectCardProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleClick = () => {
-    const category = searchParams?.get('category');
-
-    if (category && category !== 'all') {
-      const detailParams = new URLSearchParams({ category });
+    if (currentCategory && currentCategory !== 'all') {
+      const detailParams = new URLSearchParams({ category: currentCategory });
       router.push(`/projects/${project.slug}?${detailParams.toString()}`);
       return;
     }

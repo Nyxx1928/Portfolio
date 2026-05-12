@@ -93,7 +93,7 @@ function ProjectsContent() {
 
       {/* ProjectGrid component */}
       <div className="mb-8" id="projects-grid">
-        <ProjectGrid projects={filteredProjects} />
+        <ProjectGrid projects={filteredProjects} currentCategory={filter} />
       </div>
     </div>
   );
