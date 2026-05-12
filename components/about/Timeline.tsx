@@ -2,6 +2,8 @@
 
 import { TimelineEvent } from '@/types';
 import { cn } from '@/lib/utils';
+import { BookOpen, Briefcase, Zap, Star, MapPin } from 'lucide-react';
+import React from 'react';
 
 interface TimelineProps {
   events: TimelineEvent[];
@@ -79,12 +81,12 @@ function TimelineEventItem({
     month: 'short',
   });
 
-  // Event type icons (manga style)
-  const typeIcons: Record<TimelineEvent['type'], string> = {
-    education: '📚',
-    work: '💼',
-    project: '⚡',
-    achievement: '⭐',
+  // Event type icons (Lucide icons)
+  const typeIconMap: Record<TimelineEvent['type'], React.ReactNode> = {
+    education: <BookOpen className="w-6 h-6" />,
+    work: <Briefcase className="w-6 h-6" />,
+    project: <Zap className="w-6 h-6" />,
+    achievement: <Star className="w-6 h-6" />,
   };
 
   // Event type labels
@@ -120,7 +122,7 @@ function TimelineEventItem({
               {formattedDate}
             </span>
             <span className="text-xs font-medium text-manga-gray-600 uppercase tracking-wide flex items-center gap-1">
-              <span>{typeIcons[event.type]}</span>
+              <span className="w-4 h-4 flex items-center justify-center">{typeIconMap[event.type]}</span>
               {typeLabels[event.type]}
             </span>
           </div>
@@ -146,7 +148,7 @@ function TimelineEventItem({
               )}
               {event.location && (
                 <div className="flex items-center gap-1">
-                  <span className="font-medium">📍</span>
+                  <MapPin className="w-3 h-3 flex-shrink-0" />
                   <span>{event.location}</span>
                 </div>
               )}
@@ -162,11 +164,11 @@ function TimelineEventItem({
           {/* Dot marker */}
           <div
             className={cn(
-              'relative z-10 w-16 h-16 border-4 border-manga-black flex items-center justify-center text-2xl',
+              'relative z-10 w-16 h-16 border-4 border-manga-black flex items-center justify-center',
               event.isPast ? 'bg-manga-gray-200' : 'bg-manga-white'
             )}
           >
-            {typeIcons[event.type]}
+            {typeIconMap[event.type]}
           </div>
 
           {/* Connecting line to next event */}
@@ -237,7 +239,7 @@ function TimelineEventItem({
                 )}
                 {event.location && (
                   <div className="flex items-center gap-2">
-                    <span className="font-medium">📍</span>
+                    <MapPin className="w-4 h-4 flex-shrink-0" />
                     <span>{event.location}</span>
                   </div>
                 )}

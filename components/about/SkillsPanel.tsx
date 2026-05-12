@@ -4,6 +4,7 @@ import { Skill, Tool } from '@/types';
 import { cn } from '@/lib/utils';
 import * as LucideIcons from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SkillsPanelProps {
   skills: Skill[];
@@ -108,16 +109,36 @@ function SkillCategory({ title, skills }: { title: string; skills: Skill[] }) {
 }
 
 /**
- * SkillStatBar - RPG-style stat bar with animated fill
+ * SkillStatBar - RPG-style stat bar with animated fill on scroll into view
  */
 function SkillStatBar({ skill }: { skill: Skill }) {
-  // Get the icon component from lucide-react
-  const IconComponent = skill.icon 
+  const IconComponent = skill.icon
     ? (LucideIcons[skill.icon as keyof typeof LucideIcons] as LucideIcon)
     : null;
 
+  const barRef = useRef<HTMLDivElement>(null);
+  const [filled, setFilled] = useState(false);
+
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setFilled(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="space-y-1">
+    <div className="space-y-1" ref={barRef}>
       {/* Skill name and level */}
       <div className="flex items-center justify-between text-sm md:text-base">
         <div className="flex items-center gap-2">
@@ -130,7 +151,7 @@ function SkillStatBar({ skill }: { skill: Skill }) {
       </div>
       {/* Stat bar container */}
       <div className="relative h-6 border-2 border-manga-black bg-manga-white overflow-hidden">
-        {/* Background pattern (manga halftone effect) */}
+        {/* Background halftone pattern */}
         <div
           className="absolute inset-0 opacity-5"
           style={{
@@ -138,12 +159,16 @@ function SkillStatBar({ skill }: { skill: Skill }) {
             backgroundSize: '4px 4px',
           }}
         />
-        {/* Static fill bar for debug */}
+        {/* Animated fill bar */}
         <div
-          className="absolute inset-y-0 left-0 bg-manga-black"
-          style={{ width: `${skill.level}%` }}
+          className="absolute inset-y-0 left-0 bg-manga-black transition-[width] duration-700 ease-out"
+          style={{ width: filled ? `${skill.level}%` : '0%' }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          {/* Shimmer sweep on fill */}
+          {filled && (
+            <div className="absolute inset-y-0 right-0 w-6 bg-gradient-to-r from-transparent to-white/20 animate-pulse" />
+          )}
         </div>
       </div>
     </div>
