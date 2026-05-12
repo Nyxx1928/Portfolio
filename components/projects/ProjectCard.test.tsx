@@ -106,8 +106,8 @@ describe('ProjectCard', () => {
   });
 
   it('preserves category query when navigating to project detail', () => {
-    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams('category=web'));
-    render(<ProjectCard project={mockProject} index={0} />);
+    // Provide the active category via prop (component no longer reads useSearchParams)
+    render(<ProjectCard project={mockProject} index={0} currentCategory="web" />);
 
     const card = screen.getByRole('button', { name: /view test project project details/i });
     fireEvent.click(card);
