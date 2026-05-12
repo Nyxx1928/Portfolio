@@ -62,9 +62,16 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
       if (onSubmit) {
         await onSubmit(data);
       } else {
-        // Simulate API call for demo purposes
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        console.log('Form submitted:', data);
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          throw new Error(text || 'Failed to send message');
+        }
       }
       
       setSubmissionState('success');
