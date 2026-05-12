@@ -167,7 +167,7 @@ export function FeaturedProjects() {
           ))}
         </motion.div>
 
-        {/* View all projects link */}
+        {/* View all projects link
         <div className="mt-8 sm:mt-12 text-center">
           <Link
             href="/projects"
@@ -178,7 +178,7 @@ export function FeaturedProjects() {
           >
             View All Projects
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );
