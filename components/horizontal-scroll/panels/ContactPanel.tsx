@@ -22,12 +22,12 @@ export function ContactPanel() {
           <ContactForm />
           <SocialLinks
             links={[
-              { platform: 'github', url: 'https://github.com', username: 'mangadev' },
+              { platform: 'github', url: 'https://github.com/Nyxx1928', username: 'Nyxx1928' },
               { platform: 'linkedin', url: 'https://linkedin.com/in/mangadev', username: 'mangadev' },
               { platform: 'twitter', url: 'https://twitter.com/mangadev', username: 'mangadev' },
             ]}
-            email="hello@mangaportfolio.dev"
-            location="Tokyo, Japan"
+            email="nyxxlumapak@gmail.com"
+            location="Caloocan, Metro Manila"
           />
         </div>
       </div>

@@ -23,7 +23,7 @@ export function ProjectsPanel() {
       return projects;
     }
 
-    return projects.filter((project) => project.category === filter);
+    return projects.filter((project) => project.category.includes(filter));
   }, [filter, projects]);
 
   return (
