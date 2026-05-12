@@ -79,10 +79,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <HalftonePattern intensity="light" className="z-10" />
           
           {/* Category badge overlay */}
-          <div className="absolute top-2 right-2 z-20">
-            <span className="border border-manga-black bg-manga-black px-2 py-1 text-xs font-heading uppercase text-manga-white">
-              {project.category}
-            </span>
+          <div className="absolute top-2 right-2 z-20 flex gap-1">
+            {project.category.map((cat) => (
+              <span key={cat} className="border border-manga-black bg-manga-black px-2 py-1 text-xs font-heading uppercase text-manga-white">
+                {cat === 'uiux' ? 'UI/UX' : cat}
+              </span>
+            ))}
           </div>
         </div>
         
