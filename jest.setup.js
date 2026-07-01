@@ -35,6 +35,12 @@ jest.mock('framer-motion', () => ({
     nav: ({ children, ...props }) => <nav {...props}>{children}</nav>,
     header: ({ children, ...props }) => <header {...props}>{children}</header>,
     footer: ({ children, ...props }) => <footer {...props}>{children}</footer>,
+    svg: ({ children, ...props }) => <svg {...props}>{children}</svg>,
+    path: ({ children, ...props }) => <path {...props}>{children}</path>,
+    circle: ({ children, ...props }) => <circle {...props}>{children}</circle>,
+    rect: ({ children, ...props }) => <rect {...props}>{children}</rect>,
+    line: ({ children, ...props }) => <line {...props}>{children}</line>,
+    polygon: ({ children, ...props }) => <polygon {...props}>{children}</polygon>,
   },
   AnimatePresence: ({ children }) => children,
 }))
@@ -58,6 +64,27 @@ global.IntersectionObserver = class IntersectionObserver {
     return []
   }
   unobserve() {}
+}
+
+// Polyfill Web API Request for tests (jsdom does not provide it)
+if (typeof globalThis.Request === 'undefined') {
+  globalThis.Request = class Request {
+    constructor(input, init = {}) {
+      this.url = typeof input === 'string' ? input : input.url;
+      this.method = init.method || 'GET';
+      this.headers = new Headers(init.headers || {});
+      this.bodyUsed = false;
+      this._body = init.body;
+    }
+    async json() {
+      this.bodyUsed = true;
+      return JSON.parse(this._body || '{}');
+    }
+    async text() {
+      this.bodyUsed = true;
+      return this._body || '';
+    }
+  };
 }
 
 // Mock window.matchMedia
