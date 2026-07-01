@@ -42,7 +42,7 @@ export function ProjectGrid({ projects, currentCategory }: ProjectGridProps) {
           transition={{ duration: 0.5 }}
           className="text-center max-w-md mx-auto px-4"
         >
-          <div className="manga-panel-bordered p-8">
+          <div className="border-[3px] border-manga-black bg-manga-white relative shadow-manga p-8">
             <h3 className="text-2xl font-heading mb-4 uppercase">No Projects Found</h3>
             <p className="text-manga-gray-600">
               No projects match the current filter. Try selecting a different category!

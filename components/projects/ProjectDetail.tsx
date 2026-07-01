@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Project } from '@/types';
-import { MangaImage } from '@/components/ui/MangaImage';
+import { MangaImage } from '@/components/manga/MangaImage';
 import { MangaPanel } from '@/components/manga/MangaPanel';
 import { ChapterHeader } from '@/components/manga/ChapterHeader';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
@@ -98,7 +98,7 @@ export function ProjectDetail({ project, category }: ProjectDetailProps) {
                   href={project.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="manga-button"
+                  className="px-6 py-3 border-[3px] border-manga-black bg-manga-black text-manga-white font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px]"
                 >
                   View Demo
                 </a>
@@ -108,7 +108,7 @@ export function ProjectDetail({ project, category }: ProjectDetailProps) {
                   href={project.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="manga-button-outline"
+                  className="px-6 py-3 border-[3px] border-manga-black bg-manga-white text-manga-black font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px]"
                 >
                   View Code
                 </a>
@@ -318,7 +318,10 @@ export function ProjectDetail({ project, category }: ProjectDetailProps) {
 
       {/* Bottom Navigation */}
       <div className="mt-12 text-center">
-        <Link href={projectsHref} className="manga-button">
+        <Link
+          href={projectsHref}
+          className="px-6 py-3 border-[3px] border-manga-black bg-manga-black text-manga-white font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px]"
+        >
           View All Projects
         </Link>
       </div>

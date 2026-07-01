@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Project } from '@/types';
-import { MangaImage } from '@/components/ui/MangaImage';
+import { MangaImage } from '@/components/manga/MangaImage';
 import { HalftonePattern } from '@/components/manga/HalftonePattern';
 import { cardHoverVariants } from '@/lib/animations/variants';
 
@@ -60,7 +60,7 @@ export function ProjectCard({ project, currentCategory }: ProjectCardProps) {
       role="button"
       tabIndex={0}
       aria-label={`View ${project.title} project details`}
-      className="manga-panel-bordered h-full cursor-pointer transition-shadow duration-200 focus:outline-none focus:ring-2 focus:ring-manga-black focus:ring-offset-2"
+      className="border-[3px] border-manga-black bg-manga-white p-6 relative shadow-manga h-full cursor-pointer transition-shadow duration-200 focus:outline-none focus:ring-2 focus:ring-manga-black focus:ring-offset-2"
       data-testid={`project-card-${project.id}`}
     >
       <div className="space-y-4">
