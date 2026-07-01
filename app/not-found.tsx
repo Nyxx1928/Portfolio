@@ -65,16 +65,28 @@ export default function NotFound() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/" className="manga-button text-center">
+            <Link
+              href="/"
+              className="px-6 py-3 border-[3px] border-manga-black bg-manga-black text-manga-white font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] text-center"
+            >
               Home
             </Link>
-            <Link href="/projects" className="manga-button-outline text-center">
+            <Link
+              href="/projects"
+              className="px-6 py-3 border-[3px] border-manga-black bg-manga-white text-manga-black font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] text-center"
+            >
               Projects
             </Link>
-            <Link href="/about" className="manga-button-outline text-center">
+            <Link
+              href="/about"
+              className="px-6 py-3 border-[3px] border-manga-black bg-manga-white text-manga-black font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] text-center"
+            >
               About
             </Link>
-            <Link href="/contact" className="manga-button-outline text-center">
+            <Link
+              href="/contact"
+              className="px-6 py-3 border-[3px] border-manga-black bg-manga-white text-manga-black font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] text-center"
+            >
               Contact
             </Link>
           </div>

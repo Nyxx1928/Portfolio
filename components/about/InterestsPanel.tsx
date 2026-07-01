@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MangaImage } from '@/components/ui/MangaImage';
+import { MangaImage } from '@/components/manga/MangaImage';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
 import { Interest } from '@/types';
 import { cn } from '@/lib/utils';

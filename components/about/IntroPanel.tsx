@@ -1,7 +1,7 @@
 'use client';
 
 import { MangaPanel } from '@/components/manga/MangaPanel';
-import { MangaImage } from '@/components/ui/MangaImage';
+import { MangaImage } from '@/components/manga/MangaImage';
 import { cn } from '@/lib/utils';
 
 interface IntroPanelProps {
