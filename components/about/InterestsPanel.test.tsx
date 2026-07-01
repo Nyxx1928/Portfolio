@@ -31,7 +31,7 @@ jest.mock('next/image', () => ({
 }));
 
 // Mock MangaImage to render a plain img
-jest.mock('@/components/ui/MangaImage', () => ({
+jest.mock('@/components/manga/MangaImage', () => ({
   // eslint-disable-next-line @next/next/no-img-element
   MangaImage: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />,
 }));

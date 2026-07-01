@@ -213,287 +213,7 @@
   }
 }
 
-@layer components {
-  /* Manga Panel Base */
-  .manga-panel {
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    padding: 1.5rem;
-    position: relative;
-  }
 
-  .manga-panel-bordered {
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    padding: 1.5rem;
-    position: relative;
-    box-shadow: var(--manga-shadow);
-  }
-
-  /* Speech Bubble */
-  .speech-bubble {
-    position: relative;
-    background-color: var(--color-manga-white);
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    border-radius: 1rem;
-    padding: 1rem;
-  }
-
-  .speech-bubble::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 15px 15px 0 0;
-    border-color: #000 transparent transparent transparent;
-  }
-
-  /* Halftone Pattern */
-  .halftone-overlay {
-    position: absolute;
-    inset: 0;
-    opacity: 0.3;
-    pointer-events: none;
-    background-image: radial-gradient(circle, #000 1px, transparent 1px);
-    background-size: 4px 4px;
-  }
-
-  /* Manga Button */
-  .manga-button {
-    padding: 0.75rem 1.5rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-black);
-    color: var(--color-manga-white);
-    font-family: var(--font-family-heading);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: var(--manga-shadow);
-    cursor: pointer;
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
-  }
-
-  .manga-button:hover {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-  }
-
-  .manga-button:focus-visible {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-    outline: none;
-  }
-
-  .manga-button:active {
-    box-shadow: none;
-    transform: translate(4px, 4px);
-  }
-
-  .manga-button:disabled,
-  .manga-button[aria-disabled='true'] {
-    opacity: 0.6;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-  }
-
-  .manga-button-outline {
-    padding: 0.75rem 1.5rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    color: var(--color-manga-black);
-    font-family: var(--font-family-heading);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: var(--manga-shadow);
-    cursor: pointer;
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
-  }
-
-  .manga-button-outline:hover {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-  }
-
-  .manga-button-outline:focus-visible {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-    outline: none;
-  }
-
-  .manga-button-outline:active {
-    box-shadow: none;
-    transform: translate(4px, 4px);
-  }
-
-  .manga-button-outline:disabled,
-  .manga-button-outline[aria-disabled='true'] {
-    opacity: 0.6;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-  }
-
-  .typewriter-text {
-    display: inline-block;
-    position: relative;
-  }
-
-  .typewriter-text::after {
-    content: '|';
-    position: absolute;
-    right: -8px;
-    animation: typewriterBlink 1s step-end infinite;
-  }
-
-  @keyframes typewriterBlink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0;
-    }
-  }
-
-  /* Form Fields */
-  .manga-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-gray-50);
-    font-family: var(--font-family-body);
-    color: var(--color-manga-black);
-  }
-
-  .manga-input:focus {
-    outline: none;
-    ring: 2px;
-    ring-color: var(--color-manga-black);
-    border-color: var(--color-manga-black);
-  }
-
-  .manga-input::placeholder {
-    color: var(--color-manga-gray-400);
-  }
-
-  .manga-textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-gray-50);
-    font-family: var(--font-family-body);
-    color: var(--color-manga-black);
-    min-height: 150px;
-    resize: vertical;
-  }
-
-  .manga-textarea:focus {
-    outline: none;
-    ring: 2px;
-    ring-color: var(--color-manga-black);
-    border-color: var(--color-manga-black);
-  }
-
-  .manga-textarea::placeholder {
-    color: var(--color-manga-gray-400);
-  }
-
-  /* Chapter Header */
-  .chapter-header {
-    position: relative;
-    font-size: 2.25rem;
-    font-family: var(--font-family-heading);
-    text-transform: uppercase;
-    text-align: center;
-    padding: 2rem 0;
-  }
-
-  @media (min-width: 768px) {
-    .chapter-header {
-      font-size: 3rem;
-    }
-  }
-
-  .chapter-header::before,
-  .chapter-header::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 25%;
-    height: 4px;
-    background-color: var(--color-manga-black);
-  }
-
-  .chapter-header::before {
-    left: 0;
-  }
-
-  .chapter-header::after {
-    right: 0;
-  }
-
-  /* Stat Bar (Skills) */
-  .stat-bar {
-    position: relative;
-    width: 100%;
-    height: 2rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-gray-50);
-    overflow: hidden;
-  }
-
-  .stat-bar-fill {
-    position: absolute;
-    inset-block: 0;
-    left: 0;
-    background-color: var(--color-manga-black);
-    transition: all 1s ease-out;
-  }
-
-  /* Trading Card */
-  .trading-card {
-    position: relative;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    padding: 1rem;
-    box-shadow: var(--manga-shadow);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .trading-card:hover {
-    box-shadow: var(--manga-shadow-hover);
-    transform: translate(-2px, -2px);
-  }
-
-  /* Speed Lines */
-  .speed-lines {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .speed-lines::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, transparent, var(--color-manga-black), transparent);
-    opacity: 0.2;
-    transform: skewX(-20deg);
-  }
-}
 
 @layer utilities {
   .text-outline {
@@ -532,6 +252,77 @@
 
   .backface-hidden {
     backface-visibility: hidden;
+  }
+
+  .halftone-overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #000 1px, transparent 1px);
+    background-size: 4px 4px;
+  }
+
+  .speed-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .speed-lines::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent, var(--color-manga-black), transparent);
+    opacity: 0.2;
+    transform: skewX(-20deg);
+  }
+
+  .typewriter-text {
+    display: inline-block;
+    position: relative;
+  }
+
+  .typewriter-text::after {
+    content: '|';
+    position: absolute;
+    right: -8px;
+    animation: typewriterBlink 1s step-end infinite;
+  }
+
+  .stat-bar {
+    position: relative;
+    width: 100%;
+    height: 2rem;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-gray-50);
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    background-color: var(--color-manga-black);
+    transition: all 1s ease-out;
+  }
+
+  .trading-card {
+    position: relative;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-white);
+    padding: 1rem;
+    box-shadow: var(--manga-shadow);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .trading-card:hover {
+    box-shadow: var(--manga-shadow-hover);
+    transform: translate(-2px, -2px);
   }
 }
 

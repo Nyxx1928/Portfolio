@@ -1,39 +1,38 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const FROM_EMAIL = process.env.RESEND_FROM || 'onboarding@resend.dev';
-const TO_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'nyxxlumapak@gmail.com';
-
-if (!RESEND_API_KEY) {
-  console.warn('Resend API key is not set (process.env.RESEND_API_KEY). Contact emails will fail.');
-}
-
 export async function POST(req: Request) {
   try {
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const FROM_EMAIL = process.env.RESEND_FROM;
+    const TO_EMAIL = process.env.CONTACT_RECEIVER_EMAIL;
+
+    if (!RESEND_API_KEY) {
+      return NextResponse.json(
+        { error: 'Email service not configured. Please contact the site owner.' },
+        { status: 500 }
+      );
+    }
+
+    if (!FROM_EMAIL || !isValidEmail(FROM_EMAIL)) {
+      return NextResponse.json(
+        { error: 'Email service not configured (invalid RESEND_FROM). Please contact the site owner.' },
+        { status: 500 }
+      );
+    }
+
+    if (!TO_EMAIL || !isValidEmail(TO_EMAIL)) {
+      return NextResponse.json(
+        { error: 'Email service not configured (invalid CONTACT_RECEIVER_EMAIL). Please contact the site owner.' },
+        { status: 500 }
+      );
+    }
+
     const body = await req.json();
     const { name, email, subject, message } = body ?? {};
 
     if (!name || !email || !subject || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    if (!RESEND_API_KEY) {
-      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
-    }
-
-    if (!isValidEmail(FROM_EMAIL)) {
-      return NextResponse.json(
-        { error: 'RESEND_FROM must be a valid email address, such as onboarding@resend.dev' },
-        { status: 500 }
-      );
-    }
-
-    if (!isValidEmail(TO_EMAIL)) {
-      return NextResponse.json(
-        { error: 'CONTACT_RECEIVER_EMAIL must be a valid email address' },
-        { status: 500 }
-      );
     }
 
     const resend = new Resend(RESEND_API_KEY);
