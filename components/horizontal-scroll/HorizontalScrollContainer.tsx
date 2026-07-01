@@ -11,6 +11,7 @@ import {
   getRawScrollLeftForIndex,
   shouldIgnoreArrowNavigation,
 } from "@/components/horizontal-scroll/utils";
+import { usePanelFocus } from "@/lib/hooks/usePanelFocus";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export interface PanelConfig {
@@ -52,7 +53,6 @@ export function HorizontalScrollContainer({
 
   const currentIndexRef = useRef(currentIndex);
 
-  // Keep currentIndexRef in sync with currentIndex
   useEffect(() => {
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
@@ -66,8 +66,11 @@ export function HorizontalScrollContainer({
     setTotalPanelsInternal(panels.length);
   }, [panels.length, setTotalPanelsInternal]);
 
+  usePanelFocus(panels, currentIndex);
+
+  // Merged scroll-init + scroll-position tracking (6.2)
   useEffect(() => {
-    if (!hydrated || !containerNode) {
+    if (!hydrated || !containerNode || totalPanels === 0) {
       return;
     }
 
@@ -102,24 +105,6 @@ export function HorizontalScrollContainer({
 
     registerScrollHandler(handler);
     handler(0, false);
-
-    return () => {
-      registerScrollHandler(null);
-    };
-  }, [
-    containerNode,
-    hydrated,
-    panels.length,
-    registerScrollHandler,
-    setCurrentIndexInternal,
-  ]);
-
-  useEffect(() => {
-    if (!containerNode || totalPanels === 0) {
-      return;
-    }
-
-    const container = containerNode;
 
     const updateActiveIndex = () => {
       const panelWidth = container.clientWidth;
@@ -156,33 +141,26 @@ export function HorizontalScrollContainer({
     container.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
+      registerScrollHandler(null);
       container.removeEventListener("scroll", onScroll);
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [containerNode, setCurrentIndexInternal, totalPanels]);
+  }, [
+    containerNode,
+    hydrated,
+    panels.length,
+    registerScrollHandler,
+    setCurrentIndexInternal,
+    totalPanels,
+  ]);
 
+  // Body overflow lock using CSS class (6.1)
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
+    document.documentElement.classList.add('scroll-lock');
+    return () => document.documentElement.classList.remove('scroll-lock');
   }, []);
-
-  useEffect(() => {
-    scrollToPanel(0, false);
-  }, [scrollToPanel]);
-
-  useEffect(() => {
-    const activePanel = document.getElementById(panels[currentIndex]?.id ?? "");
-    const heading = activePanel?.querySelector<HTMLElement>(
-      '[data-panel-heading="true"]',
-    );
-    heading?.focus({ preventScroll: true });
-  }, [currentIndex, panels]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -241,57 +219,44 @@ export function HorizontalScrollContainer({
         const atTop = activePanel.scrollTop <= 0;
         const atBottom = panelBottomStateRef.current[currentIndexRef.current] ?? false;
 
-        // Scrolling down: allow internal scroll if not at bottom
         if (event.deltaY > 0 && !atBottom) {
-          return; // Allow browser to scroll the panel
+          return;
         }
 
-        // Scrolling up: allow internal scroll if not at top
         if (event.deltaY < 0 && !atTop) {
-          return; // Allow browser to scroll the panel
+          return;
         }
       }
 
       event.preventDefault();
 
-      // Trackpad detection
       const isTrackpad = event.deltaMode === 0 && Math.abs(event.deltaY) <= 100;
 
       if (isTrackpad) {
-        // Trackpad gesture handling with delta accumulation
-        // If this is the first event of a new gesture, reset the navigated flag
         if (gestureTimeoutRef.current === null) {
           navigatedRef.current = false;
         }
 
         accumulatedDeltaRef.current += event.deltaY;
 
-        // Clear existing gesture timeout
         if (gestureTimeoutRef.current !== null) {
           window.clearTimeout(gestureTimeoutRef.current);
         }
 
-        // Set timeout to detect gesture end (150ms)
         gestureTimeoutRef.current = window.setTimeout(() => {
           const accumulated = accumulatedDeltaRef.current;
           const threshold = 50;
 
           if (Math.abs(accumulated) >= threshold && !navigatedRef.current) {
-            // Determine direction
             const direction = accumulated > 0 ? 1 : -1;
             scrollToPanel(currentIndexRef.current + direction);
-            // Mark that we've navigated during this gesture so further
-            // accumulated values in the same gesture don't trigger another move
             navigatedRef.current = true;
-            // Reset accumulation after navigation
             accumulatedDeltaRef.current = 0;
           }
 
-          // Gesture sequence completed
           gestureTimeoutRef.current = null;
         }, 150);
       } else {
-        // Mouse wheel events bypass accumulation logic
         const directionalDelta = getDirectionalDelta(event.deltaY, "ltr");
         container.scrollBy({ left: directionalDelta, behavior: "smooth" });
       }
@@ -305,8 +270,6 @@ export function HorizontalScrollContainer({
         gestureTimeoutRef.current = null;
       }
     };
-  // scrollToPanel is stable; currentIndex is read via ref to avoid re-registering
-   
   }, [scrollToPanel]);
 
   useEffect(() => {
@@ -345,6 +308,7 @@ export function HorizontalScrollContainer({
     };
   }, [currentIndex, scrollToPanel]);
 
+  // Resize handler with ref to avoid stale closure (6.3)
   useEffect(() => {
     const onResize = () => {
       if (resizeTimerRef.current !== null) {
@@ -352,7 +316,7 @@ export function HorizontalScrollContainer({
       }
 
       resizeTimerRef.current = window.setTimeout(() => {
-        scrollToPanel(currentIndex, false);
+        scrollToPanel(currentIndexRef.current, false);
       }, 150);
     };
 
@@ -363,7 +327,7 @@ export function HorizontalScrollContainer({
         window.clearTimeout(resizeTimerRef.current);
       }
     };
-  }, [currentIndex, scrollToPanel]);
+  }, [scrollToPanel]);
 
   const renderedPanels = useMemo(
     () =>
