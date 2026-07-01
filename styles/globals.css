@@ -326,6 +326,11 @@
   }
 }
 
+/* ── Scroll lock for horizontal scroll container (6.1) ──────────────────── */
+html.scroll-lock {
+  overflow: hidden;
+}
+
 /* ── Accessibility: Visible Focus Indicators ─────────────────────────────── */
 @layer base {
   /* Keyboard-only focus ring for all interactive elements */
