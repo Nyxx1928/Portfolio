@@ -81,12 +81,13 @@ describe('horizontal-scroll properties', () => {
   });
 
   // Feature: horizontal-scroll-manga, Property 5: Navigator state consistency
-  it('P5: navigator label, dots, and disabled states remain consistent', () => {
+  it('P5: navigator label, tabs, and disabled states remain consistent', () => {
     fc.assert(
       fc.property(fc.integer({ min: 1, max: 10 }), (total) => {
         return fc.sample(fc.integer({ min: 0, max: total - 1 }), 1).every((index) => {
           const state = getNavigatorState(index, total);
-          expect(state.label).toBe(`Panel ${index + 1} / ${total}`);
+          expect(state.label).toBe(`VOL. 1 — pp. ${index + 1} / ${total}`);
+          expect(state.activeTab).toBe(index);
           expect(state.activeDot).toBe(index);
           expect(state.prevDisabled).toBe(index === 0);
           expect(state.nextDisabled).toBe(index === total - 1);
@@ -129,6 +130,7 @@ describe('horizontal-scroll properties', () => {
       fc.property(fc.integer({ min: 1, max: 10 }), (total) => {
         return fc.sample(fc.integer({ min: 0, max: total - 1 }), 1).every((index) => {
           const state = getNavigatorState(index, total);
+          expect(state.activeTab).toBe(index);
           expect(state.activeDot).toBe(index);
           return true;
         });
