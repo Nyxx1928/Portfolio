@@ -9,7 +9,6 @@ import { Toaster } from "@/components/retroui/Sonner";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { SplashScreen } from "@/components/manga/SplashScreen";
 import { ClickSplash } from "@/components/cursor/ClickSplash";
-import { PreviouslyOnBanner } from "@/components/layout/PreviouslyOnBanner";
 
 const bebasNeue = localFont({
   src: [{ path: "../public/fonts/BebasNeue-Regular.ttf", weight: "400", style: "normal" }],
@@ -62,7 +61,6 @@ export default function RootLayout({
           <HorizontalScrollProvider>
             <SmoothScrollProvider>
               <Navigation />
-              <PreviouslyOnBanner />
               <HorizontalAppShell>{children}</HorizontalAppShell>
               <Toaster />
             </SmoothScrollProvider>

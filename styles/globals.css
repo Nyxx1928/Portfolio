@@ -152,7 +152,7 @@
   }
 
   .dark {
-    --background: oklch(0.13 0.028 261.692);
+    --background: oklch(0 0 0);
     --foreground: oklch(0.985 0.002 247.839);
     --card: oklch(0.21 0.034 264.665);
     --card-foreground: oklch(0.985 0.002 247.839);
@@ -351,6 +351,21 @@
   .pen-nib-cursor [role="button"],
   .pen-nib-cursor [tabindex]:not([tabindex="-1"]) {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect x='4' y='8' width='24' height='18' rx='3' fill='%23000'/%3E%3Crect x='8' y='12' width='16' height='10' rx='1' fill='%23fff'/%3E%3C/svg%3E") 16 16, pointer;
+  }
+
+  /* Ink Reverse (dark mode): invert cursor ink to white so it's visible on black */
+  .dark .pen-nib-cursor {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpolygon points='16,0 4,28 16,22 28,28' fill='%23fff'/%3E%3C/svg%3E") 16 4, auto;
+  }
+
+  .dark .pen-nib-cursor a,
+  .dark .pen-nib-cursor button,
+  .dark .pen-nib-cursor input,
+  .dark .pen-nib-cursor select,
+  .dark .pen-nib-cursor textarea,
+  .dark .pen-nib-cursor [role="button"],
+  .dark .pen-nib-cursor [tabindex]:not([tabindex="-1"]) {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect x='4' y='8' width='24' height='18' rx='3' fill='%23fff'/%3E%3Crect x='8' y='12' width='16' height='10' rx='1' fill='%23000'/%3E%3C/svg%3E") 16 16, pointer;
   }
 }
 
