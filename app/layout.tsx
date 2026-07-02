@@ -8,6 +8,8 @@ import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 import { Toaster } from "@/components/retroui/Sonner";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { SplashScreen } from "@/components/manga/SplashScreen";
+import { ClickSplash } from "@/components/cursor/ClickSplash";
+import { PreviouslyOnBanner } from "@/components/layout/PreviouslyOnBanner";
 
 const bebasNeue = localFont({
   src: [{ path: "../public/fonts/BebasNeue-Regular.ttf", weight: "400", style: "normal" }],
@@ -43,10 +45,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${bebasNeue.variable} ${inter.variable}`}>
-      <body suppressHydrationWarning className="antialiased font-body bg-background text-foreground">
+      <body suppressHydrationWarning className="antialiased font-body bg-background text-foreground pen-nib-cursor">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {/* Manga splash screen — shown once per session */}
           <SplashScreen />
+          <ClickSplash />
 
           {/* Skip-to-content link for keyboard / screen-reader users */}
           <a
@@ -59,6 +62,7 @@ export default function RootLayout({
           <HorizontalScrollProvider>
             <SmoothScrollProvider>
               <Navigation />
+              <PreviouslyOnBanner />
               <HorizontalAppShell>{children}</HorizontalAppShell>
               <Toaster />
             </SmoothScrollProvider>
