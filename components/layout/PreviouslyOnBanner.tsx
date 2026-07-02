@@ -104,7 +104,7 @@ export function PreviouslyOnBanner() {
   const sectionLabel = sectionLabels[history.lastSection] || 'a previous page';
 
   const bannerContent = (
-    <div className="bg-manga-black text-manga-white px-4 py-3 border-b-2 border-manga-gray-800">
+    <div className="bg-manga-black/80 backdrop-blur-md text-manga-white px-4 py-3 border-b-2 border-manga-gray-800">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <span className="font-heading text-xs uppercase tracking-widest shrink-0">

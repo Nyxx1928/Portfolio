@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Project } from '@/types';
@@ -16,6 +17,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project, currentCategory }: ProjectCardProps) {
   const router = useRouter();
   const prefersReducedMotion = usePrefersReducedMotion();
+  const [flipped, setFlipped] = useState(false);
 
   const handleClick = () => {
     if (currentCategory && currentCategory !== 'all') {
@@ -39,6 +41,8 @@ export function ProjectCard({ project, currentCategory }: ProjectCardProps) {
       className="perspective-1000 h-full"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
       role="button"
       tabIndex={0}
       aria-label={`View ${project.title} project details`}
@@ -46,11 +50,11 @@ export function ProjectCard({ project, currentCategory }: ProjectCardProps) {
     >
       <motion.div
         className="relative preserve-3d cursor-pointer h-full"
-        whileHover={prefersReducedMotion ? undefined : { rotateY: 180 }}
+        animate={prefersReducedMotion ? { rotateY: 0 } : { rotateY: flipped ? 180 : 0 }}
         transition={{ duration: 0.5 }}
         style={{ willChange: prefersReducedMotion ? 'auto' : 'transform' }}
       >
-        <div className="trading-card h-full backface-hidden">
+        <div className="relative h-full backface-hidden border-[3px] border-manga-black bg-manga-white p-4 shadow-manga">
           <TradingCardFront project={project} />
         </div>
 
