@@ -1,6 +1,7 @@
 "use client";
 
 import { useHorizontalScrollController } from "@/components/horizontal-scroll/HorizontalScrollContext";
+import { PageCurlOverlay } from "@/components/horizontal-scroll/PageCurlOverlay";
 import { PageTransitionOverlay } from "@/components/horizontal-scroll/PageTransitionOverlay";
 import { PanelNavigator } from "@/components/horizontal-scroll/PanelNavigator";
 import { PanelPage } from "@/components/horizontal-scroll/PanelPage";
@@ -40,6 +41,7 @@ export function HorizontalScrollContainer({
   const gestureTimeoutRef = useRef<number | null>(null);
   const navigatedRef = useRef(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pageCurlDirection, setPageCurlDirection] = useState<'left' | 'right'>('right');
 
   const {
     currentIndex,
@@ -56,6 +58,22 @@ export function HorizontalScrollContainer({
   useEffect(() => {
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
+
+  // Update localStorage with current panel label for "Previously On..." banner
+  const panelLabels = useMemo(() => panels.map((p) => p.label), [panels]);
+  useEffect(() => {
+    try {
+      const label = panelLabels[currentIndex];
+      if (!label) return;
+      const raw = localStorage.getItem('manga-portfolio-history');
+      const history = raw ? JSON.parse(raw) : { visitCount: 1 };
+      history.lastSection = `/#panel-${currentIndex}`;
+      history.lastSectionLabel = `the "${label}" section`;
+      localStorage.setItem('manga-portfolio-history', JSON.stringify(history));
+    } catch {
+      // localStorage unavailable
+    }
+  }, [currentIndex, panelLabels]);
 
   const setContainerRef = useCallback((node: HTMLDivElement | null) => {
     containerRef.current = node;
@@ -98,6 +116,9 @@ export function HorizontalScrollContainer({
         "ltr",
       );
 
+      if (animate && clamped !== currentIndexRef.current) {
+        setPageCurlDirection(clamped > currentIndexRef.current ? 'right' : 'left');
+      }
       setIsTransitioning(animate);
       container.scrollTo({ left, behavior: animate ? "smooth" : "auto" });
       setCurrentIndexInternal(clamped);
@@ -209,8 +230,11 @@ export function HorizontalScrollContainer({
         return;
       }
 
-      const activePanel = container.children.item(
+      const activeWrapper = container.children.item(
         currentIndexRef.current,
+      ) as HTMLElement | null;
+      const activePanel = activeWrapper?.querySelector(
+        '[data-allow-internal-scroll="true"]',
       ) as HTMLElement | null;
       const allowsInternalScroll =
         activePanel?.dataset.allowInternalScroll === "true";
@@ -333,24 +357,30 @@ export function HorizontalScrollContainer({
     () =>
       panels.map((panel, index) => {
         const PanelComponent = panel.component;
+        const edgePeekClass = index < panels.length - 1 ? 'mr-[-60px]' : '';
         return (
-          <PanelPage
-            key={panel.id}
-            id={panel.id}
-            label={panel.label}
-            index={index}
-            allowInternalScroll={panel.allowInternalScroll}
-            isActive={index === currentIndex}
-            onBottomInViewChange={(panelIndex, inView) => {
-              panelBottomStateRef.current[panelIndex] = inView;
-            }}
-          >
-            <PanelComponent />
-          </PanelPage>
+          <div key={panel.id} className={`shrink-0 snap-start ${edgePeekClass}`}>
+            <PanelPage
+              id={panel.id}
+              label={panel.label}
+              index={index}
+              allowInternalScroll={panel.allowInternalScroll}
+              isActive={index === currentIndex}
+              onBottomInViewChange={(panelIndex, inView) => {
+                panelBottomStateRef.current[panelIndex] = inView;
+              }}
+            >
+              <PanelComponent />
+            </PanelPage>
+          </div>
         );
       }),
     [currentIndex, panels],
   );
+
+  const handleCurlComplete = () => {
+    setIsTransitioning(false);
+  };
 
   return (
     <>
@@ -358,6 +388,7 @@ export function HorizontalScrollContainer({
         ref={setContainerRef}
         className="flex h-screen w-full snap-x snap-mandatory overflow-x-scroll overflow-y-hidden scroll-smooth"
         dir="ltr"
+        data-page-curl-direction={pageCurlDirection}
       >
         {renderedPanels}
       </div>
@@ -365,7 +396,14 @@ export function HorizontalScrollContainer({
       <PanelNavigator />
       <PageTransitionOverlay
         isTransitioning={isTransitioning}
-        onComplete={() => setIsTransitioning(false)}
+        onComplete={() => {
+          /* handled by PageCurlOverlay */
+        }}
+      />
+      <PageCurlOverlay
+        isActive={isTransitioning}
+        direction={pageCurlDirection}
+        onComplete={handleCurlComplete}
       />
     </>
   );

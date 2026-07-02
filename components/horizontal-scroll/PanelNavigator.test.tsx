@@ -30,7 +30,7 @@ function Controller({
 }
 
 describe('PanelNavigator', () => {
-  it('renders panel count text and boundary disabled states', async () => {
+  it('renders tankobon label and tab navigation', async () => {
     const onScroll = jest.fn();
 
     render(
@@ -40,12 +40,46 @@ describe('PanelNavigator', () => {
       </HorizontalScrollProvider>
     );
 
-    expect(screen.getByText('Panel 1 / 4')).toBeInTheDocument();
+    expect(screen.getByText('VOL. 1 — pp. 1 / 4')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Previous panel' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Next panel' })).not.toBeDisabled();
 
-    await userEvent.click(screen.getByRole('button', { name: 'Go to panel 3' }));
+    await userEvent.click(screen.getByRole('tab', { name: 'Go to panel 3' }));
 
     await waitFor(() => expect(onScroll).toHaveBeenCalledWith(2));
+  });
+
+  it('highlights correct tab for each index', async () => {
+    const onScroll = jest.fn();
+
+    const { rerender } = render(
+      <HorizontalScrollProvider initialTotalPanels={3}>
+        <Controller currentIndex={0} onScroll={onScroll} />
+        <PanelNavigator />
+      </HorizontalScrollProvider>
+    );
+
+    let tab1 = screen.getByRole('tab', { name: 'Go to panel 1' });
+    let tab2 = screen.getByRole('tab', { name: 'Go to panel 2' });
+    let tab3 = screen.getByRole('tab', { name: 'Go to panel 3' });
+
+    expect(tab1).toHaveAttribute('aria-selected', 'true');
+    expect(tab2).toHaveAttribute('aria-selected', 'false');
+    expect(tab3).toHaveAttribute('aria-selected', 'false');
+
+    rerender(
+      <HorizontalScrollProvider initialTotalPanels={3}>
+        <Controller currentIndex={1} onScroll={onScroll} />
+        <PanelNavigator />
+      </HorizontalScrollProvider>
+    );
+
+    tab1 = screen.getByRole('tab', { name: 'Go to panel 1' });
+    tab2 = screen.getByRole('tab', { name: 'Go to panel 2' });
+    tab3 = screen.getByRole('tab', { name: 'Go to panel 3' });
+
+    expect(tab1).toHaveAttribute('aria-selected', 'false');
+    expect(tab2).toHaveAttribute('aria-selected', 'true');
+    expect(tab3).toHaveAttribute('aria-selected', 'false');
   });
 });
