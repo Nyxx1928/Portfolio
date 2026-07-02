@@ -61,29 +61,7 @@ export function PanelNavigator() {
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            aria-label="Previous panel"
-            aria-disabled={state.prevDisabled}
-            disabled={state.prevDisabled}
-            onClick={() => scrollToPanel(currentIndex - 1)}
-            className="flex h-11 w-11 items-center justify-center border border-manga-black bg-manga-white text-sm font-heading uppercase shadow-manga transition-all duration-150 ease-out hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:outline-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:cursor-not-allowed disabled:opacity-40 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-none"
-          >
-            Prev
-          </button>
-
-          <button
-            type="button"
-            aria-label="Next panel"
-            aria-disabled={state.nextDisabled}
-            disabled={state.nextDisabled}
-            onClick={() => scrollToPanel(currentIndex + 1)}
-            className="flex h-11 w-11 items-center justify-center border border-manga-black bg-manga-white text-sm font-heading uppercase shadow-manga transition-all duration-150 ease-out hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:outline-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:cursor-not-allowed disabled:opacity-40 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-none"
-          >
-            Next
-          </button>
-        </div>
+        {/* Prev/Next buttons removed — use arrow keys or numbered tabs */}
       </div>
     </aside>
   );

@@ -41,8 +41,6 @@ describe('PanelNavigator', () => {
     );
 
     expect(screen.getByText('VOL. 1 — pp. 1 / 4')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Previous panel' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Next panel' })).not.toBeDisabled();
 
     await userEvent.click(screen.getByRole('tab', { name: 'Go to panel 3' }));
 
