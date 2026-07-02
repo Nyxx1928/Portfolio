@@ -7,6 +7,7 @@ import { Navigation } from "@/components/layout/Navigation";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 import { Toaster } from "@/components/retroui/Sonner";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { DitherBackground } from "@/components/theme/DitherBackground";
 import { SplashScreen } from "@/components/manga/SplashScreen";
 import { ClickSplash } from "@/components/cursor/ClickSplash";
 
@@ -49,6 +50,7 @@ export default function RootLayout({
           {/* Manga splash screen — shown once per session */}
           <SplashScreen />
           <ClickSplash />
+          <DitherBackground />
 
           {/* Skip-to-content link for keyboard / screen-reader users */}
           <a
