@@ -2,17 +2,13 @@ import dynamic from 'next/dynamic';
 import { ChapterHeader } from '@/components/manga/ChapterHeader';
 import { ContactIntro } from '@/components/contact/ContactIntro';
 import { ContactForm } from '@/components/contact/ContactForm';
+import { MangaLoadingSkeleton } from '@/components/manga/MangaLoadingSkeleton';
 
 // Dynamic import for below-the-fold social links section
 const SocialLinks = dynamic(
   () => import('@/components/contact/SocialLinks').then((m) => m.SocialLinks),
   {
-    loading: () => (
-      <div className="border-manga border-manga-black bg-manga-white p-8 animate-pulse min-h-[150px]">
-        <div className="h-6 w-40 bg-manga-gray-200 mb-4" />
-        <div className="h-4 w-full bg-manga-gray-200" />
-      </div>
-    ),
+    loading: () => <MangaLoadingSkeleton panels={1} variant="list" />,
   }
 );
 
