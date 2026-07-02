@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest --watch",
-    "test:ci": "jest --ci",
+    "test:ci": "jest --ci --forceExit",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
