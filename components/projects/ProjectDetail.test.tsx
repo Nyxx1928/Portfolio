@@ -74,6 +74,9 @@ describe('ProjectDetail', () => {
     techStack: ['React', 'TypeScript', 'Next.js'],
     category: ['web'],
     featured: true,
+    rarity: 'common',
+    stats: { code: 80, design: 70, innovation: 60 },
+    cardNumber: '001',
     demoUrl: 'https://demo.example.com',
     repoUrl: 'https://github.com/user/repo',
     challenges: [

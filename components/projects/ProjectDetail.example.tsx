@@ -24,6 +24,9 @@ const fullFeaturedProject: Project = {
   techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'PostgreSQL', 'WebSocket'],
   category: ['web'],
   featured: true,
+  rarity: 'rare',
+  stats: { code: 90, design: 85, innovation: 80 },
+  cardNumber: '#001',
   demoUrl: 'https://taskmaster-demo.example.com',
   repoUrl: 'https://github.com/username/taskmaster-pro',
   challenges: [
@@ -59,6 +62,9 @@ const projectWithoutDemo: Project = {
   techStack: ['React', 'TypeScript', 'D3.js', 'Node.js'],
   category: ['web'],
   featured: false,
+  rarity: 'uncommon',
+  stats: { code: 80, design: 70, innovation: 75 },
+  cardNumber: '#002',
   repoUrl: 'https://github.com/username/analytics-tool',
   challenges: [
     'Processing large datasets efficiently',
@@ -89,6 +95,9 @@ const projectWithFewScreenshots: Project = {
   techStack: ['Node.js', 'TypeScript', 'Commander.js'],
   category: ['other'],
   featured: false,
+  rarity: 'common',
+  stats: { code: 85, design: 60, innovation: 70 },
+  cardNumber: '#003',
   repoUrl: 'https://github.com/username/devtools-cli',
   challenges: [
     'Creating an intuitive CLI interface',
