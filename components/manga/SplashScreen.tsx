@@ -3,22 +3,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CornerAccents, SplashHalftoneOverlay } from './splash';
+import { useIsClient } from '@/lib/hooks/useIsClient';
 
 const SPLASH_KEY = 'manga-splash-shown';
 
 export function SplashScreen() {
-  const [phase, setPhase] = useState<'splash' | 'done'>('done');
+  const isClient = useIsClient();
+  const [dismissed, setDismissed] = useState(false);
   const dismissing = useRef(false);
 
-  useEffect(() => {
-    try {
-      if (!sessionStorage.getItem(SPLASH_KEY)) {
-        setPhase('splash');
+  // Decide whether to show the splash. sessionStorage is only readable on the
+  // client, so we gate on `isClient` (hydration-safe via useSyncExternalStore).
+  const shouldShowSplash =
+    isClient &&
+    !dismissed &&
+    (() => {
+      try {
+        return !sessionStorage.getItem(SPLASH_KEY);
+      } catch {
+        return true;
       }
-    } catch {
-      setPhase('splash');
-    }
-  }, []);
+    })();
+
+  const phase: 'splash' | 'done' = shouldShowSplash ? 'splash' : 'done';
 
   const dismiss = useCallback(() => {
     if (dismissing.current) return;
@@ -26,7 +33,7 @@ export function SplashScreen() {
     try {
       sessionStorage.setItem(SPLASH_KEY, '1');
     } catch {}
-    setPhase('done');
+    setDismissed(true);
   }, []);
 
   useEffect(() => {
@@ -47,7 +54,7 @@ export function SplashScreen() {
           onClick={dismiss}
           role="dialog"
           aria-modal="true"
-          aria-label="Welcome splash screen — click or press any key to continue"
+          aria-label="Welcome splash screen — click or press Enter, Space, or Escape to continue"
           exit={{
             x: '-100%',
             transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },

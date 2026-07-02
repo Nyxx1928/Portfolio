@@ -75,11 +75,15 @@ export function MangaPanel({
     },
   };
 
-  // Determine base classes based on variant
+  // Determine base classes based on variant.
+  // These replace the former `.manga-panel` / `.manga-panel-bordered` CSS
+  // component classes that were removed during the codebase remediation. The
+  // Tailwind utilities below are the spec-mandated equivalents
+  // (see .opencode/specs/codebase-remediation/design.md).
   const variantClasses = {
-    default: 'manga-panel',
-    bordered: 'manga-panel-bordered',
-    shadowed: 'manga-panel-bordered',
+    default: 'border-[3px] border-manga-black bg-manga-white p-6 relative',
+    bordered: 'border-[3px] border-manga-black bg-manga-white p-6 relative shadow-manga',
+    shadowed: 'border-[3px] border-manga-black bg-manga-white p-6 relative shadow-manga',
   };
 
   return (
