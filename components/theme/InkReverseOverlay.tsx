@@ -10,9 +10,10 @@ interface InkReverseOverlayProps {
   onComplete: () => void;
 }
 
-export function InkReverseOverlay({ isActive, onComplete }: InkReverseOverlayProps) {
+function InkReverseOverlayInner({ onComplete }: { onComplete: () => void }) {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
+  const [renderReady, setRenderReady] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -24,14 +25,7 @@ export function InkReverseOverlay({ isActive, onComplete }: InkReverseOverlayPro
     return () => media.removeEventListener('change', update);
   }, []);
 
-  const [renderReady, setRenderReady] = useState(false);
-
   useEffect(() => {
-    if (!isActive) {
-      setRenderReady(false);
-      return;
-    }
-
     if (prefersReducedMotion) {
       onComplete();
       return;
@@ -46,9 +40,8 @@ export function InkReverseOverlay({ isActive, onComplete }: InkReverseOverlayPro
       clearTimeout(splashTimer);
       clearTimeout(completeTimer);
     };
-  }, [isActive, onComplete, prefersReducedMotion]);
+  }, [onComplete, prefersReducedMotion]);
 
-  if (!isActive) return null;
   if (prefersReducedMotion) return null;
 
   return (
@@ -80,4 +73,10 @@ export function InkReverseOverlay({ isActive, onComplete }: InkReverseOverlayPro
       </div>
     </motion.div>
   );
+}
+
+export function InkReverseOverlay({ isActive, onComplete }: InkReverseOverlayProps) {
+  if (!isActive) return null;
+
+  return <InkReverseOverlayInner onComplete={onComplete} />;
 }
