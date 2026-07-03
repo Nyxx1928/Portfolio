@@ -36,19 +36,19 @@ export function IntroPanel({
 }: IntroPanelProps) {
   return (
     <MangaPanel>
-      <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
-        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 md:gap-8 lg:gap-12">
+      <div className="border-manga border-manga-black bg-manga-white p-4 md:p-6 shadow-manga">
+        <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 md:gap-6 lg:gap-8">
         {/* Avatar/Photo Section */}
         <div className="flex justify-center md:justify-start">
           <div className="relative">
             {/* Manga-style frame */}
-            <div className="relative border-manga border-manga-black bg-manga-white p-2 shadow-manga">
-              <div className="relative w-64 h-64 overflow-hidden border-2 border-manga-black">
+            <div className="relative border-manga border-manga-black bg-manga-white p-1.5 shadow-manga">
+              <div className="relative w-48 h-48 overflow-hidden border-2 border-manga-black">
                 <MangaImage
                   src={avatarSrc}
                   alt={`${name} - Portfolio Avatar`}
                   fill
-                  sizes="(max-width: 768px) 256px, 300px"
+                  sizes="(max-width: 768px) 192px, 250px"
                   className="object-cover grayscale"
                   wrapperClassName="absolute inset-0"
                   priority
@@ -69,7 +69,7 @@ export function IntroPanel({
         </div>
 
         {/* Bio and Inspirations Section */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
           {/* Name Header */}
           <div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading uppercase tracking-wider mb-2">
@@ -86,30 +86,24 @@ export function IntroPanel({
           </div>
 
           {/* Inspirations Section */}
-          <div className="mt-4">
-            <h3 className="text-xl md:text-2xl font-heading uppercase tracking-wider mb-4 flex items-center gap-2">
+          <div>
+            <h3 className="text-lg md:text-xl font-heading uppercase tracking-wider mb-3 flex items-center gap-2">
               <span className="inline-block w-2 h-2 bg-manga-black" />
               Manga & Anime Inspirations
             </h3>
             
-            {/* Inspirations list in manga style */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex flex-wrap gap-2">
               {inspirations.map((inspiration, index) => (
-                <div
+                <span
                   key={index}
                   className={cn(
-                    'relative border-2 border-manga-black bg-manga-gray-50 px-4 py-2',
-                    'hover:bg-manga-white hover:shadow-manga transition-all duration-200',
-                    'hover:-translate-x-0.5 hover:-translate-y-0.5'
+                    'inline-block border-2 border-manga-black bg-manga-gray-50 px-3 py-1',
+                    'text-sm font-medium text-manga-black',
+                    'hover:bg-manga-white hover:shadow-manga-sm transition-all duration-200'
                   )}
                 >
-                  {/* Speech bubble tail effect */}
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-manga-black" />
-                  
-                  <p className="text-sm md:text-base font-medium text-manga-black">
-                    {inspiration}
-                  </p>
-                </div>
+                  {inspiration}
+                </span>
               ))}
             </div>
           </div>
