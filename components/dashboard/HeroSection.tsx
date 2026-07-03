@@ -34,7 +34,7 @@ interface HeroSectionProps {
 export function HeroSection({
   headline = "Hi, I'm Nics",
   subheadline = "Crafting Digital Experiences with Code & Creativity",
-  avatarSrc = "/images/profile3.jpg",
+  avatarSrc = "/images/akoto.jpg",
   className,
 }: HeroSectionProps) {
   const router = useRouter();

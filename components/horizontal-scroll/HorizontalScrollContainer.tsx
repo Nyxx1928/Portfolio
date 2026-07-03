@@ -37,6 +37,7 @@ export function HorizontalScrollContainer({
   const resizeTimerRef = useRef<number | null>(null);
   const panelBottomStateRef = useRef<Record<number, boolean>>({});
   const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
   const accumulatedDeltaRef = useRef(0);
   const gestureTimeoutRef = useRef<number | null>(null);
   const navigatedRef = useRef(false);
@@ -304,22 +305,60 @@ export function HorizontalScrollContainer({
 
     const onTouchStart = (event: TouchEvent) => {
       touchStartXRef.current = event.changedTouches[0]?.clientX ?? 0;
+      touchStartYRef.current = event.changedTouches[0]?.clientY ?? 0;
     };
 
     const onTouchEnd = (event: TouchEvent) => {
-      const endX = event.changedTouches[0]?.clientX ?? 0;
+      const touch = event.changedTouches[0];
+      if (!touch) return;
+
+      const endX = touch.clientX;
+      const endY = touch.clientY;
       const deltaX = endX - touchStartXRef.current;
+      const deltaY = endY - touchStartYRef.current;
       const threshold = 50;
-      if (Math.abs(deltaX) < threshold) {
+
+      // Horizontal swipe: navigate panels
+      if (Math.abs(deltaX) >= threshold) {
+        const directionStep = 1;
+        if (deltaX < 0) {
+          scrollToPanel(currentIndex + directionStep);
+        } else {
+          scrollToPanel(currentIndex - directionStep);
+        }
         return;
       }
 
-      const directionStep = 1;
+      // Vertical swipe at panel boundary: navigate panels
+      //
+      // On touch, the finger moves OPPOSITE to content:
+      //  - Finger swipes UP   → content scrolls DOWN  → deltaY < 0
+      //  - Finger swipes DOWN → content scrolls UP    → deltaY > 0
+      //
+      // So at the bottom, the user naturally continues swiping UP (deltaY < 0).
+      if (Math.abs(deltaY) >= threshold) {
+        const activeWrapper = container?.children.item(currentIndex) as HTMLElement | null;
+        const activePanel = activeWrapper?.querySelector(
+          '[data-allow-internal-scroll="true"]',
+        ) as HTMLElement | null;
 
-      if (deltaX < 0) {
-        scrollToPanel(currentIndex + directionStep);
-      } else {
-        scrollToPanel(currentIndex - directionStep);
+        const atBottom = activePanel
+          ? (panelBottomStateRef.current[currentIndex] ?? false)
+          : true; // panels without internal scroll are always "at bottom"
+        const atTop = activePanel
+          ? activePanel.scrollTop <= 0
+          : true; // panels without internal scroll are always "at top"
+
+        // Swipe UP at bottom → next panel
+        if (deltaY < 0 && atBottom && currentIndex < panels.length - 1) {
+          scrollToPanel(currentIndex + 1);
+          return;
+        }
+        // Swipe DOWN at top → previous panel
+        if (deltaY > 0 && atTop && currentIndex > 0) {
+          scrollToPanel(currentIndex - 1);
+          return;
+        }
       }
     };
 
@@ -357,9 +396,8 @@ export function HorizontalScrollContainer({
     () =>
       panels.map((panel, index) => {
         const PanelComponent = panel.component;
-        const edgePeekClass = index < panels.length - 1 ? 'mr-[-60px]' : '';
         return (
-          <div key={panel.id} className={`shrink-0 snap-start ${edgePeekClass}`}>
+          <div key={panel.id} className="w-screen shrink-0 snap-start">
             <PanelPage
               id={panel.id}
               label={panel.label}
