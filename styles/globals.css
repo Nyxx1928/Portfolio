@@ -21,8 +21,8 @@
   --font-family-mono: 'Courier New', monospace;
 
   /* Spacing */
-  --spacing-panel-gap: 1.5rem;
-  --spacing-section: 4rem;
+  --spacing-panel-gap: 1rem;
+  --spacing-section: 2rem;
 
   /* Border Widths */
   --border-width-manga: 3px;
