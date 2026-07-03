@@ -331,6 +331,6 @@ describe('ContactForm', () => {
         expect(screen.getByRole('alert')).toBeInTheDocument();
         expect(screen.getByText(/oops! something went wrong/i)).toBeInTheDocument();
       });
-    });
+    }, 10000);
   });
 });

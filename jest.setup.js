@@ -45,6 +45,33 @@ jest.mock('framer-motion', () => ({
   AnimatePresence: ({ children }) => children,
 }))
 
+// Mock Three.js / R3F dependencies (ESM packages Jest cannot parse)
+jest.mock('@react-three/postprocessing', () => ({
+  EffectComposer: ({ children }) => <div data-testid="effect-composer">{children}</div>,
+  wrapEffect: () => 'div',
+}))
+jest.mock('@react-three/fiber', () => ({
+  Canvas: ({ children }) => <div data-testid="r3f-canvas">{children}</div>,
+  useFrame: () => {},
+  useThree: () => ({ viewport: {}, size: {}, gl: {} }),
+  extend: () => {},
+  createPortal: (children) => children,
+  ThreeEvent: {},
+}))
+jest.mock('three', () => ({
+  Uniform: class { constructor(v) { this.value = v } },
+  Vector2: class { constructor(x, y) { this.x = x || 0; this.y = y || 0 } set(x, y) { this.x = x; this.y = y } },
+  Vector3: class { constructor(x, y, z) { this.x = x || 0; this.y = y || 0; this.z = z || 0 } },
+  Color: class { constructor(...args) { this.r = 0; this.g = 0; this.b = 0 } set(...args) {} },
+  Mesh: class {},
+  PlaneGeometry: class {},
+  ShaderMaterial: class {},
+  MeshBasicMaterial: class {},
+}))
+jest.mock('postprocessing', () => ({
+  Effect: class { constructor() {} },
+}))
+
 // Mock Lenis smooth scroll
 jest.mock('lenis', () => {
   return jest.fn().mockImplementation(() => ({
