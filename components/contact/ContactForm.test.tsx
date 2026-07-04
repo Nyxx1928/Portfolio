@@ -49,7 +49,7 @@ describe('ContactForm', () => {
 
   describe('Validation', () => {
     it('shows error when name is empty', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       render(<ContactForm />);
 
       const nameInput = screen.getByLabelText(/name/i);
@@ -62,7 +62,7 @@ describe('ContactForm', () => {
     });
 
     it('shows error when name is too short', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       render(<ContactForm />);
 
       const nameInput = screen.getByLabelText(/name/i);
@@ -75,7 +75,7 @@ describe('ContactForm', () => {
     });
 
     it('shows error when email is invalid', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       render(<ContactForm />);
 
       const emailInput = screen.getByLabelText(/email/i);
@@ -88,7 +88,7 @@ describe('ContactForm', () => {
     });
 
     it('shows error when subject is too short', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       render(<ContactForm />);
 
       const subjectInput = screen.getByLabelText(/subject/i);
@@ -101,7 +101,7 @@ describe('ContactForm', () => {
     });
 
     it('shows error when message is too short', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       render(<ContactForm />);
 
       const messageInput = screen.getByLabelText(/message/i);
@@ -114,7 +114,7 @@ describe('ContactForm', () => {
     });
 
     it('does not show errors for valid inputs', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       render(<ContactForm />);
 
       await user.type(screen.getByLabelText(/name/i), 'John Doe');
@@ -136,7 +136,7 @@ describe('ContactForm', () => {
 
   describe('Form Submission', () => {
     it('calls onSubmit with form data when submitted with valid data', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: ContactFormData) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
@@ -163,7 +163,7 @@ describe('ContactForm', () => {
     });
 
     it('displays loading state during submission', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn(
         async () => {
           await new Promise<void>((resolve) => setTimeout(resolve, 100));
@@ -190,7 +190,7 @@ describe('ContactForm', () => {
     });
 
     it('displays success message after successful submission', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: ContactFormData) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
@@ -209,7 +209,7 @@ describe('ContactForm', () => {
     });
 
     it('displays error message when submission fails', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error')) as jest.MockedFunction<(data: ContactFormData) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
@@ -228,7 +228,7 @@ describe('ContactForm', () => {
     });
 
     it('resets form after successful submission', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: ContactFormData) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
@@ -253,7 +253,7 @@ describe('ContactForm', () => {
     });
 
     it('disables form fields during submission', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn(
         async () => {
           await new Promise<void>((resolve) => setTimeout(resolve, 100));
@@ -298,7 +298,7 @@ describe('ContactForm', () => {
     });
 
     it('displays inline success alert on success', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn().mockResolvedValue(undefined) as jest.MockedFunction<(data: ContactFormData) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
@@ -316,7 +316,7 @@ describe('ContactForm', () => {
     });
 
     it('displays inline error alert on error', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 0 });
       const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error')) as jest.MockedFunction<(data: any) => Promise<void>>;
       render(<ContactForm onSubmit={mockOnSubmit} />);
 
