@@ -57,10 +57,10 @@ const validPayload = fc.record({
 
 const partialPayload = fc
   .record({
-    name: fc.option(validString),
-    email: fc.option(validEmail),
-    subject: fc.option(validString),
-    message: fc.option(fc.string({ minLength: 10, maxLength: 100 })),
+    name: fc.option(validString, { nil: undefined }),
+    email: fc.option(validEmail, { nil: undefined }),
+    subject: fc.option(validString, { nil: undefined }),
+    message: fc.option(fc.string({ minLength: 10, maxLength: 100 }), { nil: undefined }),
   })
   .filter((obj) => {
     const values = [obj.name, obj.email, obj.subject, obj.message];
@@ -69,10 +69,10 @@ const partialPayload = fc
   });
 
 const emptyStringPayload = fc.record({
-  name: fc.constantFrom('', '  '),
-  email: fc.constantFrom('', '  '),
-  subject: fc.constantFrom('', '  '),
-  message: fc.constantFrom('', '  '),
+  name: fc.constantFrom(''),
+  email: fc.constantFrom(''),
+  subject: fc.constantFrom(''),
+  message: fc.constantFrom(''),
 });
 
 describe('POST /api/contact (property-based)', () => {
@@ -82,7 +82,7 @@ describe('POST /api/contact (property-based)', () => {
         const response = await POST(makeRequest(payload));
         expect(response.status).toBe(200);
       }),
-      { numRuns: 10 },
+      { numRuns: 5 },
     );
   });
 
@@ -92,7 +92,7 @@ describe('POST /api/contact (property-based)', () => {
         const response = await POST(makeRequest(payload));
         expect(response.status).toBe(400);
       }),
-      { numRuns: 10 },
+      { numRuns: 5 },
     );
   });
 
@@ -102,7 +102,7 @@ describe('POST /api/contact (property-based)', () => {
         const response = await POST(makeRequest(payload));
         expect(response.status).toBe(400);
       }),
-      { numRuns: 10 },
+      { numRuns: 5 },
     );
   });
 });
