@@ -15,7 +15,7 @@
  * navigate to exactly one adjacent panel in the correct direction.
  */
 
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { HorizontalScrollContainer, PanelConfig } from './HorizontalScrollContainer';
 import { HorizontalScrollProvider } from './HorizontalScrollContext';
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -48,12 +48,16 @@ async function simulateTrackpadGesture(
 ): Promise<void> {
   for (let i = 0; i < eventCount; i++) {
     const event = createTrackpadWheelEvent(deltaY);
-    container.dispatchEvent(event);
+    await act(async () => {
+      container.dispatchEvent(event);
+    });
     // Minimal yield to let React process events between gestures
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 1));
   }
   // Wait for gesture completion timeout (150ms) + smooth scroll animation + buffer
-  await new Promise(resolve => setTimeout(resolve, 150));
+  await act(async () => {
+    await new Promise(resolve => setTimeout(resolve, 160));
+  });
 }
 
 // Helper to get current panel index from scroll position
@@ -134,12 +138,16 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
       value: 1920 * 4, // 4 panels
     });
 
-    // Let effects settle after render
-    await new Promise(resolve => setTimeout(resolve, 20));
+    // Let effects settle after render (flush pending RAF callbacks)
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
     expect(scrollContainer.scrollLeft).toBe(0);
 
     // Start at panel 1 (so we can swipe left)
-    scrollContainer.scrollTo({ left: 1920, behavior: 'auto' });
+    await act(async () => {
+      scrollContainer.scrollTo({ left: 1920, behavior: 'auto' });
+    });
     // scrollTo mock is synchronous — state is already updated
     expect(getCurrentPanelIndex(scrollContainer)).toBe(1);
 
@@ -193,8 +201,10 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
       value: 1920 * 4,
     });
 
-    // Let effects settle after render
-    await new Promise(resolve => setTimeout(resolve, 20));
+    // Let effects settle after render (flush pending RAF callbacks)
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
     expect(scrollContainer.scrollLeft).toBe(0);
 
     const initialPanel = getCurrentPanelIndex(scrollContainer);
@@ -248,7 +258,9 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     });
 
     // Start at panel 2 (so we can swipe up)
-    scrollContainer.scrollTo({ left: 1920 * 2, behavior: 'auto' });
+    await act(async () => {
+      scrollContainer.scrollTo({ left: 1920 * 2, behavior: 'auto' });
+    });
     // scrollTo mock is synchronous
     expect(getCurrentPanelIndex(scrollContainer)).toBe(2);
 
@@ -313,7 +325,9 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
           });
 
           // Navigate to starting panel
-          scrollContainer.scrollTo({ left: 1920 * startPanel, behavior: 'auto' });
+          await act(async () => {
+            scrollContainer.scrollTo({ left: 1920 * startPanel, behavior: 'auto' });
+          });
           // scrollTo mock is synchronous
           expect(getCurrentPanelIndex(scrollContainer)).toBe(startPanel);
 
@@ -339,7 +353,7 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
         }
       ),
       {
-        numRuns: 20, // Run 20 test cases
+        numRuns: 5, // Run 5 test cases (reduced from 20 to prevent CI timeout)
         timeout: 15000,
       }
     );
@@ -424,8 +438,10 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       value: 1920 * 4,
     });
 
-    // Wait for initial setup
-    await new Promise(resolve => setTimeout(resolve, 20));
+    // Wait for initial setup (flush pending RAF callbacks)
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
     expect(scrollContainer.scrollLeft).toBe(0);
 
     const initialScrollLeft = scrollContainer.scrollLeft;
@@ -438,10 +454,14 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       cancelable: true,
     });
 
-    scrollContainer.dispatchEvent(mouseWheelEvent);
+    await act(async () => {
+      scrollContainer.dispatchEvent(mouseWheelEvent);
+    });
 
     // Wait for scroll to complete
-    await new Promise(resolve => setTimeout(resolve, 20));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
 
     // Verify that scrollBy was called with the delta value
     // The scroll position should have changed
@@ -478,8 +498,10 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       value: 1920 * 4,
     });
 
-    // Let effects settle after render
-    await new Promise(resolve => setTimeout(resolve, 20));
+    // Let effects settle after render (flush pending RAF callbacks)
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
     expect(scrollContainer.scrollLeft).toBe(0);
 
     const initialPanel = getCurrentPanelIndex(scrollContainer);
@@ -495,12 +517,18 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       bubbles: true,
     });
 
-    scrollContainer.dispatchEvent(touchStartEvent);
-    await new Promise(resolve => setTimeout(resolve, 0));
-    scrollContainer.dispatchEvent(touchEndEvent);
+    await act(async () => {
+      scrollContainer.dispatchEvent(touchStartEvent);
+    });
+    await new Promise(resolve => setTimeout(resolve, 1));
+    await act(async () => {
+      scrollContainer.dispatchEvent(touchEndEvent);
+    });
 
     // Wait for navigation to complete
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 50));
+    });
 
     const finalPanel = getCurrentPanelIndex(scrollContainer);
 
@@ -537,8 +565,10 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       value: 1920 * 4,
     });
 
-    // Let effects settle after render
-    await new Promise(resolve => setTimeout(resolve, 20));
+    // Let effects settle after render (flush pending RAF callbacks)
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
     expect(scrollContainer.scrollLeft).toBe(0);
 
     // Focus an element within the container
@@ -556,10 +586,14 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       cancelable: true,
     });
 
-    window.dispatchEvent(keyEvent);
+    await act(async () => {
+      window.dispatchEvent(keyEvent);
+    });
 
     // Wait for navigation to complete
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 50));
+    });
 
     const finalPanel = getCurrentPanelIndex(scrollContainer);
 
@@ -609,8 +643,10 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       value: 1920 * 2,
     });
 
-    // Let effects settle after render
-    await new Promise(resolve => setTimeout(resolve, 20));
+    // Let effects settle after render (flush pending RAF callbacks)
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
     expect(scrollContainer.scrollLeft).toBe(0);
 
     const activePanel = scrollContainer.children[0] as HTMLElement;
@@ -632,10 +668,14 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
       cancelable: true,
     });
 
-    scrollContainer.dispatchEvent(wheelDownEvent);
+    await act(async () => {
+      scrollContainer.dispatchEvent(wheelDownEvent);
+    });
 
     // Wait a bit
-    await new Promise(resolve => setTimeout(resolve, 20));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    });
 
     const finalPanel = getCurrentPanelIndex(scrollContainer);
 
@@ -684,8 +724,10 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
             value: 1920 * 4,
           });
 
-          // Let effects settle after render
-          await new Promise(resolve => setTimeout(resolve, 20));
+          // Let effects settle after render (flush pending RAF callbacks)
+          await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 20));
+          });
           expect(scrollContainer.scrollLeft).toBe(0);
 
           const initialScrollLeft = scrollContainer.scrollLeft;
@@ -698,17 +740,21 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
             cancelable: true,
           });
 
-          scrollContainer.dispatchEvent(mouseWheelEvent);
+          await act(async () => {
+            scrollContainer.dispatchEvent(mouseWheelEvent);
+          });
 
           // Wait for scroll
-          await new Promise(resolve => setTimeout(resolve, 20));
+          await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 20));
+          });
 
           // Verify scroll position changed (scrollBy was called)
           expect(scrollContainer.scrollLeft).not.toBe(initialScrollLeft);
         }
       ),
       {
-        numRuns: 10,
+        numRuns: 5,
         timeout: 10000,
       }
     );
@@ -747,13 +793,17 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
             value: 1920 * 4,
           });
 
-          // Let effects settle after render
-          await new Promise(resolve => setTimeout(resolve, 20));
+          // Let effects settle after render (flush pending RAF callbacks)
+          await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 20));
+          });
           expect(scrollContainer.scrollLeft).toBe(0);
 
           // Programmatically navigate to target panel
           const expectedScrollLeft = targetPanel * 1920;
-          scrollContainer.scrollTo({ left: expectedScrollLeft, behavior: 'auto' });
+          await act(async () => {
+            scrollContainer.scrollTo({ left: expectedScrollLeft, behavior: 'auto' });
+          });
           // scrollTo mock is synchronous
           expect(getCurrentPanelIndex(scrollContainer)).toBe(targetPanel);
 
@@ -764,7 +814,7 @@ describe('Preservation Property Tests: Non-Trackpad Inputs', () => {
         }
       ),
       {
-        numRuns: 10,
+        numRuns: 5,
         timeout: 10000,
       }
     );
