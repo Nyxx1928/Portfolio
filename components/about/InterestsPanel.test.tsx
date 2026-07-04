@@ -27,7 +27,7 @@ jest.mock('@/lib/hooks/useScrollAnimation', () => ({
 jest.mock('next/image', () => ({
   __esModule: true,
   // eslint-disable-next-line @next/next/no-img-element
-  default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => <img src={src} alt={alt} {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />,
+  default: ({ src, alt, priority, fill, onLoadingComplete, blurDataURL, placeholder, ...props }: Record<string, unknown>) => <img src={src as string} alt={alt as string} {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />,
 }));
 
 // Mock MangaImage to render a plain img
