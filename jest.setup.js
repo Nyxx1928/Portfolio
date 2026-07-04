@@ -22,25 +22,47 @@ jest.mock('next/navigation', () => ({
   },
 }))
 
+// Framer-motion props that React DOM would warn about if passed to a DOM element
+const FRAMER_PROPS = new Set([
+  'layout', 'layoutId', 'layoutDependency', 'layoutScroll',
+  'initial', 'animate', 'exit',
+  'whileHover', 'whileTap', 'whileFocus', 'whileDrag', 'whileInView',
+  'variants', 'transition',
+  'onAnimationStart', 'onAnimationComplete',
+  'drag', 'dragConstraints', 'dragElastic', 'dragMomentum', 'dragPropagation',
+  'viewport', 'once', 'amount',
+  'onViewportEnter', 'onViewportLeave',
+  'custom', 'inherit',
+]);
+function stripFramerProps(props) {
+  const filtered = {};
+  for (const key of Object.keys(props)) {
+    if (!FRAMER_PROPS.has(key)) {
+      filtered[key] = props[key];
+    }
+  }
+  return filtered;
+}
+
 // Mock Framer Motion to avoid animation issues in tests
 jest.mock('framer-motion', () => ({
   ...jest.requireActual('framer-motion'),
   motion: {
-    div: ({ children, ...props }) => <div {...props}>{children}</div>,
-    section: ({ children, ...props }) => <section {...props}>{children}</section>,
-    article: ({ children, ...props }) => <article {...props}>{children}</article>,
-    span: ({ children, ...props }) => <span {...props}>{children}</span>,
-    button: ({ children, ...props }) => <button {...props}>{children}</button>,
-    a: ({ children, ...props }) => <a {...props}>{children}</a>,
-    nav: ({ children, ...props }) => <nav {...props}>{children}</nav>,
-    header: ({ children, ...props }) => <header {...props}>{children}</header>,
-    footer: ({ children, ...props }) => <footer {...props}>{children}</footer>,
-    svg: ({ children, ...props }) => <svg {...props}>{children}</svg>,
-    path: ({ children, ...props }) => <path {...props}>{children}</path>,
-    circle: ({ children, ...props }) => <circle {...props}>{children}</circle>,
-    rect: ({ children, ...props }) => <rect {...props}>{children}</rect>,
-    line: ({ children, ...props }) => <line {...props}>{children}</line>,
-    polygon: ({ children, ...props }) => <polygon {...props}>{children}</polygon>,
+    div: ({ children, ...props }) => <div {...stripFramerProps(props)}>{children}</div>,
+    section: ({ children, ...props }) => <section {...stripFramerProps(props)}>{children}</section>,
+    article: ({ children, ...props }) => <article {...stripFramerProps(props)}>{children}</article>,
+    span: ({ children, ...props }) => <span {...stripFramerProps(props)}>{children}</span>,
+    button: ({ children, ...props }) => <button {...stripFramerProps(props)}>{children}</button>,
+    a: ({ children, ...props }) => <a {...stripFramerProps(props)}>{children}</a>,
+    nav: ({ children, ...props }) => <nav {...stripFramerProps(props)}>{children}</nav>,
+    header: ({ children, ...props }) => <header {...stripFramerProps(props)}>{children}</header>,
+    footer: ({ children, ...props }) => <footer {...stripFramerProps(props)}>{children}</footer>,
+    svg: ({ children, ...props }) => <svg {...stripFramerProps(props)}>{children}</svg>,
+    path: ({ children, ...props }) => <path {...stripFramerProps(props)}>{children}</path>,
+    circle: ({ children, ...props }) => <circle {...stripFramerProps(props)}>{children}</circle>,
+    rect: ({ children, ...props }) => <rect {...stripFramerProps(props)}>{children}</rect>,
+    line: ({ children, ...props }) => <line {...stripFramerProps(props)}>{children}</line>,
+    polygon: ({ children, ...props }) => <polygon {...stripFramerProps(props)}>{children}</polygon>,
   },
   AnimatePresence: ({ children }) => children,
 }))
