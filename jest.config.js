@@ -29,10 +29,7 @@ const customJestConfig = {
   moduleDirectories: ['node_modules', '<rootDir>/'],
   modulePathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/.next/standalone/', '<rootDir>/test-results/', '<rootDir>/playwright-report/'],
   watchPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/test-results/', '<rootDir>/playwright-report/'],
-  haste: {
-    forceNodeFilesystemAPI: true,
-    throwOnModuleCollision: false,
-  },
+
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '<rootDir>/e2e/'],
 }
 
