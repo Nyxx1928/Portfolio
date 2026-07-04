@@ -4,7 +4,8 @@ import { Project } from '@/types';
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: { src: string; alt: string; [key: string]: unknown }) => {
+  default: ({ priority, fill, onLoadingComplete, blurDataURL, placeholder, ...props }: Record<string, unknown>) => {
+    // eslint-disable-next-line @next/next/no-img-element
     return <img {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />;
   },
 }));
@@ -16,7 +17,8 @@ jest.mock('@/components/manga/HalftonePattern', () => ({
 }));
 
 jest.mock('@/components/manga/MangaImage', () => ({
-  MangaImage: (props: { src: string; alt: string; [key: string]: unknown }) => (
+  MangaImage: ({ wrapperClassName, showSkeleton, fill, ...props }: Record<string, unknown>) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />
   ),
 }));
