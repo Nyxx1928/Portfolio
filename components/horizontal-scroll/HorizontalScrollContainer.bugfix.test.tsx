@@ -54,9 +54,9 @@ async function simulateTrackpadGesture(
     // Minimal yield to let React process events between gestures
     await new Promise(resolve => setTimeout(resolve, 1));
   }
-  // Wait for gesture completion timeout (150ms) + smooth scroll animation + buffer
+  // Wait for gesture completion timeout (150ms) + RAF callback (16ms) + buffer
   await act(async () => {
-    await new Promise(resolve => setTimeout(resolve, 160));
+    await new Promise(resolve => setTimeout(resolve, 200));
   });
 }
 
