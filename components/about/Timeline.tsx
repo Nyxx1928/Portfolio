@@ -30,8 +30,8 @@ export function Timeline({ events }: TimelineProps) {
   );
 
   return (
-    <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
-      <div className="space-y-8">
+    <div className="border-manga border-manga-black bg-manga-white p-4 md:p-6 shadow-manga">
+      <div className="space-y-6">
         {/* Header */}
         <div>
           <h2 className="text-3xl md:text-4xl font-heading uppercase tracking-wider mb-2">
@@ -43,10 +43,10 @@ export function Timeline({ events }: TimelineProps) {
         {/* Timeline Container */}
         <div className="relative">
           {/* Vertical connecting line (hidden on mobile) */}
-          <div className="hidden md:block absolute left-8 top-0 bottom-0 w-0.5 bg-manga-black" />
+          <div className="hidden md:block absolute left-6 top-0 bottom-0 w-0.5 bg-manga-black" />
 
           {/* Timeline Events */}
-          <div className="space-y-6 md:space-y-8">
+          <div className="space-y-4 md:space-y-6">
             {sortedEvents.map((event, index) => (
               <TimelineEventItem
                 key={event.id}
@@ -158,30 +158,30 @@ function TimelineEventItem({
       </div>
 
       {/* Desktop: Timeline layout with connecting line */}
-      <div className="hidden md:flex gap-6">
+      <div className="hidden md:flex gap-4">
         {/* Timeline marker */}
         <div className="relative flex-shrink-0">
           {/* Dot marker */}
           <div
             className={cn(
-              'relative z-10 w-16 h-16 border-4 border-manga-black flex items-center justify-center',
+              'relative z-10 w-12 h-12 border-4 border-manga-black flex items-center justify-center',
               event.isPast ? 'bg-manga-gray-200' : 'bg-manga-white'
             )}
           >
-            {typeIconMap[event.type]}
+            <div className="scale-75">{typeIconMap[event.type]}</div>
           </div>
 
           {/* Connecting line to next event */}
           {!isLast && (
-            <div className="absolute left-1/2 top-16 -translate-x-1/2 w-0.5 h-8 bg-manga-black" />
+            <div className="absolute left-1/2 top-12 -translate-x-1/2 w-0.5 h-6 bg-manga-black" />
           )}
         </div>
 
         {/* Event content panel */}
-        <div className="flex-1 pb-8">
+        <div className="flex-1 pb-6">
           <div
             className={cn(
-              'relative border-manga border-manga-black p-6',
+              'relative border-manga border-manga-black p-4',
               event.isPast
                 ? 'bg-manga-gray-50' // Flashback styling
                 : 'bg-manga-white shadow-manga'

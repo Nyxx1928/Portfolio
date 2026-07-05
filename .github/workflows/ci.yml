@@ -52,11 +52,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
+      - name: Cache SWC transpilation (next/jest)
+        uses: actions/cache@v4
+        with:
+          path: .swc
+          key: swc-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/tsconfig.json', '**/next.config.ts', '**/jest.config.js') }}
+          restore-keys: |
+            swc-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
+            swc-${{ runner.os }}-
       - run: npm ci
       - name: Run unit tests
         env:
           CI: true
-        run: npx jest --ci --maxWorkers=50% --passWithNoTests --testPathIgnorePatterns='(/integration/|\.integration\.|/e2e/|\.e2e\.)'
+        run: npx jest --ci --maxWorkers=50% --forceExit --passWithNoTests --testPathIgnorePatterns='(/integration/|\.integration\.|/e2e/|\.e2e\.)'
 
   build:
     name: "Build"

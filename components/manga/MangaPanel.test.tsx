@@ -32,7 +32,8 @@ describe('MangaPanel', () => {
     );
 
     const panel = container.firstChild as HTMLElement;
-    expect(panel).toHaveClass('manga-panel');
+    expect(panel).toHaveClass('border-manga-black');
+    expect(panel).toHaveClass('bg-manga-white');
   });
 
   it('applies bordered variant classes', () => {
@@ -43,7 +44,8 @@ describe('MangaPanel', () => {
     );
 
     const panel = container.firstChild as HTMLElement;
-    expect(panel).toHaveClass('manga-panel-bordered');
+    expect(panel).toHaveClass('border-manga-black');
+    expect(panel).toHaveClass('shadow-manga');
   });
 
   it('applies shadowed variant classes', () => {
@@ -54,7 +56,8 @@ describe('MangaPanel', () => {
     );
 
     const panel = container.firstChild as HTMLElement;
-    expect(panel).toHaveClass('manga-panel-bordered');
+    expect(panel).toHaveClass('border-manga-black');
+    expect(panel).toHaveClass('shadow-manga');
   });
 
   it('applies custom className', () => {

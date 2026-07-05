@@ -34,7 +34,7 @@ interface HeroSectionProps {
 export function HeroSection({
   headline = "Hi, I'm Nics",
   subheadline = "Crafting Digital Experiences with Code & Creativity",
-  avatarSrc = "/images/profile3.jpg",
+  avatarSrc = "/images/akoto.jpg",
   className,
 }: HeroSectionProps) {
   const router = useRouter();
@@ -160,16 +160,15 @@ export function HeroSection({
             {/* View Projects Button - Requirement 3.5 */}
             <motion.button
               onClick={handleViewProjects}
-              className="manga-button w-full sm:w-auto"
+              className="px-6 py-3 border-[3px] border-manga-black bg-manga-black text-manga-white font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] w-full sm:w-auto"
               aria-label="Navigate to projects page"
             >
               View Projects
             </motion.button>
 
-            {/* Contact Me Button - Requirement 3.6 */}
             <motion.button
               onClick={handleContactMe}
-              className="manga-button-outline w-full sm:w-auto"
+              className="px-6 py-3 border-[3px] border-manga-black bg-manga-white text-manga-black font-heading uppercase tracking-wider shadow-manga cursor-pointer transition-all duration-150 ease-out hover:shadow-manga-pressed hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:shadow-manga-pressed focus-visible:translate-x-[2px] focus-visible:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] w-full sm:w-auto"
               aria-label="Navigate to contact page"
             >
               Contact Me

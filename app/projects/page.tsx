@@ -1,6 +1,7 @@
 "use client";
 
 import { ChapterHeader } from "@/components/manga/ChapterHeader";
+import { MangaLoadingSkeleton } from "@/components/manga/MangaLoadingSkeleton";
 import { SpeechBubble } from "@/components/manga/SpeechBubble";
 import { FilterTabs } from "@/components/projects/FilterTabs";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
@@ -61,7 +62,7 @@ function ProjectsContent() {
           <Suspense
             fallback={
               <div aria-hidden="true" className="py-4">
-                Loading filters...
+                <MangaLoadingSkeleton panels={1} variant="card" />
               </div>
             }
           >
@@ -113,9 +114,7 @@ export default function ProjectsPage() {
       <Suspense
         fallback={
           <div className="container mx-auto px-4 py-8">
-            <div className="text-center text-manga-gray-600">
-              Loading projects...
-            </div>
+            <MangaLoadingSkeleton panels={3} variant="card" />
           </div>
         }
       >

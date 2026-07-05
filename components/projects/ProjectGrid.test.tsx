@@ -2,12 +2,32 @@ import { render, screen } from '@testing-library/react';
 import { ProjectGrid } from './ProjectGrid';
 import { Project } from '@/types';
 
-// Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>,
   },
   useInView: () => true,
+}));
+
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ priority, fill, onLoadingComplete, blurDataURL, placeholder, ...props }: Record<string, unknown>) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />;
+  },
+}));
+
+jest.mock('@/components/manga/HalftonePattern', () => ({
+  HalftonePattern: ({ intensity, className }: { intensity?: string; className?: string }) => (
+    <div data-testid="halftone-pattern" data-intensity={intensity} className={className} />
+  ),
+}));
+
+jest.mock('@/components/manga/MangaImage', () => ({
+  MangaImage: ({ wrapperClassName, showSkeleton, fill, ...props }: Record<string, unknown>) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img {...(props as React.ImgHTMLAttributes<HTMLImageElement>)} />
+  ),
 }));
 
 // Mock useScrollAnimation hook
@@ -30,6 +50,9 @@ const mockProjects: Project[] = [
     techStack: ['React', 'TypeScript', 'Next.js'],
     category: ['web'],
     featured: false,
+    rarity: 'common',
+    stats: { code: 70, design: 70, innovation: 70 },
+    cardNumber: '#001',
     challenges: [],
     learnings: [],
     impact: [],
@@ -46,6 +69,9 @@ const mockProjects: Project[] = [
     techStack: ['Vue', 'JavaScript', 'Tailwind'],
     category: ['mobile'],
     featured: true,
+    rarity: 'uncommon',
+    stats: { code: 80, design: 60, innovation: 75 },
+    cardNumber: '#002',
     challenges: [],
     learnings: [],
     impact: [],
@@ -62,6 +88,9 @@ const mockProjects: Project[] = [
     techStack: ['Angular', 'TypeScript', 'RxJS', 'NgRx', 'Material UI'],
     category: ['uiux'],
     featured: false,
+    rarity: 'rare',
+    stats: { code: 90, design: 85, innovation: 95 },
+    cardNumber: '#003',
     challenges: [],
     learnings: [],
     impact: [],
@@ -74,21 +103,22 @@ describe('ProjectGrid', () => {
     it('renders projects in a grid layout', () => {
       render(<ProjectGrid projects={mockProjects} />);
       
-      // Check that all projects are rendered by looking for headings
-      expect(screen.getByRole('heading', { name: /Test Project 1/i })).toBeInTheDocument();
-      expect(screen.getByRole('heading', { name: /Test Project 2/i })).toBeInTheDocument();
-      expect(screen.getByRole('heading', { name: /Test Project 3/i })).toBeInTheDocument();
+      // Each project title appears twice (front + back), use getAllByText
+      expect(screen.getAllByText('Test Project 1').length).toBe(2);
+      expect(screen.getAllByText('Test Project 2').length).toBe(2);
+      expect(screen.getAllByText('Test Project 3').length).toBe(2);
     });
 
     it('displays project titles', () => {
       render(<ProjectGrid projects={mockProjects} />);
       
       mockProjects.forEach(project => {
-        expect(screen.getByRole('heading', { name: new RegExp(project.title, 'i') })).toBeInTheDocument();
+        const headings = screen.getAllByText(project.title);
+        expect(headings.length).toBe(2);
       });
     });
 
-    it('displays project descriptions', () => {
+    it('displays project descriptions on card backs', () => {
       render(<ProjectGrid projects={mockProjects} />);
       
       mockProjects.forEach(project => {
@@ -99,7 +129,6 @@ describe('ProjectGrid', () => {
     it('displays tech stack badges', () => {
       render(<ProjectGrid projects={mockProjects} />);
       
-      // Check first 3 tech items from first project
       expect(screen.getAllByText('React').length).toBeGreaterThan(0);
       expect(screen.getAllByText('TypeScript').length).toBeGreaterThan(0);
       expect(screen.getAllByText('Next.js').length).toBeGreaterThan(0);
@@ -108,10 +137,10 @@ describe('ProjectGrid', () => {
     it('limits tech stack display to 3 items with overflow indicator', () => {
       render(<ProjectGrid projects={mockProjects} />);
       
-      // Project 3 has 5 tech items, should show first 3 + "+2"
-      expect(screen.getByText('Angular')).toBeInTheDocument();
-      expect(screen.getByText('RxJS')).toBeInTheDocument();
-      expect(screen.getByText('+2 more')).toBeInTheDocument();
+      // Project 3 has 5 tech items, shown on card back (first 4) + "+1"
+      expect(screen.getAllByText('Angular').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('RxJS').length).toBeGreaterThan(0);
+      expect(screen.getByText('+1')).toBeInTheDocument();
     });
   });
 
@@ -126,7 +155,6 @@ describe('ProjectGrid', () => {
     it('does not display grid when projects array is empty', () => {
       const { container } = render(<ProjectGrid projects={[]} />);
       
-      // Should not have grid layout
       const grid = container.querySelector('.grid');
       expect(grid).not.toBeInTheDocument();
     });
@@ -137,9 +165,9 @@ describe('ProjectGrid', () => {
       const { container } = render(<ProjectGrid projects={mockProjects} />);
       
       const grid = container.querySelector('.grid');
-      expect(grid).toHaveClass('grid-cols-1'); // Mobile: 1 column
-      expect(grid).toHaveClass('md:grid-cols-2'); // Tablet: 2 columns
-      expect(grid).toHaveClass('lg:grid-cols-3'); // Desktop: 3 columns
+      expect(grid).toHaveClass('grid-cols-1');
+      expect(grid).toHaveClass('md:grid-cols-2');
+      expect(grid).toHaveClass('lg:grid-cols-3');
     });
 
     it('applies gap spacing between grid items', () => {
@@ -161,7 +189,6 @@ describe('ProjectGrid', () => {
     it('renders semantic HTML structure', () => {
       const { container } = render(<ProjectGrid projects={mockProjects} />);
       
-      // Should have proper div structure
       const grid = container.querySelector('.grid');
       expect(grid).toBeInTheDocument();
     });
@@ -178,7 +205,6 @@ describe('ProjectGrid', () => {
     it('wraps each project in motion div for staggered animation', () => {
       const { container } = render(<ProjectGrid projects={mockProjects} />);
       
-      // Each project should be in its own container with custom prop
       const projectContainers = container.querySelectorAll('[custom]');
       expect(projectContainers.length).toBe(mockProjects.length);
     });
@@ -188,8 +214,8 @@ describe('ProjectGrid', () => {
     it('handles single project', () => {
       render(<ProjectGrid projects={[mockProjects[0]]} />);
       
-      expect(screen.getByRole('heading', { name: /Test Project 1/i })).toBeInTheDocument();
-      expect(screen.queryByRole('heading', { name: /Test Project 2/i })).not.toBeInTheDocument();
+      expect(screen.getAllByText('Test Project 1').length).toBe(2);
+      expect(screen.queryByText('Test Project 2')).not.toBeInTheDocument();
     });
 
     it('handles projects with no tech stack', () => {
@@ -200,7 +226,7 @@ describe('ProjectGrid', () => {
       
       render(<ProjectGrid projects={[projectWithNoTech]} />);
       
-      expect(screen.getByRole('heading', { name: /Test Project 1/i })).toBeInTheDocument();
+      expect(screen.getAllByText('Test Project 1').length).toBe(2);
     });
 
     it('handles projects with long descriptions', () => {
@@ -211,7 +237,7 @@ describe('ProjectGrid', () => {
       
       render(<ProjectGrid projects={[projectWithLongDesc]} />);
       
-      expect(screen.getByText(projectWithLongDesc.description)).toBeInTheDocument();
+      expect(screen.getByText(/truncated with line-clamp/)).toBeInTheDocument();
     });
 
     it('handles projects with long titles', () => {
@@ -222,7 +248,8 @@ describe('ProjectGrid', () => {
       
       render(<ProjectGrid projects={[projectWithLongTitle]} />);
       
-      expect(screen.getByRole('heading', { name: new RegExp(projectWithLongTitle.title, 'i') })).toBeInTheDocument();
+      const headings = screen.getAllByText(/Very Long Project Title/);
+      expect(headings.length).toBe(2);
     });
   });
 });

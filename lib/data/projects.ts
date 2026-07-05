@@ -28,6 +28,9 @@ export const projects: Project[] = [
     techStack: ['Java', 'Spring Boot', 'WebSockets'],
     category: ['web'],
     featured: true,
+    rarity: 'uncommon',
+    stats: { code: 75, design: 60, innovation: 80 },
+    cardNumber: '#001',
     repoUrl: 'https://github.com/Nyxx1928/chatter-sys',
     challenges: [
       'Implementing WebSocket connection management and reconnection logic',
@@ -65,6 +68,9 @@ export const projects: Project[] = [
     techStack: ['HTML', 'JavaScript'],
     category: ['web'],
     featured: true,
+    rarity: 'rare',
+    stats: { code: 85, design: 70, innovation: 90 },
+    cardNumber: '#002',
     demoUrl: 'https://tpl-web-copy.vercel.app',
     repoUrl: 'https://github.com/Nyxx1928/the-periodic-legends-web',
     challenges: [
@@ -103,6 +109,9 @@ export const projects: Project[] = [
     techStack: ['TypeScript', 'CSS', 'JavaScript', 'Dockerfile', 'Next.js'],
     category: ['web', 'uiux'],
     featured: true,
+    rarity: 'common',
+    stats: { code: 75, design: 82, innovation: 70 },
+    cardNumber: '#003',
     demoUrl: 'https://accugeo.vercel.app',
     repoUrl: 'https://github.com/Nyxx1928/Accugeo-Website',
     challenges: [
@@ -141,6 +150,9 @@ export const projects: Project[] = [
     techStack: ['Laravel', 'React', 'JavaScript', 'PHP', 'Blade', 'HTML', 'CSS', 'Shell', 'Dockerfile'],
     category: ['web'],
     featured: true,
+    rarity: 'rare',
+    stats: { code: 95, design: 65, innovation: 92 },
+    cardNumber: '#004',
     demoUrl: 'https://geo-tracker-eight-blond.vercel.app',
     repoUrl: 'https://github.com/Nyxx1928/LinkGuard',
     challenges: [
@@ -169,7 +181,7 @@ export const projects: Project[] = [
     slug: 'happy-valentines-day',
     title: "Valentine's Love Wall",
     description: 'A full-stack application for sharing love notes and messages, built with NestJS backend and Next.js frontend. Features real-time message posting, moderation, and a beautiful Valentine-themed interface.',
-    fullDescription: "Valentine's Love Wall is a heartwarming full-stack web application that allows users to share love notes, messages, and Valentine's wishes in a public digital space. Built with a modern tech stack featuring NestJS for the backend API and Next.js for the frontend, the application provides a seamless and responsive user experience. The platform includes real-time message posting, content moderation capabilities, user authentication, and a beautifully designed Valentine-themed interface with animations and interactive elements. The application demonstrates proficiency in full-stack development, including RESTful API design, database management, frontend state management, and deployment strategies. It showcases the ability to create engaging, user-friendly applications with both aesthetic appeal and robust functionality.",
+    fullDescription: 'Full description for valentine project',
     thumbnail: '/images/projects/hvd-thumb.jpg',
     screenshots: [
       '/images/projects/hvd-1.jpg',
@@ -179,6 +191,9 @@ export const projects: Project[] = [
     techStack: ['TypeScript', 'JavaScript', 'CSS', 'Batchfile', 'Shell', 'Dockerfile', 'NestJS', 'Next.js'],
     category: ['web'],
     featured: true,
+    rarity: 'uncommon',
+    stats: { code: 78, design: 88, innovation: 82 },
+    cardNumber: '#005',
     demoUrl: 'https://hvd-ten.vercel.app',
     repoUrl: 'https://github.com/Nyxx1928/HVD',
     challenges: [

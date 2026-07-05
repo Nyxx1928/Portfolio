@@ -231,36 +231,21 @@ describe('SkillsPanel', () => {
       expect(screen.getByText('Stripe')).toBeInTheDocument();
     });
 
-    it('renders tool categories', () => {
+    it('renders all tools in a flat horizontal layout', () => {
       render(<SkillsPanel skills={mockSkills} tools={mockTools} />);
-      
-      expect(screen.getByText('Deployment')).toBeInTheDocument();
-      expect(screen.getByText('Cloud Services')).toBeInTheDocument();
-      expect(screen.getByText('Backend Services')).toBeInTheDocument();
-      expect(screen.getByText('Payment Processing')).toBeInTheDocument();
+
+      expect(screen.getByText('Vercel')).toBeInTheDocument();
+      expect(screen.getByText('AWS')).toBeInTheDocument();
+      expect(screen.getByText('Firebase')).toBeInTheDocument();
+      expect(screen.getByText('Stripe')).toBeInTheDocument();
+
+      expect(screen.queryByText('Deployment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Cloud Services')).not.toBeInTheDocument();
     });
 
     it('does not render tools section when tools array is empty', () => {
       render(<SkillsPanel skills={mockSkills} tools={[]} />);
       expect(screen.queryByText('Tools & Technologies')).not.toBeInTheDocument();
-    });
-
-    it('groups tools by category', () => {
-      const toolsWithSameCategory: Tool[] = [
-        { name: 'Vercel', category: 'Deployment' },
-        { name: 'Netlify', category: 'Deployment' },
-        { name: 'AWS', category: 'Cloud Services' },
-      ];
-
-      render(<SkillsPanel skills={mockSkills} tools={toolsWithSameCategory} />);
-      
-      // Should have 2 category headers (Deployment and Cloud Services)
-      expect(screen.getByText('Deployment')).toBeInTheDocument();
-      expect(screen.getByText('Cloud Services')).toBeInTheDocument();
-      
-      // Both Vercel and Netlify should be present
-      expect(screen.getByText('Vercel')).toBeInTheDocument();
-      expect(screen.getByText('Netlify')).toBeInTheDocument();
     });
   });
 

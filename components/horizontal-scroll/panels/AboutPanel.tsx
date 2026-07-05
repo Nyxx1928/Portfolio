@@ -20,15 +20,23 @@ export function AboutPanel() {
         About panel
       </h2>
       <div className="container mx-auto space-y-section px-4">
-        <IntroPanel
-          name={aboutData.name}
-          bio={aboutData.bio}
-          avatarSrc={aboutData.avatarSrc}
-          inspirations={aboutData.inspirations}
-        />
-        <SkillsPanel skills={skills} tools={tools} />
-        <Timeline events={timelineEvents} />
-        <InterestsPanel interests={interests} />
+        <div id="intro" className="scroll-mt-28">
+          <IntroPanel
+            name={aboutData.name}
+            bio={aboutData.bio}
+            avatarSrc={aboutData.avatarSrc}
+            inspirations={aboutData.inspirations}
+          />
+        </div>
+        <div id="skills" className="scroll-mt-28">
+          <SkillsPanel skills={skills} tools={tools} />
+        </div>
+        <div id="timeline" className="scroll-mt-28">
+          <Timeline events={timelineEvents} />
+        </div>
+        <div id="interests" className="scroll-mt-28">
+          <InterestsPanel interests={interests} />
+        </div>
       </div>
     </section>
   );

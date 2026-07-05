@@ -76,8 +76,8 @@ export function PanelPage({
       data-panel-index={index}
       data-allow-internal-scroll={allowInternalScroll ? 'true' : 'false'}
       className={`
-        relative w-screen min-h-screen shrink-0 snap-start
-        ${allowInternalScroll ? 'overflow-y-auto overflow-x-hidden' : 'overflow-hidden'}
+        relative w-screen shrink-0 snap-start
+        ${allowInternalScroll ? 'h-screen overflow-y-auto overflow-x-hidden' : 'min-h-screen overflow-hidden'}
       `}
       tabIndex={-1}
     >

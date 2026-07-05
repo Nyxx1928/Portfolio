@@ -98,18 +98,20 @@ describe('HeroSection', () => {
   });
 
   describe('Styling and Layout', () => {
-    it('applies manga-button class to View Projects button', () => {
+    it('applies manga button styling to View Projects button', () => {
       render(<HeroSection />);
       
       const viewProjectsButton = screen.getByLabelText('Navigate to projects page');
-      expect(viewProjectsButton).toHaveClass('manga-button');
+      expect(viewProjectsButton).toHaveClass('bg-manga-black');
+      expect(viewProjectsButton).toHaveClass('font-heading');
     });
 
-    it('applies manga-button-outline class to Contact Me button', () => {
+    it('applies outline button styling to Contact Me button', () => {
       render(<HeroSection />);
       
       const contactButton = screen.getByLabelText('Navigate to contact page');
-      expect(contactButton).toHaveClass('manga-button-outline');
+      expect(contactButton).toHaveClass('bg-manga-white');
+      expect(contactButton).toHaveClass('font-heading');
     });
 
     it('applies custom className when provided', () => {

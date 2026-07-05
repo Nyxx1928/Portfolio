@@ -13,6 +13,25 @@ const navLinks = [
   { label: 'Contact', href: '/contact' },
 ];
 
+const sectionLabels: Record<string, string> = {
+  '/': 'the Home page',
+  '/about': 'the About page',
+  '/projects': 'the Projects page',
+  '/contact': 'the Contact page',
+};
+
+function updateHistory(href: string) {
+  try {
+    const raw = localStorage.getItem('manga-portfolio-history');
+    const history = raw ? JSON.parse(raw) : { visitCount: 1 };
+    history.lastSection = href;
+    history.lastSectionLabel = sectionLabels[href] || href;
+    localStorage.setItem('manga-portfolio-history', JSON.stringify(history));
+  } catch {
+    // localStorage unavailable
+  }
+}
+
 export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,6 +50,8 @@ export function Navigation() {
     href: string,
     index: number
   ) => {
+    updateHistory(href);
+
     if (!isHorizontalActive || !isScrollHandlerReady) {
       if (href === '/') {
         window.scrollTo({ top: 0, behavior: 'smooth' });

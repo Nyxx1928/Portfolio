@@ -1,6 +1,7 @@
 "use client";
 
 import { useHorizontalScrollController } from "@/components/horizontal-scroll/HorizontalScrollContext";
+import { PageCurlOverlay } from "@/components/horizontal-scroll/PageCurlOverlay";
 import { PageTransitionOverlay } from "@/components/horizontal-scroll/PageTransitionOverlay";
 import { PanelNavigator } from "@/components/horizontal-scroll/PanelNavigator";
 import { PanelPage } from "@/components/horizontal-scroll/PanelPage";
@@ -11,6 +12,7 @@ import {
   getRawScrollLeftForIndex,
   shouldIgnoreArrowNavigation,
 } from "@/components/horizontal-scroll/utils";
+import { usePanelFocus } from "@/lib/hooks/usePanelFocus";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export interface PanelConfig {
@@ -35,10 +37,13 @@ export function HorizontalScrollContainer({
   const resizeTimerRef = useRef<number | null>(null);
   const panelBottomStateRef = useRef<Record<number, boolean>>({});
   const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
   const accumulatedDeltaRef = useRef(0);
   const gestureTimeoutRef = useRef<number | null>(null);
   const navigatedRef = useRef(false);
+  const programmaticScrollRef = useRef(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pageCurlDirection, setPageCurlDirection] = useState<'left' | 'right'>('right');
 
   const {
     currentIndex,
@@ -52,10 +57,25 @@ export function HorizontalScrollContainer({
 
   const currentIndexRef = useRef(currentIndex);
 
-  // Keep currentIndexRef in sync with currentIndex
   useEffect(() => {
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
+
+  // Update localStorage with current panel label for "Previously On..." banner
+  const panelLabels = useMemo(() => panels.map((p) => p.label), [panels]);
+  useEffect(() => {
+    try {
+      const label = panelLabels[currentIndex];
+      if (!label) return;
+      const raw = localStorage.getItem('manga-portfolio-history');
+      const history = raw ? JSON.parse(raw) : { visitCount: 1 };
+      history.lastSection = `/#panel-${currentIndex}`;
+      history.lastSectionLabel = `the "${label}" section`;
+      localStorage.setItem('manga-portfolio-history', JSON.stringify(history));
+    } catch {
+      // localStorage unavailable
+    }
+  }, [currentIndex, panelLabels]);
 
   const setContainerRef = useCallback((node: HTMLDivElement | null) => {
     containerRef.current = node;
@@ -66,8 +86,11 @@ export function HorizontalScrollContainer({
     setTotalPanelsInternal(panels.length);
   }, [panels.length, setTotalPanelsInternal]);
 
+  usePanelFocus(panels, currentIndex);
+
+  // Merged scroll-init + scroll-position tracking (6.2)
   useEffect(() => {
-    if (!hydrated || !containerNode) {
+    if (!hydrated || !containerNode || totalPanels === 0) {
       return;
     }
 
@@ -95,31 +118,17 @@ export function HorizontalScrollContainer({
         "ltr",
       );
 
+      if (animate && clamped !== currentIndexRef.current) {
+        setPageCurlDirection(clamped > currentIndexRef.current ? 'right' : 'left');
+      }
       setIsTransitioning(animate);
+      programmaticScrollRef.current = true;
       container.scrollTo({ left, behavior: animate ? "smooth" : "auto" });
       setCurrentIndexInternal(clamped);
     };
 
     registerScrollHandler(handler);
     handler(0, false);
-
-    return () => {
-      registerScrollHandler(null);
-    };
-  }, [
-    containerNode,
-    hydrated,
-    panels.length,
-    registerScrollHandler,
-    setCurrentIndexInternal,
-  ]);
-
-  useEffect(() => {
-    if (!containerNode || totalPanels === 0) {
-      return;
-    }
-
-    const container = containerNode;
 
     const updateActiveIndex = () => {
       const panelWidth = container.clientWidth;
@@ -147,6 +156,11 @@ export function HorizontalScrollContainer({
         return;
       }
 
+      if (programmaticScrollRef.current) {
+        programmaticScrollRef.current = false;
+        return;
+      }
+
       rafRef.current = requestAnimationFrame(() => {
         updateActiveIndex();
         rafRef.current = null;
@@ -156,33 +170,26 @@ export function HorizontalScrollContainer({
     container.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
+      registerScrollHandler(null);
       container.removeEventListener("scroll", onScroll);
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [containerNode, setCurrentIndexInternal, totalPanels]);
+  }, [
+    containerNode,
+    hydrated,
+    panels.length,
+    registerScrollHandler,
+    setCurrentIndexInternal,
+    totalPanels,
+  ]);
 
+  // Body overflow lock using CSS class (6.1)
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
+    document.documentElement.classList.add('scroll-lock');
+    return () => document.documentElement.classList.remove('scroll-lock');
   }, []);
-
-  useEffect(() => {
-    scrollToPanel(0, false);
-  }, [scrollToPanel]);
-
-  useEffect(() => {
-    const activePanel = document.getElementById(panels[currentIndex]?.id ?? "");
-    const heading = activePanel?.querySelector<HTMLElement>(
-      '[data-panel-heading="true"]',
-    );
-    heading?.focus({ preventScroll: true });
-  }, [currentIndex, panels]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -231,8 +238,11 @@ export function HorizontalScrollContainer({
         return;
       }
 
-      const activePanel = container.children.item(
+      const activeWrapper = container.children.item(
         currentIndexRef.current,
+      ) as HTMLElement | null;
+      const activePanel = activeWrapper?.querySelector(
+        '[data-allow-internal-scroll="true"]',
       ) as HTMLElement | null;
       const allowsInternalScroll =
         activePanel?.dataset.allowInternalScroll === "true";
@@ -241,57 +251,44 @@ export function HorizontalScrollContainer({
         const atTop = activePanel.scrollTop <= 0;
         const atBottom = panelBottomStateRef.current[currentIndexRef.current] ?? false;
 
-        // Scrolling down: allow internal scroll if not at bottom
         if (event.deltaY > 0 && !atBottom) {
-          return; // Allow browser to scroll the panel
+          return;
         }
 
-        // Scrolling up: allow internal scroll if not at top
         if (event.deltaY < 0 && !atTop) {
-          return; // Allow browser to scroll the panel
+          return;
         }
       }
 
       event.preventDefault();
 
-      // Trackpad detection
       const isTrackpad = event.deltaMode === 0 && Math.abs(event.deltaY) <= 100;
 
       if (isTrackpad) {
-        // Trackpad gesture handling with delta accumulation
-        // If this is the first event of a new gesture, reset the navigated flag
         if (gestureTimeoutRef.current === null) {
           navigatedRef.current = false;
         }
 
         accumulatedDeltaRef.current += event.deltaY;
 
-        // Clear existing gesture timeout
         if (gestureTimeoutRef.current !== null) {
           window.clearTimeout(gestureTimeoutRef.current);
         }
 
-        // Set timeout to detect gesture end (150ms)
         gestureTimeoutRef.current = window.setTimeout(() => {
           const accumulated = accumulatedDeltaRef.current;
           const threshold = 50;
 
           if (Math.abs(accumulated) >= threshold && !navigatedRef.current) {
-            // Determine direction
             const direction = accumulated > 0 ? 1 : -1;
             scrollToPanel(currentIndexRef.current + direction);
-            // Mark that we've navigated during this gesture so further
-            // accumulated values in the same gesture don't trigger another move
             navigatedRef.current = true;
-            // Reset accumulation after navigation
             accumulatedDeltaRef.current = 0;
           }
 
-          // Gesture sequence completed
           gestureTimeoutRef.current = null;
         }, 150);
       } else {
-        // Mouse wheel events bypass accumulation logic
         const directionalDelta = getDirectionalDelta(event.deltaY, "ltr");
         container.scrollBy({ left: directionalDelta, behavior: "smooth" });
       }
@@ -305,8 +302,6 @@ export function HorizontalScrollContainer({
         gestureTimeoutRef.current = null;
       }
     };
-  // scrollToPanel is stable; currentIndex is read via ref to avoid re-registering
-   
   }, [scrollToPanel]);
 
   useEffect(() => {
@@ -317,22 +312,60 @@ export function HorizontalScrollContainer({
 
     const onTouchStart = (event: TouchEvent) => {
       touchStartXRef.current = event.changedTouches[0]?.clientX ?? 0;
+      touchStartYRef.current = event.changedTouches[0]?.clientY ?? 0;
     };
 
     const onTouchEnd = (event: TouchEvent) => {
-      const endX = event.changedTouches[0]?.clientX ?? 0;
+      const touch = event.changedTouches[0];
+      if (!touch) return;
+
+      const endX = touch.clientX;
+      const endY = touch.clientY;
       const deltaX = endX - touchStartXRef.current;
+      const deltaY = endY - touchStartYRef.current;
       const threshold = 50;
-      if (Math.abs(deltaX) < threshold) {
+
+      // Horizontal swipe: navigate panels
+      if (Math.abs(deltaX) >= threshold) {
+        const directionStep = 1;
+        if (deltaX < 0) {
+          scrollToPanel(currentIndex + directionStep);
+        } else {
+          scrollToPanel(currentIndex - directionStep);
+        }
         return;
       }
 
-      const directionStep = 1;
+      // Vertical swipe at panel boundary: navigate panels
+      //
+      // On touch, the finger moves OPPOSITE to content:
+      //  - Finger swipes UP   → content scrolls DOWN  → deltaY < 0
+      //  - Finger swipes DOWN → content scrolls UP    → deltaY > 0
+      //
+      // So at the bottom, the user naturally continues swiping UP (deltaY < 0).
+      if (Math.abs(deltaY) >= threshold) {
+        const activeWrapper = container?.children.item(currentIndex) as HTMLElement | null;
+        const activePanel = activeWrapper?.querySelector(
+          '[data-allow-internal-scroll="true"]',
+        ) as HTMLElement | null;
 
-      if (deltaX < 0) {
-        scrollToPanel(currentIndex + directionStep);
-      } else {
-        scrollToPanel(currentIndex - directionStep);
+        const atBottom = activePanel
+          ? (panelBottomStateRef.current[currentIndex] ?? false)
+          : true; // panels without internal scroll are always "at bottom"
+        const atTop = activePanel
+          ? activePanel.scrollTop <= 0
+          : true; // panels without internal scroll are always "at top"
+
+        // Swipe UP at bottom → next panel
+        if (deltaY < 0 && atBottom && currentIndex < panels.length - 1) {
+          scrollToPanel(currentIndex + 1);
+          return;
+        }
+        // Swipe DOWN at top → previous panel
+        if (deltaY > 0 && atTop && currentIndex > 0) {
+          scrollToPanel(currentIndex - 1);
+          return;
+        }
       }
     };
 
@@ -345,6 +378,7 @@ export function HorizontalScrollContainer({
     };
   }, [currentIndex, scrollToPanel]);
 
+  // Resize handler with ref to avoid stale closure (6.3)
   useEffect(() => {
     const onResize = () => {
       if (resizeTimerRef.current !== null) {
@@ -352,7 +386,7 @@ export function HorizontalScrollContainer({
       }
 
       resizeTimerRef.current = window.setTimeout(() => {
-        scrollToPanel(currentIndex, false);
+        scrollToPanel(currentIndexRef.current, false);
       }, 150);
     };
 
@@ -363,30 +397,35 @@ export function HorizontalScrollContainer({
         window.clearTimeout(resizeTimerRef.current);
       }
     };
-  }, [currentIndex, scrollToPanel]);
+  }, [scrollToPanel]);
 
   const renderedPanels = useMemo(
     () =>
       panels.map((panel, index) => {
         const PanelComponent = panel.component;
         return (
-          <PanelPage
-            key={panel.id}
-            id={panel.id}
-            label={panel.label}
-            index={index}
-            allowInternalScroll={panel.allowInternalScroll}
-            isActive={index === currentIndex}
-            onBottomInViewChange={(panelIndex, inView) => {
-              panelBottomStateRef.current[panelIndex] = inView;
-            }}
-          >
-            <PanelComponent />
-          </PanelPage>
+          <div key={panel.id} className="w-screen shrink-0 snap-start">
+            <PanelPage
+              id={panel.id}
+              label={panel.label}
+              index={index}
+              allowInternalScroll={panel.allowInternalScroll}
+              isActive={index === currentIndex}
+              onBottomInViewChange={(panelIndex, inView) => {
+                panelBottomStateRef.current[panelIndex] = inView;
+              }}
+            >
+              <PanelComponent />
+            </PanelPage>
+          </div>
         );
       }),
     [currentIndex, panels],
   );
+
+  const handleCurlComplete = () => {
+    setIsTransitioning(false);
+  };
 
   return (
     <>
@@ -394,6 +433,7 @@ export function HorizontalScrollContainer({
         ref={setContainerRef}
         className="flex h-screen w-full snap-x snap-mandatory overflow-x-scroll overflow-y-hidden scroll-smooth"
         dir="ltr"
+        data-page-curl-direction={pageCurlDirection}
       >
         {renderedPanels}
       </div>
@@ -401,7 +441,14 @@ export function HorizontalScrollContainer({
       <PanelNavigator />
       <PageTransitionOverlay
         isTransitioning={isTransitioning}
-        onComplete={() => setIsTransitioning(false)}
+        onComplete={() => {
+          /* handled by PageCurlOverlay */
+        }}
+      />
+      <PageCurlOverlay
+        isActive={isTransitioning}
+        direction={pageCurlDirection}
+        onComplete={handleCurlComplete}
       />
     </>
   );

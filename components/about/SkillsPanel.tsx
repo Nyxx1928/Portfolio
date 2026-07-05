@@ -48,8 +48,8 @@ export function SkillsPanel({ skills, tools }: SkillsPanelProps) {
   const categoryOrder = ['frontend', 'backend', 'design', 'tools', 'other'];
 
   return (
-    <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
-      <div className="space-y-8">
+    <div className="border-manga border-manga-black bg-manga-white p-4 md:p-6 shadow-manga">
+      <div className="space-y-6">
         {/* Header */}
         <div>
           <h2 className="text-3xl md:text-4xl font-heading uppercase tracking-wider mb-2">
@@ -59,7 +59,7 @@ export function SkillsPanel({ skills, tools }: SkillsPanelProps) {
         </div>
 
         {/* Skills by Category */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {categoryOrder.map((category) => {
             const categorySkills = groupedSkills[category];
             if (!categorySkills || categorySkills.length === 0) return null;
@@ -77,7 +77,7 @@ export function SkillsPanel({ skills, tools }: SkillsPanelProps) {
         {/* Tools Section */}
         {tools.length > 0 && (
           <div className="pt-4 border-t-2 border-manga-black">
-            <h3 className="text-xl md:text-2xl font-heading uppercase tracking-wider mb-4 flex items-center gap-2">
+            <h3 className="text-lg md:text-xl font-heading uppercase tracking-wider mb-3 flex items-center gap-2">
               <span className="inline-block w-2 h-2 bg-manga-black" />
               Tools & Technologies
             </h3>
@@ -95,11 +95,11 @@ export function SkillsPanel({ skills, tools }: SkillsPanelProps) {
 function SkillCategory({ title, skills }: { title: string; skills: Skill[] }) {
   return (
     <div>
-      <h3 className="text-xl md:text-2xl font-heading uppercase tracking-wider mb-4 flex items-center gap-2">
+      <h3 className="text-lg md:text-xl font-heading uppercase tracking-wider mb-3 flex items-center gap-2">
         <span className="inline-block w-2 h-2 bg-manga-black" />
         {title}
       </h3>
-      <div className="space-y-3">
+      <div className="space-y-2">
         {skills.map((skill) => (
           <SkillStatBar key={skill.id} skill={skill} />
         ))}
@@ -150,7 +150,7 @@ function SkillStatBar({ skill }: { skill: Skill }) {
         </span>
       </div>
       {/* Stat bar container */}
-      <div className="relative h-6 border-2 border-manga-black bg-manga-white overflow-hidden">
+      <div className="relative h-5 border-2 border-manga-black bg-manga-white overflow-hidden">
         {/* Background halftone pattern */}
         <div
           className="absolute inset-0 opacity-5"
@@ -176,39 +176,20 @@ function SkillStatBar({ skill }: { skill: Skill }) {
 }
 
 function ToolBadges({ tools }: { tools: Tool[] }) {
-  // All animation and scroll logic removed for debug
-  // Group tools by category
-  const groupedTools = tools.reduce((acc, tool) => {
-    if (!acc[tool.category]) {
-      acc[tool.category] = [];
-    }
-    acc[tool.category].push(tool);
-    return acc;
-  }, {} as Record<string, Tool[]>);
-
   return (
-    <div className="space-y-4">
-      {Object.entries(groupedTools).map(([category, categoryTools]) => (
-        <div key={category}>
-          <h4 className="text-sm font-medium text-manga-gray-600 uppercase tracking-wide mb-2">
-            {category}
-          </h4>
-          <div className="flex flex-wrap gap-2">
-            {categoryTools.map((tool) => (
-              <div
-                key={tool.name}
-                className={cn(
-                  'relative border-2 border-manga-black bg-manga-gray-50 px-3 py-1.5',
-                  'hover:bg-manga-white hover:shadow-manga transition-all duration-200',
-                  'hover:-translate-x-0.5 hover:-translate-y-0.5'
-                )}
-              >
-                <span className="text-sm font-medium text-manga-black">
-                  {tool.name}
-                </span>
-              </div>
-            ))}
-          </div>
+    <div className="flex flex-wrap gap-2">
+      {tools.map((tool) => (
+        <div
+          key={tool.name}
+          className={cn(
+            'relative border-2 border-manga-black bg-manga-gray-50 px-3 py-1.5',
+            'hover:bg-manga-white hover:shadow-manga transition-all duration-200',
+            'hover:-translate-x-0.5 hover:-translate-y-0.5'
+          )}
+        >
+          <span className="text-sm font-medium text-manga-black">
+            {tool.name}
+          </span>
         </div>
       ))}
     </div>

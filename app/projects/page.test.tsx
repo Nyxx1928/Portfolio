@@ -73,6 +73,9 @@ describe('ProjectsPage', () => {
         techStack: ['React'],
         category: ['web'],
         featured: false,
+        rarity: 'common',
+        stats: { code: 70, design: 70, innovation: 70 },
+        cardNumber: '#001',
         challenges: [],
         learnings: [],
         impact: [],
@@ -98,6 +101,9 @@ describe('ProjectsPage', () => {
         techStack: ['React'],
         category: ['web'],
         featured: false,
+        rarity: 'common',
+        stats: { code: 70, design: 70, innovation: 70 },
+        cardNumber: '#001',
         challenges: [],
         learnings: [],
         impact: [],
@@ -107,6 +113,7 @@ describe('ProjectsPage', () => {
     
     render(<ProjectsPage />);
     
-    expect(screen.getByText('Test Project')).toBeInTheDocument();
+    const titles = screen.getAllByText('Test Project');
+    expect(titles.length).toBe(2);
   });
 });

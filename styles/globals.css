@@ -21,8 +21,8 @@
   --font-family-mono: 'Courier New', monospace;
 
   /* Spacing */
-  --spacing-panel-gap: 1.5rem;
-  --spacing-section: 4rem;
+  --spacing-panel-gap: 1rem;
+  --spacing-section: 2rem;
 
   /* Border Widths */
   --border-width-manga: 3px;
@@ -53,6 +53,16 @@
   @keyframes speedLine {
     0% { transform: scaleX(0); opacity: 0; }
     100% { transform: scaleX(1); opacity: 1; }
+  }
+
+  --animate-draw-border: drawBorder 1.2s ease-out forwards;
+
+  @keyframes drawBorder {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes fadeInLines {
+    to { opacity: 1; }
   }
 
   /* shadcn/ui theme variables */
@@ -142,7 +152,7 @@
   }
 
   .dark {
-    --background: oklch(0.13 0.028 261.692);
+    --background: oklch(0 0 0);
     --foreground: oklch(0.985 0.002 247.839);
     --card: oklch(0.21 0.034 264.665);
     --card-foreground: oklch(0.985 0.002 247.839);
@@ -213,287 +223,7 @@
   }
 }
 
-@layer components {
-  /* Manga Panel Base */
-  .manga-panel {
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    padding: 1.5rem;
-    position: relative;
-  }
 
-  .manga-panel-bordered {
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    padding: 1.5rem;
-    position: relative;
-    box-shadow: var(--manga-shadow);
-  }
-
-  /* Speech Bubble */
-  .speech-bubble {
-    position: relative;
-    background-color: var(--color-manga-white);
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    border-radius: 1rem;
-    padding: 1rem;
-  }
-
-  .speech-bubble::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 15px 15px 0 0;
-    border-color: #000 transparent transparent transparent;
-  }
-
-  /* Halftone Pattern */
-  .halftone-overlay {
-    position: absolute;
-    inset: 0;
-    opacity: 0.3;
-    pointer-events: none;
-    background-image: radial-gradient(circle, #000 1px, transparent 1px);
-    background-size: 4px 4px;
-  }
-
-  /* Manga Button */
-  .manga-button {
-    padding: 0.75rem 1.5rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-black);
-    color: var(--color-manga-white);
-    font-family: var(--font-family-heading);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: var(--manga-shadow);
-    cursor: pointer;
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
-  }
-
-  .manga-button:hover {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-  }
-
-  .manga-button:focus-visible {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-    outline: none;
-  }
-
-  .manga-button:active {
-    box-shadow: none;
-    transform: translate(4px, 4px);
-  }
-
-  .manga-button:disabled,
-  .manga-button[aria-disabled='true'] {
-    opacity: 0.6;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-  }
-
-  .manga-button-outline {
-    padding: 0.75rem 1.5rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    color: var(--color-manga-black);
-    font-family: var(--font-family-heading);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: var(--manga-shadow);
-    cursor: pointer;
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
-  }
-
-  .manga-button-outline:hover {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-  }
-
-  .manga-button-outline:focus-visible {
-    box-shadow: var(--manga-shadow-pressed);
-    transform: translate(2px, 2px);
-    outline: none;
-  }
-
-  .manga-button-outline:active {
-    box-shadow: none;
-    transform: translate(4px, 4px);
-  }
-
-  .manga-button-outline:disabled,
-  .manga-button-outline[aria-disabled='true'] {
-    opacity: 0.6;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-  }
-
-  .typewriter-text {
-    display: inline-block;
-    position: relative;
-  }
-
-  .typewriter-text::after {
-    content: '|';
-    position: absolute;
-    right: -8px;
-    animation: typewriterBlink 1s step-end infinite;
-  }
-
-  @keyframes typewriterBlink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0;
-    }
-  }
-
-  /* Form Fields */
-  .manga-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-gray-50);
-    font-family: var(--font-family-body);
-    color: var(--color-manga-black);
-  }
-
-  .manga-input:focus {
-    outline: none;
-    ring: 2px;
-    ring-color: var(--color-manga-black);
-    border-color: var(--color-manga-black);
-  }
-
-  .manga-input::placeholder {
-    color: var(--color-manga-gray-400);
-  }
-
-  .manga-textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-gray-50);
-    font-family: var(--font-family-body);
-    color: var(--color-manga-black);
-    min-height: 150px;
-    resize: vertical;
-  }
-
-  .manga-textarea:focus {
-    outline: none;
-    ring: 2px;
-    ring-color: var(--color-manga-black);
-    border-color: var(--color-manga-black);
-  }
-
-  .manga-textarea::placeholder {
-    color: var(--color-manga-gray-400);
-  }
-
-  /* Chapter Header */
-  .chapter-header {
-    position: relative;
-    font-size: 2.25rem;
-    font-family: var(--font-family-heading);
-    text-transform: uppercase;
-    text-align: center;
-    padding: 2rem 0;
-  }
-
-  @media (min-width: 768px) {
-    .chapter-header {
-      font-size: 3rem;
-    }
-  }
-
-  .chapter-header::before,
-  .chapter-header::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 25%;
-    height: 4px;
-    background-color: var(--color-manga-black);
-  }
-
-  .chapter-header::before {
-    left: 0;
-  }
-
-  .chapter-header::after {
-    right: 0;
-  }
-
-  /* Stat Bar (Skills) */
-  .stat-bar {
-    position: relative;
-    width: 100%;
-    height: 2rem;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-gray-50);
-    overflow: hidden;
-  }
-
-  .stat-bar-fill {
-    position: absolute;
-    inset-block: 0;
-    left: 0;
-    background-color: var(--color-manga-black);
-    transition: all 1s ease-out;
-  }
-
-  /* Trading Card */
-  .trading-card {
-    position: relative;
-    border-width: var(--border-width-manga);
-    border-color: var(--color-manga-black);
-    background-color: var(--color-manga-white);
-    padding: 1rem;
-    box-shadow: var(--manga-shadow);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .trading-card:hover {
-    box-shadow: var(--manga-shadow-hover);
-    transform: translate(-2px, -2px);
-  }
-
-  /* Speed Lines */
-  .speed-lines {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .speed-lines::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, transparent, var(--color-manga-black), transparent);
-    opacity: 0.2;
-    transform: skewX(-20deg);
-  }
-}
 
 @layer utilities {
   .text-outline {
@@ -533,6 +263,115 @@
   .backface-hidden {
     backface-visibility: hidden;
   }
+
+  .rotateY-180 {
+    transform: rotateY(180deg);
+  }
+
+  .halftone-overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #000 1px, transparent 1px);
+    background-size: 4px 4px;
+  }
+
+  .speed-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .speed-lines::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent, var(--color-manga-black), transparent);
+    opacity: 0.2;
+    transform: skewX(-20deg);
+  }
+
+  .typewriter-text {
+    display: inline-block;
+    position: relative;
+  }
+
+  .typewriter-text::after {
+    content: '|';
+    position: absolute;
+    right: -8px;
+    animation: typewriterBlink 1s step-end infinite;
+  }
+
+  .stat-bar {
+    position: relative;
+    width: 100%;
+    height: 2rem;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-gray-50);
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    background-color: var(--color-manga-black);
+    transition: all 1s ease-out;
+  }
+
+  .trading-card {
+    position: relative;
+    border-width: var(--border-width-manga);
+    border-color: var(--color-manga-black);
+    background-color: var(--color-manga-white);
+    padding: 1rem;
+    box-shadow: var(--manga-shadow);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .trading-card:hover {
+    box-shadow: var(--manga-shadow-hover);
+    transform: translate(-2px, -2px);
+  }
+
+  .pen-nib-cursor {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpolygon points='16,0 4,28 16,22 28,28' fill='%23000'/%3E%3C/svg%3E") 16 4, auto;
+  }
+
+  .pen-nib-cursor a,
+  .pen-nib-cursor button,
+  .pen-nib-cursor input,
+  .pen-nib-cursor select,
+  .pen-nib-cursor textarea,
+  .pen-nib-cursor [role="button"],
+  .pen-nib-cursor [tabindex]:not([tabindex="-1"]) {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect x='4' y='8' width='24' height='18' rx='3' fill='%23000'/%3E%3Crect x='8' y='12' width='16' height='10' rx='1' fill='%23fff'/%3E%3C/svg%3E") 16 16, pointer;
+  }
+
+  /* Ink Reverse (dark mode): invert cursor ink to white so it's visible on black */
+  .dark .pen-nib-cursor {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpolygon points='16,0 4,28 16,22 28,28' fill='%23fff'/%3E%3C/svg%3E") 16 4, auto;
+  }
+
+  .dark .pen-nib-cursor a,
+  .dark .pen-nib-cursor button,
+  .dark .pen-nib-cursor input,
+  .dark .pen-nib-cursor select,
+  .dark .pen-nib-cursor textarea,
+  .dark .pen-nib-cursor [role="button"],
+  .dark .pen-nib-cursor [tabindex]:not([tabindex="-1"]) {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect x='4' y='8' width='24' height='18' rx='3' fill='%23fff'/%3E%3Crect x='8' y='12' width='16' height='10' rx='1' fill='%23000'/%3E%3C/svg%3E") 16 16, pointer;
+  }
+}
+
+/* ── Scroll lock for horizontal scroll container (6.1) ──────────────────── */
+html.scroll-lock {
+  overflow: hidden;
 }
 
 /* ── Accessibility: Visible Focus Indicators ─────────────────────────────── */
@@ -558,5 +397,10 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .pen-nib-cursor,
+  .pen-nib-cursor * {
+    cursor: auto !important;
   }
 }

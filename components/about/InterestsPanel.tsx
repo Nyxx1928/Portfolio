@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MangaImage } from '@/components/ui/MangaImage';
+import { MangaImage } from '@/components/manga/MangaImage';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
 import { Interest } from '@/types';
 import { cn } from '@/lib/utils';
@@ -32,8 +32,8 @@ export function InterestsPanel({ interests }: InterestsPanelProps) {
   const hobbyInterests = interests.filter((i) => i.type === 'hobby');
 
   return (
-    <div className="border-manga border-manga-black bg-manga-white p-6 md:p-8 shadow-manga">
-      <div className="space-y-12">
+    <div className="border-manga border-manga-black bg-manga-white p-4 md:p-6 shadow-manga">
+      <div className="space-y-8">
         {/* Header */}
         <div>
           <h2 className="text-3xl md:text-4xl font-heading uppercase tracking-wider mb-2">
@@ -89,13 +89,13 @@ function InterestSection({
 
   return (
     <div ref={ref}>
-      <h3 className="text-xl md:text-2xl font-heading uppercase tracking-wider mb-6 flex items-center gap-2">
+      <h3 className="text-lg md:text-xl font-heading uppercase tracking-wider mb-4 flex items-center gap-2">
         <span className="inline-block w-2 h-2 bg-manga-black" />
         {title}
       </h3>
 
       {/* Grid layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {interests.map((interest, index) => (
           <motion.div
             key={interest.id}
@@ -130,7 +130,7 @@ function TradingCard({ interest }: { interest: Interest }) {
 
   return (
     <div
-      className="relative h-80 cursor-pointer perspective-1000"
+      className="relative h-64 cursor-pointer perspective-1000"
       onMouseEnter={() => setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
     >
@@ -234,14 +234,14 @@ function HobbyCard({ interest }: { interest: Interest }) {
   return (
     <div
       className={cn(
-        'relative border-4 border-manga-black bg-manga-white p-6 shadow-manga',
+        'relative border-4 border-manga-black bg-manga-white p-4 shadow-manga',
         'hover:shadow-manga-lg hover:-translate-x-1 hover:-translate-y-1',
         'transition-all duration-200'
       )}
     >
       {/* Image/Icon */}
       {interest.image && (
-        <div className="relative h-32 mb-4 bg-manga-gray-200 border-2 border-manga-black overflow-hidden">
+        <div className="relative h-24 mb-3 bg-manga-gray-200 border-2 border-manga-black overflow-hidden">
           <MangaImage
             src={interest.image}
             alt={interest.title}
@@ -263,7 +263,7 @@ function HobbyCard({ interest }: { interest: Interest }) {
       )}
 
       {/* Title */}
-      <h4 className="text-lg font-heading uppercase tracking-wide mb-3 border-b-2 border-manga-black pb-2">
+      <h4 className="text-base font-heading uppercase tracking-wide mb-2 border-b-2 border-manga-black pb-1.5">
         {interest.title}
       </h4>
 

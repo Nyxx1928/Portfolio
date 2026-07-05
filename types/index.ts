@@ -1,5 +1,13 @@
 // Data Models
 
+export type Rarity = 'common' | 'uncommon' | 'rare';
+
+export interface ProjectStats {
+  code: number;
+  design: number;
+  innovation: number;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -11,6 +19,9 @@ export interface Project {
   techStack: string[];
   category: Array<'web' | 'mobile' | 'uiux' | 'other'>;
   featured: boolean;
+  rarity: Rarity;
+  stats: ProjectStats;
+  cardNumber: string;
   demoUrl?: string;
   repoUrl?: string;
   challenges: string[];

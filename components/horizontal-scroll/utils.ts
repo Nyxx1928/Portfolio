@@ -20,11 +20,16 @@ export function computeContainerWidth(viewportWidth: number, panelCount: number)
 
 export function getNavigatorState(currentIndex: number, totalPanels: number) {
   return {
-    label: `Panel ${currentIndex + 1} / ${totalPanels}`,
+    label: getTankobonLabel(currentIndex, totalPanels),
     prevDisabled: currentIndex <= 0,
     nextDisabled: currentIndex >= totalPanels - 1,
     activeDot: currentIndex,
+    activeTab: currentIndex,
   };
+}
+
+export function getTankobonLabel(currentIndex: number, totalPanels: number): string {
+  return `VOL. 1 — pp. ${currentIndex + 1} / ${totalPanels}`;
 }
 
 export function readReadingDirection(storage: Pick<Storage, 'getItem'>): ReadingDirection {
