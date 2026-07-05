@@ -41,6 +41,7 @@ export function HorizontalScrollContainer({
   const accumulatedDeltaRef = useRef(0);
   const gestureTimeoutRef = useRef<number | null>(null);
   const navigatedRef = useRef(false);
+  const programmaticScrollRef = useRef(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [pageCurlDirection, setPageCurlDirection] = useState<'left' | 'right'>('right');
 
@@ -121,6 +122,7 @@ export function HorizontalScrollContainer({
         setPageCurlDirection(clamped > currentIndexRef.current ? 'right' : 'left');
       }
       setIsTransitioning(animate);
+      programmaticScrollRef.current = true;
       container.scrollTo({ left, behavior: animate ? "smooth" : "auto" });
       setCurrentIndexInternal(clamped);
     };
@@ -151,6 +153,11 @@ export function HorizontalScrollContainer({
 
     const onScroll = () => {
       if (rafRef.current !== null) {
+        return;
+      }
+
+      if (programmaticScrollRef.current) {
+        programmaticScrollRef.current = false;
         return;
       }
 

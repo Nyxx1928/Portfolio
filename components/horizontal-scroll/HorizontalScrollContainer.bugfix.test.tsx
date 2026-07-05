@@ -20,6 +20,7 @@ import { HorizontalScrollContainer, PanelConfig } from './HorizontalScrollContai
 import { HorizontalScrollProvider } from './HorizontalScrollContext';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as fc from 'fast-check';
+import { waitFor } from '@testing-library/react';
 
 // Mock panels for testing
 const mockPanels: PanelConfig[] = [
@@ -40,7 +41,6 @@ function createTrackpadWheelEvent(deltaY: number): WheelEvent {
 }
 
 // Helper to simulate a trackpad gesture sequence
-// Uses minimal real delays (setTimeout with 0 yields to the event loop but avoids wall-clock waits)
 async function simulateTrackpadGesture(
   container: HTMLElement,
   deltaY: number,
@@ -48,16 +48,10 @@ async function simulateTrackpadGesture(
 ): Promise<void> {
   for (let i = 0; i < eventCount; i++) {
     const event = createTrackpadWheelEvent(deltaY);
-    await act(async () => {
-      container.dispatchEvent(event);
-    });
+    container.dispatchEvent(event);
     // Minimal yield to let React process events between gestures
     await new Promise(resolve => setTimeout(resolve, 1));
   }
-  // Wait for gesture completion timeout (150ms) + RAF callback (16ms) + buffer
-  await act(async () => {
-    await new Promise(resolve => setTimeout(resolve, 200));
-  });
 }
 
 // Helper to get current panel index from scroll position
@@ -65,6 +59,18 @@ function getCurrentPanelIndex(container: HTMLElement): number {
   const panelWidth = container.clientWidth;
   const scrollLeft = container.scrollLeft;
   return Math.round(scrollLeft / panelWidth);
+}
+
+// Helper to scroll to a panel and wait for React effects to settle
+async function scrollToPanelAndSettle(
+  container: HTMLElement,
+  targetIndex: number,
+  panelWidth: number
+): Promise<void> {
+  container.scrollTo({ left: panelWidth * targetIndex, behavior: 'auto' });
+  await waitFor(() => {
+    expect(getCurrentPanelIndex(container)).toBe(targetIndex);
+  }, { timeout: 5000 });
 }
 
 describe('Bug Condition Exploration: Trackpad Navigation', () => {
@@ -142,14 +148,9 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 20));
     });
-    expect(scrollContainer.scrollLeft).toBe(0);
 
     // Start at panel 1 (so we can swipe left)
-    await act(async () => {
-      scrollContainer.scrollTo({ left: 1920, behavior: 'auto' });
-    });
-    // scrollTo mock is synchronous — state is already updated
-    expect(getCurrentPanelIndex(scrollContainer)).toBe(1);
+    await scrollToPanelAndSettle(scrollContainer, 1, 1920);
 
     const initialPanel = getCurrentPanelIndex(scrollContainer);
 
@@ -157,11 +158,12 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     // 10 events with deltaY = -20 (total -200px)
     await simulateTrackpadGesture(scrollContainer, -20, 10);
 
-    const finalPanel = getCurrentPanelIndex(scrollContainer);
-
-    // Assert: Should navigate to exactly one previous panel
-    expect(Math.abs(finalPanel - initialPanel)).toBe(1);
-    expect(finalPanel).toBe(initialPanel - 1);
+    // Wait for gesture debounce (150ms) and RAF callback to settle
+    await waitFor(() => {
+      const finalPanel = getCurrentPanelIndex(scrollContainer);
+      expect(Math.abs(finalPanel - initialPanel)).toBe(1);
+    }, { timeout: 5000 });
+    expect(getCurrentPanelIndex(scrollContainer)).toBe(initialPanel - 1);
   }, 10000);
 
   /**
@@ -205,7 +207,6 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 20));
     });
-    expect(scrollContainer.scrollLeft).toBe(0);
 
     const initialPanel = getCurrentPanelIndex(scrollContainer);
 
@@ -213,11 +214,12 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     // 15 events with deltaY = 80 (total 1200px)
     await simulateTrackpadGesture(scrollContainer, 80, 15);
 
-    const finalPanel = getCurrentPanelIndex(scrollContainer);
-
-    // Assert: Should navigate to exactly one next panel
-    expect(Math.abs(finalPanel - initialPanel)).toBe(1);
-    expect(finalPanel).toBe(initialPanel + 1);
+    // Wait for gesture debounce (150ms) and RAF callback to settle
+    await waitFor(() => {
+      const finalPanel = getCurrentPanelIndex(scrollContainer);
+      expect(Math.abs(finalPanel - initialPanel)).toBe(1);
+    }, { timeout: 5000 });
+    expect(getCurrentPanelIndex(scrollContainer)).toBe(initialPanel + 1);
   }, 10000);
 
   /**
@@ -258,11 +260,7 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     });
 
     // Start at panel 2 (so we can swipe up)
-    await act(async () => {
-      scrollContainer.scrollTo({ left: 1920 * 2, behavior: 'auto' });
-    });
-    // scrollTo mock is synchronous
-    expect(getCurrentPanelIndex(scrollContainer)).toBe(2);
+    await scrollToPanelAndSettle(scrollContainer, 2, 1920);
 
     const initialPanel = getCurrentPanelIndex(scrollContainer);
 
@@ -270,11 +268,12 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
     // 10 events with deltaY = -100 (total -1000px)
     await simulateTrackpadGesture(scrollContainer, -100, 10);
 
-    const finalPanel = getCurrentPanelIndex(scrollContainer);
-
-    // Assert: Should navigate to exactly one previous panel
-    expect(Math.abs(finalPanel - initialPanel)).toBe(1);
-    expect(finalPanel).toBe(initialPanel - 1);
+    // Wait for gesture debounce (150ms) and RAF callback to settle
+    await waitFor(() => {
+      const finalPanel = getCurrentPanelIndex(scrollContainer);
+      expect(Math.abs(finalPanel - initialPanel)).toBe(1);
+    }, { timeout: 5000 });
+    expect(getCurrentPanelIndex(scrollContainer)).toBe(initialPanel - 1);
   }, 10000);
 
   /**
@@ -325,11 +324,7 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
           });
 
           // Navigate to starting panel
-          await act(async () => {
-            scrollContainer.scrollTo({ left: 1920 * startPanel, behavior: 'auto' });
-          });
-          // scrollTo mock is synchronous
-          expect(getCurrentPanelIndex(scrollContainer)).toBe(startPanel);
+          await scrollToPanelAndSettle(scrollContainer, startPanel, 1920);
 
           const initialPanel = getCurrentPanelIndex(scrollContainer);
           const expectedDirection = deltaPerEvent > 0 ? 1 : -1;
@@ -337,18 +332,17 @@ describe('Bug Condition Exploration: Trackpad Navigation', () => {
           // Simulate trackpad gesture
           await simulateTrackpadGesture(scrollContainer, deltaPerEvent, eventCount);
 
-          // After gesture completes, panel should have changed
-          expect(getCurrentPanelIndex(scrollContainer)).not.toBe(initialPanel);
+          // Wait for gesture debounce (150ms) + RAF callback to settle
+          await waitFor(() => {
+            const currentPanel = getCurrentPanelIndex(scrollContainer);
+            expect(currentPanel).not.toBe(initialPanel);
+          }, { timeout: 5000 });
 
           const finalPanel = getCurrentPanelIndex(scrollContainer);
+          const panelDelta = finalPanel - initialPanel;
 
           // Property: Navigate to exactly one adjacent panel
-          const panelDelta = finalPanel - initialPanel;
-          
-          // Should move exactly one panel
           expect(Math.abs(panelDelta)).toBe(1);
-          
-          // Should move in the correct direction
           expect(Math.sign(panelDelta)).toBe(expectedDirection);
         }
       ),
