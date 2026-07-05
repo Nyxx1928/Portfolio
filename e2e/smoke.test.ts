@@ -78,6 +78,6 @@ test.describe('Navigation', () => {
   test('unknown route shows 404 page', async ({ page }) => {
     await page.goto('/this-does-not-exist');
     const body = await page.textContent('body');
-    expect(body?.toLowerCase()).toMatch(/not found|404/);
+    expect(body?.toLowerCase()).toMatch(/ripped out|missing from this volume/);
   });
 });
