@@ -21,9 +21,15 @@ export const projects: Project[] = [
     description: 'A simple chat system built in Java for learning WebSockets and Spring Boot. Features real-time messaging, user authentication, and a clean interface for instant communication.',
     fullDescription: 'Chatter-sys is a Java-based chat application developed as a learning project to master WebSockets and Spring Boot framework. The application provides real-time bidirectional communication between users, demonstrating the power of WebSocket protocol for instant messaging. Built with Spring Boot for the backend, the system includes user authentication, message persistence, chat room management, and a responsive user interface. The project showcases fundamental concepts of real-time web applications, including connection management, message broadcasting, and state synchronization. It serves as an excellent demonstration of Java backend development skills, WebSocket implementation, and understanding of real-time communication protocols. The clean architecture and well-documented code make it a valuable reference for learning Spring Boot and WebSocket integration.',
     thumbnail: '/images/projects/chatter-thumb.jpg',
-    screenshots: [
-      '/images/projects/chatter-1.jpg',
-      '/images/projects/chatter-2.jpg',
+    webScreenshots: [
+      '/images/projects/chatter-web-1.jpg',
+      '/images/projects/chatter-web-2.jpg',
+      '/images/projects/chatter-web-3.jpg',
+    ],
+    mobileScreenshots: [
+      '/images/projects/chatter-mobile-1.jpg',
+      '/images/projects/chatter-mobile-2.jpg',
+      '/images/projects/chatter-mobile-3.jpg',
     ],
     techStack: ['Java', 'Spring Boot', 'WebSockets'],
     category: ['web'],
@@ -60,10 +66,15 @@ export const projects: Project[] = [
     description: 'Earth Science Educational game web analytics - Thesis project. An immersive turn-based RPG mobile application designed to enhance Earth Science education for General Academic Strand (GAS) students at Caloocan High School.',
     fullDescription: 'The Periodic Legends (TPL) is an innovative educational turn-based RPG mobile application developed as a thesis project to revolutionize Earth Science education. Designed specifically for General Academic Strand (GAS) students at Caloocan High School, this game combines engaging gameplay mechanics with curriculum-aligned learning content. Players embark on an Earth Science adventure where they learn about geological processes, atmospheric phenomena, and environmental systems through interactive battles and quests. The web analytics component provides educators with detailed insights into student engagement, learning progress, and knowledge retention. The project demonstrates how gamification can significantly improve student motivation and learning outcomes in science education.',
     thumbnail: '/images/projects/tpl-thumb.jpg',
-    screenshots: [
-      '/images/projects/tpl-1.jpg',
-      '/images/projects/tpl-2.jpg',
-      '/images/projects/tpl-3.jpg',
+    webScreenshots: [
+      '/images/projects/tpl-web-1.jpg',
+      '/images/projects/tpl-web-2.jpg',
+      '/images/projects/tpl-web-3.jpg',
+    ],
+    mobileScreenshots: [
+      '/images/projects/tpl-mobile-1.jpg',
+      '/images/projects/tpl-mobile-2.jpg',
+      '/images/projects/tpl-mobile-3.jpg',
     ],
     techStack: ['HTML', 'JavaScript'],
     category: ['web'],
@@ -101,10 +112,15 @@ export const projects: Project[] = [
     description: 'Landing page for Accugeo Construction Materials and Testing Site. A professional corporate website showcasing construction testing services, company information, and client resources.',
     fullDescription: 'Accugeo Website is a professional corporate landing page developed for Accugeo Construction Materials and Testing Site. The website serves as the digital presence for a construction materials testing company, providing comprehensive information about their services, testing capabilities, certifications, and industry expertise. Built with modern web technologies, the site features a clean, professional design that instills confidence in potential clients. It includes detailed service descriptions, case studies, contact forms, and resource sections for clients. The website is fully responsive, optimized for search engines, and designed to convert visitors into leads. The project demonstrates the ability to create professional corporate websites that effectively communicate brand value and technical expertise.',
     thumbnail: '/images/projects/accugeo-thumb.jpg',
-    screenshots: [
-      '/images/projects/accugeo-1.jpg',
-      '/images/projects/accugeo-2.jpg',
-      '/images/projects/accugeo-3.jpg',
+    webScreenshots: [
+      '/images/projects/accugeo-web-1.jpg',
+      '/images/projects/accugeo-web-2.jpg',
+      '/images/projects/accugeo-web-3.jpg',
+    ],
+    mobileScreenshots: [
+      '/images/projects/accugeo-mobile-1.jpg',
+      '/images/projects/accugeo-mobile-2.jpg',
+      '/images/projects/accugeo-mobile-3.jpg',
     ],
     techStack: ['TypeScript', 'CSS', 'JavaScript', 'Dockerfile', 'Next.js'],
     category: ['web', 'uiux'],
@@ -142,10 +158,15 @@ export const projects: Project[] = [
     description: 'Network intelligence platform that resolves emails/URLs/domains to IPs, enriches them with ISP/ASN/location/proxy/hosting metadata, assigns deterministic risk scores, and persists/shareable lookup history via a Laravel backend and React frontend.',
     fullDescription: 'LinkGuard is a comprehensive network intelligence platform designed to enhance security and threat detection. The system analyzes emails, URLs, and domains to extract IP addresses, then enriches this data with detailed metadata including ISP information, ASN details, geolocation data, proxy detection, and hosting provider information. It features a sophisticated risk scoring algorithm that assigns deterministic risk scores to help identify potential threats. Built with a Laravel backend for robust API handling and data persistence, and a React frontend for intuitive user interaction. The platform maintains a complete lookup history that can be shared across teams for collaborative threat analysis.',
     thumbnail: '/images/projects/linkguard-thumb.jpg',
-    screenshots: [
-      '/images/projects/linkguard-1.jpg',
-      '/images/projects/linkguard-2.jpg',
-      '/images/projects/linkguard-3.jpg',
+    webScreenshots: [
+      '/images/projects/linkguard-web-1.jpg',
+      '/images/projects/linkguard-web-2.jpg',
+      '/images/projects/linkguard-web-3.jpg',
+    ],
+    mobileScreenshots: [
+      '/images/projects/linkguard-mobile-1.jpg',
+      '/images/projects/linkguard-mobile-2.jpg',
+      '/images/projects/linkguard-mobile-3.jpg',
     ],
     techStack: ['Laravel', 'React', 'JavaScript', 'PHP', 'Blade', 'HTML', 'CSS', 'Shell', 'Dockerfile'],
     category: ['web'],
@@ -183,10 +204,15 @@ export const projects: Project[] = [
     description: 'A full-stack application for sharing love notes and messages, built with NestJS backend and Next.js frontend. Features real-time message posting, moderation, and a beautiful Valentine-themed interface.',
     fullDescription: 'Full description for valentine project',
     thumbnail: '/images/projects/hvd-thumb.jpg',
-    screenshots: [
-      '/images/projects/hvd-1.jpg',
-      '/images/projects/hvd-2.jpg',
-      '/images/projects/hvd-3.jpg',
+    webScreenshots: [
+      '/images/projects/hvd-web-1.jpg',
+      '/images/projects/hvd-web-2.jpg',
+      '/images/projects/hvd-web-3.jpg',
+    ],
+    mobileScreenshots: [
+      '/images/projects/hvd-mobile-1.jpg',
+      '/images/projects/hvd-mobile-2.jpg',
+      '/images/projects/hvd-mobile-3.jpg',
     ],
     techStack: ['TypeScript', 'JavaScript', 'CSS', 'Batchfile', 'Shell', 'Dockerfile', 'NestJS', 'Next.js'],
     category: ['web'],

@@ -15,7 +15,8 @@ export interface Project {
   description: string;
   fullDescription: string;
   thumbnail: string;
-  screenshots: string[];
+  webScreenshots: string[];
+  mobileScreenshots: string[];
   techStack: string[];
   category: Array<'web' | 'mobile' | 'uiux' | 'other'>;
   featured: boolean;
