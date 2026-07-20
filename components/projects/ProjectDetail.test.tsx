@@ -66,10 +66,15 @@ describe('ProjectDetail', () => {
     description: 'A test project description',
     fullDescription: 'This is a full description of the test project with more details.',
     thumbnail: '/images/test-thumb.jpg',
-    screenshots: [
-      '/images/screenshot-1.jpg',
-      '/images/screenshot-2.jpg',
-      '/images/screenshot-3.jpg',
+    webScreenshots: [
+      '/images/web-screenshot-1.jpg',
+      '/images/web-screenshot-2.jpg',
+      '/images/web-screenshot-3.jpg',
+    ],
+    mobileScreenshots: [
+      '/images/mobile-screenshot-1.jpg',
+      '/images/mobile-screenshot-2.jpg',
+      '/images/mobile-screenshot-3.jpg',
     ],
     techStack: ['React', 'TypeScript', 'Next.js'],
     category: ['web'],
@@ -177,26 +182,56 @@ describe('ProjectDetail', () => {
   });
 
   describe('Screenshots Section', () => {
-    it('should display all screenshots', () => {
+    it('should display all web screenshots', () => {
       render(<ProjectDetail project={mockProject} />);
       
-      mockProject.screenshots.forEach((screenshot, index) => {
-        const img = screen.getByAltText(`${mockProject.title} screenshot ${index + 1}`);
+      mockProject.webScreenshots.forEach((screenshot, index) => {
+        const img = screen.getByAltText(`${mockProject.title} web screenshot ${index + 1}`);
         expect(img).toBeInTheDocument();
         expect(img).toHaveAttribute('src', screenshot);
       });
     });
 
-    it('should display screenshot panel numbers', () => {
+    it('should display all mobile screenshots', () => {
       render(<ProjectDetail project={mockProject} />);
       
-      mockProject.screenshots.forEach((_, index) => {
-        expect(screen.getByLabelText(`Screenshot ${index + 1}`)).toBeInTheDocument();
+      mockProject.mobileScreenshots.forEach((screenshot, index) => {
+        const img = screen.getByAltText(`${mockProject.title} mobile screenshot ${index + 1}`);
+        expect(img).toBeInTheDocument();
+        expect(img).toHaveAttribute('src', screenshot);
       });
     });
 
+    it('should display web screenshot panel numbers', () => {
+      render(<ProjectDetail project={mockProject} />);
+      
+      mockProject.webScreenshots.forEach((_, index) => {
+        expect(screen.getByLabelText(`Web screenshot ${index + 1}`)).toBeInTheDocument();
+      });
+    });
+
+    it('should display mobile screenshot panel numbers', () => {
+      render(<ProjectDetail project={mockProject} />);
+      
+      mockProject.mobileScreenshots.forEach((_, index) => {
+        expect(screen.getByLabelText(`Mobile screenshot ${index + 1}`)).toBeInTheDocument();
+      });
+    });
+
+    it('should display "Desktop Preview" heading', () => {
+      render(<ProjectDetail project={mockProject} />);
+      
+      expect(screen.getByText('Desktop Preview')).toBeInTheDocument();
+    });
+
+    it('should display "Mobile Preview" heading', () => {
+      render(<ProjectDetail project={mockProject} />);
+      
+      expect(screen.getByText('Mobile Preview')).toBeInTheDocument();
+    });
+
     it('should not display screenshots section when no screenshots', () => {
-      const projectWithoutScreenshots = { ...mockProject, screenshots: [] };
+      const projectWithoutScreenshots = { ...mockProject, webScreenshots: [], mobileScreenshots: [] };
       render(<ProjectDetail project={projectWithoutScreenshots} />);
       
       expect(screen.queryByText('Project Showcase')).not.toBeInTheDocument();
@@ -281,7 +316,8 @@ describe('ProjectDetail', () => {
       expect(screen.getByText(mockProject.fullDescription)).toBeInTheDocument();
       
       // Screenshots
-      expect(screen.getAllByRole('img').length).toBeGreaterThanOrEqual(mockProject.screenshots.length);
+      const expectedCount = mockProject.webScreenshots.length + mockProject.mobileScreenshots.length;
+      expect(screen.getAllByRole('img').length).toBeGreaterThanOrEqual(expectedCount);
       
       // Demo and repo links
       if (mockProject.demoUrl) {
@@ -297,11 +333,15 @@ describe('ProjectDetail', () => {
       
       // Check that screenshots are rendered
       const screenshots = screen.getAllByRole('img');
-      expect(screenshots.length).toBe(mockProject.screenshots.length);
+      const expectedCount = mockProject.webScreenshots.length + mockProject.mobileScreenshots.length;
+      expect(screenshots.length).toBe(expectedCount);
       
       // Each screenshot should have a panel number
-      mockProject.screenshots.forEach((_, index) => {
-        expect(screen.getByLabelText(`Screenshot ${index + 1}`)).toBeInTheDocument();
+      mockProject.webScreenshots.forEach((_, index) => {
+        expect(screen.getByLabelText(`Web screenshot ${index + 1}`)).toBeInTheDocument();
+      });
+      mockProject.mobileScreenshots.forEach((_, index) => {
+        expect(screen.getByLabelText(`Mobile screenshot ${index + 1}`)).toBeInTheDocument();
       });
     });
 
