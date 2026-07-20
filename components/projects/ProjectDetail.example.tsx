@@ -15,10 +15,12 @@ const fullFeaturedProject: Project = {
   description: 'A powerful task management application with real-time collaboration',
   fullDescription: 'TaskMaster Pro is a comprehensive task management solution designed for teams and individuals who need to stay organized. Built with modern web technologies, it features real-time synchronization, intuitive drag-and-drop task organization, customizable workflows, and powerful analytics.',
   thumbnail: '/images/projects/taskmaster-thumb.jpg',
-  screenshots: [
+  webScreenshots: [
     '/images/projects/taskmaster-1.jpg',
     '/images/projects/taskmaster-2.jpg',
     '/images/projects/taskmaster-3.jpg',
+  ],
+  mobileScreenshots: [
     '/images/projects/taskmaster-4.jpg',
   ],
   techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'PostgreSQL', 'WebSocket'],
@@ -55,10 +57,11 @@ const projectWithoutDemo: Project = {
   description: 'A private analytics dashboard for internal team use',
   fullDescription: 'An internal tool built for analyzing team performance metrics and generating reports. Features include custom dashboards, automated reporting, and data visualization.',
   thumbnail: '/images/projects/analytics-thumb.jpg',
-  screenshots: [
+  webScreenshots: [
     '/images/projects/analytics-1.jpg',
     '/images/projects/analytics-2.jpg',
   ],
+  mobileScreenshots: [],
   techStack: ['React', 'TypeScript', 'D3.js', 'Node.js'],
   category: ['web'],
   featured: false,
@@ -89,9 +92,10 @@ const projectWithFewScreenshots: Project = {
   description: 'A command-line tool for developer workflows',
   fullDescription: 'A powerful CLI tool that automates common development tasks including project scaffolding, code generation, and deployment automation.',
   thumbnail: '/images/projects/cli-thumb.jpg',
-  screenshots: [
+  webScreenshots: [
     '/images/projects/cli-1.jpg',
   ],
+  mobileScreenshots: [],
   techStack: ['Node.js', 'TypeScript', 'Commander.js'],
   category: ['other'],
   featured: false,

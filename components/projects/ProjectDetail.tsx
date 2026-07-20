@@ -118,75 +118,139 @@ export function ProjectDetail({ project, category }: ProjectDetailProps) {
         </div>
       </MangaPanel>
 
-      {/* Screenshots Section - Comic Panel Layout */}
-      {project.screenshots.length > 0 && (
-        <div className="mb-8">
+      {/* Screenshots Section - Web & Mobile */}
+      {(project.webScreenshots.length > 0 || project.mobileScreenshots.length > 0) && (
+        <div ref={screenshotsRef} className="mb-8">
           <h2 className="text-2xl font-heading uppercase mb-6 text-center">
             Project Showcase
           </h2>
-          <motion.div
-            ref={screenshotsRef}
-            variants={containerVariants}
-            initial="hidden"
-            animate={screenshotsInView ? 'visible' : 'hidden'}
-            className={cn(
-              'grid gap-4',
-              // Responsive grid: 1 col mobile, 2 cols tablet+
-              'grid-cols-1 md:grid-cols-2',
-              // Make first screenshot span full width if odd number
-              project.screenshots.length % 2 !== 0 && '[&>*:first-child]:md:col-span-2'
-            )}
-          >
-            {project.screenshots.map((screenshot, index) => (
+
+          {/* Web Screenshots - Landscape */}
+          {project.webScreenshots.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-lg font-heading uppercase mb-4">Desktop Preview</h3>
               <motion.div
-                key={screenshot}
-                variants={panelVariants}
+                variants={containerVariants}
+                initial="hidden"
+                animate={screenshotsInView ? 'visible' : 'hidden'}
                 className={cn(
-                  'relative overflow-hidden',
-                  'border-manga border-manga-black',
-                  'bg-manga-gray-50',
-                  'shadow-manga',
-                  'aspect-video',
-                  'group'
+                  'grid gap-4',
+                  'grid-cols-1 md:grid-cols-2',
+                  project.webScreenshots.length % 2 !== 0 && '[&>*:first-child]:md:col-span-2'
                 )}
               >
-                {/* Screenshot Image */}
-                <div className="relative w-full h-full">
-                  <MangaImage
-                    src={screenshot}
-                    alt={`${project.title} screenshot ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    wrapperClassName="absolute inset-0"
-                  />
-                  {/* Halftone overlay on hover */}
-                  <div
+                {project.webScreenshots.map((screenshot, index) => (
+                  <motion.div
+                    key={screenshot}
+                    variants={panelVariants}
                     className={cn(
-                      'absolute inset-0 opacity-0 group-hover:opacity-30',
-                      'transition-opacity duration-300',
-                      'halftone-overlay'
+                      'relative overflow-hidden',
+                      'border-manga border-manga-black',
+                      'bg-manga-gray-50',
+                      'shadow-manga',
+                      'aspect-video',
+                      'group'
                     )}
-                    aria-hidden="true"
-                  />
-                </div>
-                {/* Panel number badge */}
-                <div
-                  className={cn(
-                    'absolute top-2 right-2',
-                    'w-8 h-8',
-                    'flex items-center justify-center',
-                    'bg-manga-black text-manga-white',
-                    'font-heading text-sm',
-                    'border-2 border-manga-white'
-                  )}
-                  aria-label={`Screenshot ${index + 1}`}
-                >
-                  {index + 1}
-                </div>
+                  >
+                    <div className="relative w-full h-full">
+                      <MangaImage
+                        src={screenshot}
+                        alt={`${project.title} web screenshot ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        wrapperClassName="absolute inset-0"
+                      />
+                      <div
+                        className={cn(
+                          'absolute inset-0 opacity-0 group-hover:opacity-30',
+                          'transition-opacity duration-300',
+                          'halftone-overlay'
+                        )}
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div
+                      className={cn(
+                        'absolute top-2 right-2',
+                        'w-8 h-8',
+                        'flex items-center justify-center',
+                        'bg-manga-black text-manga-white',
+                        'font-heading text-sm',
+                        'border-2 border-manga-white'
+                      )}
+                      aria-label={`Web screenshot ${index + 1}`}
+                    >
+                      {index + 1}
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
-            ))}
-          </motion.div>
+            </div>
+          )}
+
+          {/* Mobile Screenshots - Portrait */}
+          {project.mobileScreenshots.length > 0 && (
+            <div>
+              <h3 className="text-lg font-heading uppercase mb-4">Mobile Preview</h3>
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate={screenshotsInView ? 'visible' : 'hidden'}
+                className={cn(
+                  'grid gap-4',
+                  'grid-cols-2 md:grid-cols-3'
+                )}
+              >
+                {project.mobileScreenshots.map((screenshot, index) => (
+                  <motion.div
+                    key={screenshot}
+                    variants={panelVariants}
+                    className={cn(
+                      'relative overflow-hidden',
+                      'border-manga border-manga-black',
+                      'bg-manga-gray-50',
+                      'shadow-manga',
+                      'aspect-[9/16]',
+                      'group'
+                    )}
+                  >
+                    <div className="relative w-full h-full">
+                      <MangaImage
+                        src={screenshot}
+                        alt={`${project.title} mobile screenshot ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                        wrapperClassName="absolute inset-0"
+                      />
+                      <div
+                        className={cn(
+                          'absolute inset-0 opacity-0 group-hover:opacity-30',
+                          'transition-opacity duration-300',
+                          'halftone-overlay'
+                        )}
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div
+                      className={cn(
+                        'absolute top-2 right-2',
+                        'w-8 h-8',
+                        'flex items-center justify-center',
+                        'bg-manga-black text-manga-white',
+                        'font-heading text-sm',
+                        'border-2 border-manga-white'
+                      )}
+                      aria-label={`Mobile screenshot ${index + 1}`}
+                    >
+                      {index + 1}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          )}
         </div>
       )}
 
